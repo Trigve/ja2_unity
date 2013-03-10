@@ -26,8 +26,6 @@ public class MapWindow : EditorWindow
 		
 		if(GUILayout.Button("Create"))
 		{
-			// Load terrain material managet
-			var material_man = new ja2.TerrainMaterialManager(Application.dataPath);
 			// Create map GO
 			GameObject map_go = new GameObject("Map");
 			// Reset position
@@ -35,7 +33,7 @@ public class MapWindow : EditorWindow
 			// Add terrain component
 			TerrainManager terrain_manager = map_go.AddComponent<TerrainManager>();
 			// Create terrain
-			terrain_manager.CreateTerrain(new ja2.Map(m_Width, m_Height, "summer"), material_man);
+			terrain_manager.CreateTerrain(new ja2.Map(m_Width, m_Height, "summer"), new ja2.TerrainMaterialManager(Application.dataPath));
 		}
 	}
 }
