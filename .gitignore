@@ -13,6 +13,8 @@
 *.ZIP
 *.zip
 *.rtf
+*.png
+*.dds
 # Unity project files
 obj
 Temp
