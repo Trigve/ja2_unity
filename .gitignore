@@ -1,0 +1,23 @@
+*.bmp
+*.BMP
+*.psd
+*.PSD
+*.tif
+*.TIF
+*.tiff
+*.TIFF
+*.pdf
+*.PDF
+*.ttf
+*.TTF
+*.ZIP
+*.zip
+*.rtf
+# Unity project files
+obj
+Temp
+*.suo
+*.user
+*.pidb
+*.userprefs
+# Unity files
