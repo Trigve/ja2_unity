@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terrain>
+	<!--Info about splatting aplha textures. These splats are used in current tileset.-->
+	<splat>
+		<type id ="0">
+			<item id = "0" woffset = "0.001953" hoffset = "0.015625" width = "0.121094" height = "0.968750" />
+			<item id = "1" woffset = "0.126953" hoffset = "0.015625" width = "0.121094" height = "0.968750" />
+			<item id = "2" woffset = "0.251953" hoffset = "0.015625" width = "0.121094" height = "0.968750" />
+			<item id = "3" woffset = "0.376953" hoffset = "0.015625" width = "0.121094" height = "0.968750" />
+			<item id = "4" woffset = "0.501953" hoffset = "0.015625" width = "0.121094" height = "0.968750" />
+			<item id = "5" woffset = "0.626953" hoffset = "0.015625" width = "0.121094" height = "0.968750" />
+			<item id = "6" woffset = "0.751953" hoffset = "0.015625" width = "0.121094" height = "0.968750" />
+			<item id = "7" woffset = "0.876953" hoffset = "0.015625" width = "0.121094" height = "0.968750" />
+		</type>
+	</splat>
+	<!--Set type (summer, winter, ..). "tileset" is the name of tile set texture. "material" is Ogre material name used for this tileset.-->
+	<set name = "summer" material = "terrain_summer" splat = "0">
+		<!--List of terrain types (grass, mud, ...). "splat" ID of splat that is used with this terrain type.-->
+		<types>
+			<item id = "0" name = "grass">
+				<!--Each type can have variants (different texture variant of same type).-->
+				<variant id = "0" woffset = "0.000977" hoffset = "0.000977" width = "0.248047" height = "0.248047" />
+				<variant id = "1" woffset = "0.250977" hoffset = "0.000977" width = "0.248047" height = "0.248047" />
+				<variant id = "2" woffset = "0.500977" hoffset = "0.000977" width = "0.248047" height = "0.248047" />
+				<variant id = "3" woffset = "0.750977" hoffset = "0.000977" width = "0.248047" height = "0.248047" />
+				<variant id = "4" woffset = "0.000977" hoffset = "0.250977" width = "0.248047" height = "0.248047" />
+				<variant id = "5" woffset = "0.250977" hoffset = "0.250977" width = "0.248047" height = "0.248047" />
+				<variant id = "6" woffset = "0.500977" hoffset = "0.250977" width = "0.248047" height = "0.248047" />
+			</item>
+			<item id = "1" name = "mud">
+				<!--Each type can have variants (different texture variant of same type).-->
+				<variant id = "0" woffset = "0.750977" hoffset = "0.250977" width = "0.248047" height = "0.248047" />
+				<variant id = "1" woffset = "0.000977" hoffset = "0.500977" width = "0.248047" height = "0.248047" />
+				<variant id = "2" woffset = "0.250977" hoffset = "0.500977" width = "0.248047" height = "0.248047" />
+				<variant id = "3" woffset = "0.500977" hoffset = "0.500977" width = "0.248047" height = "0.248047" />
+				<variant id = "4" woffset = "0.750977" hoffset = "0.500977" width = "0.248047" height = "0.248047" />
+				<variant id = "5" woffset = "0.000977" hoffset = "0.750977" width = "0.248047" height = "0.248047" />
+				<variant id = "6" woffset = "0.250977" hoffset = "0.750977" width = "0.248047" height = "0.248047" />
+			</item>
+		</types>
+	</set>
+</terrain>
