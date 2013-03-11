@@ -118,7 +118,6 @@ public class GameCursor : MonoBehaviour
 	void Update ()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
 		if (Physics.Raycast(ray, out m_Hit, Mathf.Infinity, Terrain.LAYER_MASK))
 		{
 			// Find the tile based on triangles			
