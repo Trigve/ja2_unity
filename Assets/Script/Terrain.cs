@@ -28,10 +28,9 @@ public sealed class Terrain : MonoBehaviour
 		Mesh mesh = terrainPartition.Create(X, Y, Map, tile_set);
 		// Add needed components
 		GetComponent<MeshFilter>().mesh = mesh;
-		gameObject.getComponent<MeshCollider>().sharedMesh = mesh;
+		GetComponent<MeshCollider>().sharedMesh = mesh;
 		var mesh_renderer = gameObject.GetComponent<MeshRenderer>();
 		// Set map material
-		
 		mesh_renderer.sharedMaterial = Resources.Load("Materials/" + tile_set.materialName, typeof(Material)) as Material;
 	}
 
