@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using ja2;
 
+[RequireComponent (typeof (MeshFilter), typeof (MeshRenderer), typeof (MeshCollider))]
 public sealed class Terrain : MonoBehaviour
 {
 
@@ -27,7 +28,7 @@ public sealed class Terrain : MonoBehaviour
 		Mesh mesh = terrainPartition.Create(Map, tile_set);
 		// Add needed components
 		GetComponent<MeshFilter>().mesh = mesh;
-		gameObject.AddComponent<MeshCollider>().sharedMesh = mesh;
+		gameObject.getComponent<MeshCollider>().sharedMesh = mesh;
 		var mesh_renderer = gameObject.GetComponent<MeshRenderer>();
 		// Set map material
 		

@@ -31,8 +31,6 @@ public class TerrainManager : MonoBehaviour
 		// Set layer
 		terrain_go.layer = Terrain.LAYER;
 		// Create component
-		terrain_go.AddComponent<MeshFilter>();
-		terrain_go.AddComponent<MeshRenderer>();
 		var terrain = terrain_go.AddComponent<Terrain>();
 		terrain.CreateMap(mapInstance, MatManager);
 	}
