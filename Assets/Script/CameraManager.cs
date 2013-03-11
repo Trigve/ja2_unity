@@ -42,13 +42,13 @@ public class CameraManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetKeyDown(KeyCode.LeftArrow))
+		if (Input.GetKey(KeyCode.LeftArrow))
 			transform.Translate(0, 0, -1, Space.World);
-		else if (Input.GetKeyDown(KeyCode.RightArrow))
+		else if (Input.GetKey(KeyCode.RightArrow))
 			transform.Translate(0, 0, 1, Space.World);
-		else if (Input.GetKeyDown(KeyCode.DownArrow))
+		else if (Input.GetKey(KeyCode.DownArrow))
 			transform.Translate(1, 0, 0, Space.World);
-		else if (Input.GetKeyDown(KeyCode.UpArrow))
+		else if (Input.GetKey(KeyCode.UpArrow))
 			transform.Translate(-1, 0, 0, Space.World);
 	}
 }
