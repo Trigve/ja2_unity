@@ -5,6 +5,10 @@ using System;
 [Serializable]
 public class TerrainManager : MonoBehaviour
 {
+#region Constants
+	//! Partition name.
+	private const string PARTITION_NAME = "Terrain_";
+#endregion
 #region Attributes
 	//! Map instance.
 	[SerializeField]
@@ -33,7 +37,7 @@ public class TerrainManager : MonoBehaviour
 			for (int j = 0; j < partition_width; ++j)
 			{
 				// Create terrain GO
-				GameObject terrain_go = new GameObject("Terrain_" + j + "_" + i);
+				GameObject terrain_go = new GameObject(PARTITION_NAME + j + "_" + i);
 				terrain_go.isStatic = true;
 				// Set parent
 				terrain_go.transform.parent = transform;
