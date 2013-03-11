@@ -16,7 +16,7 @@ public sealed class Terrain : MonoBehaviour
 	//! Layer mask
 	public const int LAYER_MASK = 1 << 8;
 	//	public TerrainGen terrainGen {get; private set;}
-	[SerializeField]
+	[SerializeField, HideInInspector]
 	private ja2.TerrainPartition terrainPartition;
 
 #region Operations
