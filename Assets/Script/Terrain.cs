@@ -20,23 +20,23 @@ public sealed class Terrain : MonoBehaviour
 	private ja2.TerrainPartition terrainPartition;
 
 #region Operations
-	public void CreateMap(MapInstance Map, TerrainMaterialManager MatManager)
+	public void CreatePartition(int X, int Y, MapInstance Map, TerrainMaterialManager MatManager)
 	{
 		TerrainTileSet tile_set = MatManager.GetTerrainSet(Map.map.terrainName);
 		// Create terrain partition
 		terrainPartition = new ja2.TerrainPartition();
-		Mesh mesh = terrainPartition.Create(Map, tile_set);
+		Mesh mesh = terrainPartition.Create(X, Y, Map, tile_set);
 		// Add needed components
 		GetComponent<MeshFilter>().mesh = mesh;
 		gameObject.getComponent<MeshCollider>().sharedMesh = mesh;
 		var mesh_renderer = gameObject.GetComponent<MeshRenderer>();
 		// Set map material
 		
-		mesh_renderer.material = Resources.Load("Materials/" + tile_set.materialName, typeof(Material)) as Material;
+		mesh_renderer.sharedMaterial = Resources.Load("Materials/" + tile_set.materialName, typeof(Material)) as Material;
 	}
 
 	//! Get tile for given triangle.
-	public ja2.TerrainTile GetTile(int Triangle)
+	public ja2.TerrainPartition.TriangleMap GetTile(int Triangle)
 	{
 		return terrainPartition.GetTile(Triangle);
 	}

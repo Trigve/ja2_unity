@@ -7,10 +7,16 @@ namespace ja2
 	[Serializable]
 	public sealed class TerrainPartition
 	{
+#region Constants
+		//! Partition width preferred.
+		public const byte PARTITION_WIDTH = 10;
+		//! Partition height preferred.
+		public const byte PARTITION_HEIGHT = 20;
+#endregion
 #region Inner classes
 		[Serializable]
 		//! Helper class.
-		private class TriangleMap
+		public class TriangleMap
 		{
 			public int x;
 			public int y;
@@ -31,54 +37,34 @@ namespace ja2
 		[SerializeField]
 		//! Map for triangle -> Tile.
 		private TriangleMap[] m_TerrainMap;
-		//! Terrain width;
-		[SerializeField]
-		private int width_;
-		//! Terrain height;
-		[SerializeField]
-		private int height_;
-		//! Map.
-		[SerializeField]
-		private MapInstance mapInstance;
 #endregion
 
-#region Properties
-		//! Width.
-		public int width { private set { width_ = value; } get { return width_; } }
-		//! Height
-		public int height { private set { height_ = value; } get { return height_; } }
-#endregion
 
 #region Operations
-		public Mesh Create(MapInstance Map_, TerrainTileSet TileSet)
+		public Mesh Create(int X, int Y, MapInstance Map_, TerrainTileSet TileSet)
 		{
-			mapInstance = Map_;
-			width = mapInstance.map.width;
-			height = mapInstance.map.height;
-
-			ja2.Map map = mapInstance.map;
-
-			Mesh mesh = new Mesh();
+			Map map = Map_.map;
 			// Create vertex array
-			Vector3[] array_vec = new Vector3[GetVertexIndex(map.width - 1, map.height - 1) + 4];
+			Vector3[] array_vec = new Vector3[PARTITION_WIDTH * PARTITION_HEIGHT * 4];
 			// Create triangles array
-			int[] array_tri = new int[GetTriIndex(map.width - 1, map.height - 1) + 6];
+			int[] array_tri = new int[PARTITION_WIDTH * PARTITION_HEIGHT * 6];
 			// Create UV arrays
-			Vector2[] uv = new Vector2[array_vec.Length], uv2 = new Vector2[array_vec.Length];
+			Vector2[] uv1 = new Vector2[array_vec.Length];
+			Vector2[] uv2 = new Vector2[array_vec.Length];
 			Vector4[] uv3 = new Vector4[array_vec.Length];
 			// Triangle map
-			m_TerrainMap = new TriangleMap[width * height * 2];
+			m_TerrainMap = new TriangleMap[PARTITION_WIDTH * PARTITION_HEIGHT * 2];
 			// Go through all tiles
-			int partition_height = map.height;
-			int partition_width = map.width;
 			int partition_begin_x = 0;
 			int partition_begin_y = 0;
+			int partition_height = PARTITION_HEIGHT;
+			int partition_width = PARTITION_WIDTH;
 			for (int i = partition_begin_y, last_vertex = 0; i < partition_height; ++i)
 			{
 				for (int j = partition_begin_x; j < partition_width; ++j)
 				{
 					// Get Tile
-					ja2.TerrainTile tile = map.GetTile(j, i);
+					ja2.TerrainTile tile = map.GetTile(j + X * PARTITION_WIDTH, i + Y * PARTITION_HEIGHT);
 					// Create vertices
 					array_vec[GetVertexIndex(j, i)] = TileVertex(j, i, 0);
 					array_vec[GetVertexIndex(j, i) + 1] = TileVertex(j, i, 1);
@@ -121,10 +107,10 @@ namespace ja2
 					TextureAtlasInfo alpha_splat_mat_info = TileSet.splatUsed.GetSplat(alpha_index);
 
 					// Texture coordinates
-					uv[last_vertex - 4] = new Vector2(primary_mat_info.uvOffsetW + primary_mat_info.uvWidth / 2, primary_mat_info.uvOffsetH);
-					uv[last_vertex - 3] = new Vector2(primary_mat_info.uvOffsetW, primary_mat_info.uvOffsetH - primary_mat_info.uvHeight / 2);
-					uv[last_vertex - 2] = new Vector2(primary_mat_info.uvOffsetW + primary_mat_info.uvWidth / 2, primary_mat_info.uvOffsetH - primary_mat_info.uvHeight);
-					uv[last_vertex - 1] = new Vector2(primary_mat_info.uvOffsetW + primary_mat_info.uvWidth, primary_mat_info.uvOffsetH - primary_mat_info.uvHeight / 2);
+					uv1[last_vertex - 4] = new Vector2(primary_mat_info.uvOffsetW + primary_mat_info.uvWidth / 2, primary_mat_info.uvOffsetH);
+					uv1[last_vertex - 3] = new Vector2(primary_mat_info.uvOffsetW, primary_mat_info.uvOffsetH - primary_mat_info.uvHeight / 2);
+					uv1[last_vertex - 2] = new Vector2(primary_mat_info.uvOffsetW + primary_mat_info.uvWidth / 2, primary_mat_info.uvOffsetH - primary_mat_info.uvHeight);
+					uv1[last_vertex - 1] = new Vector2(primary_mat_info.uvOffsetW + primary_mat_info.uvWidth, primary_mat_info.uvOffsetH - primary_mat_info.uvHeight / 2);
 
 					uv2[last_vertex - 4] = new Vector2(secondary_mat_info.uvOffsetW + secondary_mat_info.uvWidth / 2, secondary_mat_info.uvOffsetH);
 					uv2[last_vertex - 3] = new Vector2(secondary_mat_info.uvOffsetW, secondary_mat_info.uvOffsetH - secondary_mat_info.uvHeight / 2);
@@ -145,15 +131,16 @@ namespace ja2
 					array_tri[triangle_index + 4] = last_vertex - 1;
 					array_tri[triangle_index + 5] = last_vertex - 2;
 					// Save triangles
-					int triangle_index_raw = tile.x * 2 + tile.y * width * 2;
+					int triangle_index_raw = j * 2 + i * PARTITION_WIDTH * 2;
 					m_TerrainMap[triangle_index_raw] = new TriangleMap(tile.x, tile.y);
 					m_TerrainMap[triangle_index_raw + 1] = new TriangleMap(tile.x, tile.y);
 				}
 			}
 
+			Mesh mesh = new Mesh();
 			mesh.vertices = array_vec;
 			mesh.triangles = array_tri;
-			mesh.uv = uv;
+			mesh.uv = uv1;
 			mesh.uv2 = uv2;
 			mesh.tangents = uv3;
 
@@ -163,11 +150,9 @@ namespace ja2
 		}
 
 		//! Find terrain tile.
-		public ja2.TerrainTile GetTile(int TriangleIndex)
+		public TriangleMap GetTile(int TriangleIndex)
 		{
-			TriangleMap tile_coord = m_TerrainMap[TriangleIndex];
-
-			return mapInstance.map.GetTile(tile_coord.x, tile_coord.y);
+			return m_TerrainMap[TriangleIndex];
 		}
 
 		public static Vector3 TileVertex(int X, int Y, short Vertex)
@@ -200,12 +185,12 @@ namespace ja2
 
 		private int GetVertexIndex(int X, int Y)
 		{
-			return X * 4 + Y * width * 4;
+			return X * 4 + Y * PARTITION_WIDTH * 4;
 		}
 
 		private int GetTriIndex(int X, int Y)
 		{
-			return X * 6 + Y * width * 6;
+			return X * 6 + Y * PARTITION_WIDTH * 6;
 		}
 		#endregion
 	}
