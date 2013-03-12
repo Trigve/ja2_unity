@@ -47,6 +47,7 @@
      <Compile Include="Assets\Script\CameraManager.cs" />
      <Compile Include="Assets\Script\GameCursor.cs" />
      <Compile Include="Assets\Script\GameManager.cs" />
+     <Compile Include="Assets\Script\GlowShader.cs" />
      <Compile Include="Assets\Script\Init1.cs" />
      <Compile Include="Assets\Script\MapInstance.cs" />
      <Compile Include="Assets\Script\MonoSingleton.cs" />
@@ -63,6 +64,7 @@
      <Compile Include="Assets\Script\ja2\TextureAtlasInfo.cs" />
      <None Include="Assets\data\terrain.xml" />
      <None Include="Assets\Shaders\Border.shader" />
+     <None Include="Assets\Shaders\Glow.shader" />
      <None Include="Assets\Shaders\Terrain.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

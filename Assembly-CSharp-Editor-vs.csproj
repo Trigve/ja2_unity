@@ -47,6 +47,7 @@
      <Compile Include="Assets\Editor\MapWindow.cs" />
      <None Include="Assets\data\terrain.xml" />
      <None Include="Assets\Shaders\Border.shader" />
+     <None Include="Assets\Shaders\Glow.shader" />
      <None Include="Assets\Shaders\Terrain.shader" />
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
