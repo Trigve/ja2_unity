@@ -13,8 +13,6 @@ public class TerrainManager : MonoBehaviour
 	//! Map instance.
 	[SerializeField]
 	private MapInstance mapInstance;
-	//! All meshes.
-	private Mesh[] m_Meshes;
 #endregion
 
 #region Operations
