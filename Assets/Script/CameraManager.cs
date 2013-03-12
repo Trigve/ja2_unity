@@ -17,7 +17,7 @@ public class CameraManager : MonoBehaviour
 	private const float Angle = 30F;
 	
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 		// Set orientation
 		transform.rotation = Quaternion.AngleAxis(90, Vector3.down) * Quaternion.AngleAxis(Angle, Vector3.right);
