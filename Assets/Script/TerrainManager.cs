@@ -15,6 +15,10 @@ public class TerrainManager : MonoBehaviour
 	private MapInstance mapInstance;
 #endregion
 
+#region Properties
+	public ja2.Map map { get { return mapInstance.map; } }
+#endregion
+
 #region Operations
 	// Helper for now. Should be replaced with partiotions
 	public ja2.TerrainTile GetTile(int TriangleIndex, GameObject Object)
