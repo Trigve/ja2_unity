@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ShaderUpdate : MonoBehaviour
+public class GlowShader : MonoBehaviour
 {
 #region Attribute
 	//! Actual time.
@@ -9,7 +9,6 @@ public class ShaderUpdate : MonoBehaviour
 	//! Glow duration.
 	public float duration = 2.5f;
 #endregion
-	
 	
 #region Operations
 	void Start ()
