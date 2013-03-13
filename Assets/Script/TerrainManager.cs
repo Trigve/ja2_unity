@@ -26,7 +26,20 @@ public class TerrainManager : MonoBehaviour
 		ja2.TerrainPartition.TriangleMap tile_x_y = Object.GetComponentInChildren<Terrain>().GetTile(TriangleIndex);
 		return mapInstance.map.GetTile(tile_x_y.x, tile_x_y.y);
 	}
+	//! Get tile position for given tile.
+	public Vector3 GetPosition(ja2.TerrainTile Tile, short Vertex)
+	{
+		// Get the partition used
+		int partition_x = Tile.x / ja2.TerrainPartition.PARTITION_WIDTH;
+		int partition_y = Tile.y / ja2.TerrainPartition.PARTITION_HEIGHT;
+		// Compute normalized terrain tile position
+		int normalized_x = Tile.x - ja2.TerrainPartition.PARTITION_WIDTH * partition_x;
+		int normalized_y = Tile.y - ja2.TerrainPartition.PARTITION_HEIGHT * partition_y;
 
+		GameObject terrain_go =  GameObject.Find(PARTITION_NAME + partition_x + "_" + partition_y);
+		
+		return terrain_go.transform.TransformPoint(terrain_go.GetComponent<Terrain>().GetTilePosition(normalized_x, normalized_y, Vertex));
+	}
 	public void CreateTerrain(ja2.Map Map_, ja2.TerrainMaterialManager MatManager)
 	{
 		if(Map_.width % ja2.TerrainPartition.PARTITION_WIDTH != 0 || Map_.width % ja2.TerrainPartition.PARTITION_WIDTH != 0)

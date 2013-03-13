@@ -39,5 +39,10 @@ public sealed class Terrain : MonoBehaviour
 	{
 		return terrainPartition.GetTile(Triangle);
 	}
+	//! Get tile position.
+	public Vector3 GetTilePosition(int X, int Y, short Vertex)
+	{
+		return TerrainPartition.TileVertex(X, Y, Vertex);
+	}
 	#endregion
 }
