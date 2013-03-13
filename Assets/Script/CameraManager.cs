@@ -14,6 +14,7 @@ public class CameraManager : MonoBehaviour
 	//! Max Y.
 	public float MaxY = 20F;
 	
+	//! Camera angle.
 	private const float Angle = 30F;
 	
 	// Use this for initialization
