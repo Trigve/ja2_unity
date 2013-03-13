@@ -33,7 +33,6 @@ public sealed class Terrain : MonoBehaviour
 		// Set map material
 		mesh_renderer.sharedMaterial = Resources.Load("Materials/" + tile_set.materialName, typeof(Material)) as Material;
 	}
-
 	//! Get tile for given triangle.
 	public ja2.TerrainPartition.TriangleMap GetTile(int Triangle)
 	{
