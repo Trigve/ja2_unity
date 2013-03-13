@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{71027FD4-B26C-1E11-E731-5E663938BF19}</ProjectGuid>
+	<ProjectGuid>{319DA02A-15E0-EB26-AFFB-44E8C79754D2}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,32 +44,11 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Script\CameraManager.cs" />
-     <Compile Include="Assets\Script\GameCursor.cs" />
-     <Compile Include="Assets\Script\GameManager.cs" />
-     <Compile Include="Assets\Script\GlowShader.cs" />
-     <Compile Include="Assets\Script\Init1.cs" />
-     <Compile Include="Assets\Script\MapInstance.cs" />
-     <Compile Include="Assets\Script\MonoSingleton.cs" />
-     <Compile Include="Assets\Script\Singleton.cs" />
-     <Compile Include="Assets\Script\Terrain.cs" />
-     <Compile Include="Assets\Script\TerrainManager.cs" />
-     <Compile Include="Assets\Script\World.cs" />
-     <Compile Include="Assets\Script\ja2\Map.cs" />
-     <Compile Include="Assets\Script\ja2\TerrainMaterialManager.cs" />
-     <Compile Include="Assets\Script\ja2\TerrainPartition.cs" />
-     <Compile Include="Assets\Script\ja2\TerrainTile.cs" />
-     <Compile Include="Assets\Script\ja2\TerrainTileSet.cs" />
-     <Compile Include="Assets\Script\ja2\TerrainTileSplat.cs" />
-     <Compile Include="Assets\Script\ja2\TextureAtlasInfo.cs" />
+     <Compile Include="Assets\Plugins\radical\System\RadicalRoutine.cs" />
      <None Include="Assets\data\terrain.xml" />
      <None Include="Assets\Shaders\Border.shader" />
      <None Include="Assets\Shaders\Glow.shader" />
      <None Include="Assets\Shaders\Terrain.shader" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
-      <Project>{319DA02A-15E0-EB26-AFFB-44E8C79754D2}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
