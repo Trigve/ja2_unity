@@ -23,8 +23,6 @@ Temp
 *.pidb
 *.userprefs
 # Unity files
-Library/AnnotationManager
-Library/EditorUserSettings.asset
-Library/ProjectSettings.asset
 ja2_Data/
 ja2.exe
+Library/
