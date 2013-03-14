@@ -25,3 +25,5 @@ Temp
 # Unity files
 Library/
 bin/
+*.csproj
+*.sln
