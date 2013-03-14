@@ -23,6 +23,5 @@ Temp
 *.pidb
 *.userprefs
 # Unity files
-ja2_Data/
-ja2.exe
 Library/
+bin/
