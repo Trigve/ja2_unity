@@ -143,6 +143,7 @@ namespace ja2
 			mesh.uv = uv1;
 			mesh.uv2 = uv2;
 			mesh.tangents = uv3;
+			mesh.RecalculateNormals();
 
 			mesh.RecalculateNormals();
 
@@ -159,22 +160,22 @@ namespace ja2
 		{
 			Vector3 out_vec;
 
-			float x_pos = ((Y % 2) * TILE_WIDTH) + TILE_WIDTH + X * TILE_WIDTH * 2;
-			float y_pos = Y * TILE_WIDTH + TILE_WIDTH;
+			float z_pos = ((Y % 2) * TILE_WIDTH) + TILE_WIDTH + X * TILE_WIDTH * 2;
+			float x_pos = Y * TILE_WIDTH + TILE_WIDTH;
 
 			switch (Vertex)
 			{
 				case 0:
-					out_vec = new Vector3(y_pos - TILE_HEIGHT, 0, x_pos);
+					out_vec = new Vector3(x_pos - TILE_HEIGHT, 0, z_pos);
 					break;
 				case 1:
-					out_vec = new Vector3(y_pos, 0, x_pos - TILE_HEIGHT);
+					out_vec = new Vector3(x_pos, 0, z_pos - TILE_WIDTH);
 					break;
 				case 2:
-					out_vec = new Vector3(y_pos + TILE_HEIGHT, 0, x_pos);
+					out_vec = new Vector3(x_pos + TILE_HEIGHT, 0, z_pos);
 					break;
 				case 3:
-					out_vec = new Vector3(y_pos, 0, x_pos + TILE_HEIGHT);
+					out_vec = new Vector3(x_pos, 0, z_pos + TILE_WIDTH);
 					break;
 				default:
 					throw new ArgumentException("MapRenderer: Unknown tile vertex number.");
