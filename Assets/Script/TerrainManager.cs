@@ -34,6 +34,13 @@ public class TerrainManager : MonoBehaviour
 		
 		return terrain_go.transform.TransformPoint(terrain_go.GetComponent<Terrain>().GetTilePosition(normalized_x, normalized_y, Vertex));
 	}
+
+	//! Get position of center of tile.
+	public Vector3 GetPosition(ja2.TerrainTile Tile)
+	{
+		return new Vector3(GetPosition(Tile, 1).x, 0, GetPosition(Tile, 0).z);
+	}
+
 	public void CreateTerrain(ja2.Map Map_, ja2.TerrainMaterialManager MatManager)
 	{
 		if(Map_.width % ja2.TerrainPartition.PARTITION_WIDTH != 0 || Map_.width % ja2.TerrainPartition.PARTITION_WIDTH != 0)
