@@ -20,12 +20,6 @@ public class TerrainManager : MonoBehaviour
 #endregion
 
 #region Operations
-	// Helper for now. Should be replaced with partiotions
-	public ja2.TerrainTile GetTile(int TriangleIndex, GameObject Object)
-	{
-		ja2.TerrainPartition.TriangleMap tile_x_y = Object.GetComponentInChildren<Terrain>().GetTile(TriangleIndex);
-		return mapInstance.map.GetTile(tile_x_y.x, tile_x_y.y);
-	}
 	//! Get tile position for given tile.
 	public Vector3 GetPosition(ja2.TerrainTile Tile, short Vertex)
 	{
