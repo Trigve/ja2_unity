@@ -107,6 +107,22 @@ namespace ja2
 
 			return GetTileChecked(x, y);
 		}
+
+		//! Get tile in given direction and distance.
+		public TerrainTile GetTile(TerrainTile Tile, Direction Dir, ushort Step)
+		{
+			TerrainTile out_tile = Tile;
+			for (ushort i = 0; i < Step; ++i)
+			{
+				// Break if we are out
+				if (out_tile == null)
+					break;
+
+				out_tile = GetTile(out_tile, Dir);
+			}
+			
+			return out_tile;
+		}
 		//! Set tile terrain type.
 		public void SetTileTerrainType(TerrainTile Tile, byte TerrainType)
 		{
