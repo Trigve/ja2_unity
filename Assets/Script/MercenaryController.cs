@@ -111,10 +111,13 @@ public class MercenaryController : MonoBehaviourEx
 		// Set walk state
 		animator.SetBool(walkParam, true);
 
-		var line_render = GameObject.Find("Lines").GetComponent<LineRenderer>();
-		line_render.SetVertexCount(4);
-		line_render.SetColors(Color.white, Color.white);
-		line_render.SetWidth(0.1f, 0.1f);
+		var line_render_white = GameObject.Find("LinesWhite").GetComponent<LineRenderer>();
+		line_render_white.SetVertexCount(2);
+		line_render_white.SetWidth(0.05f, 0.05f);
+
+		var line_render_red = GameObject.Find("LinesRed").GetComponent<LineRenderer>();
+		line_render_red.SetVertexCount(2);
+		line_render_red.SetWidth(0.05f, 0.05f);
 
 		Vector3 old_pos = (target_pos - beg_pos).normalized;
 		// Full distance to target
@@ -132,7 +135,7 @@ public class MercenaryController : MonoBehaviourEx
 			// tiles or other weird position
 			parentTransform.LookAt(target_pos);
 			// Debug drawing of distance
-			if (!line_render.enabled)
+			if (!line_render_white.enabled || !line_render_red)
 			{
 				if (debugPathDraw)
 				{
@@ -144,14 +147,13 @@ public class MercenaryController : MonoBehaviourEx
 			{
 				if (debugPathDraw)
 				{
-					line_render.SetPosition(0, tile_beg_pos);
-					line_render.SetPosition(1, target_pos);
+					line_render_white.SetPosition(0, tile_beg_pos);
+					line_render_white.SetPosition(1, target_pos);
 
-					line_render.SetPosition(2, parentTransform.position);
-					line_render.SetPosition(3, target_pos);
+					line_render_red.SetPosition(0, parentTransform.position);
+					line_render_red.SetPosition(1, target_pos);
 				}
 			}
-
 
 			if (distance_to_go <= MOVE_DIFF)
 			{
