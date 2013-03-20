@@ -1,20 +1,3 @@
-*.bmp
-*.BMP
-*.psd
-*.PSD
-*.tif
-*.TIF
-*.tiff
-*.TIFF
-*.pdf
-*.PDF
-*.ttf
-*.TTF
-*.ZIP
-*.zip
-*.rtf
-*.png
-*.dds
 # Unity project files
 obj
 Temp
