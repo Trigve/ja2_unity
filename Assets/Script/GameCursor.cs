@@ -5,6 +5,7 @@ public class GameCursor : MonoBehaviour
 {
 #region Attributes
 	private RaycastHit m_Hit;
+	private ja2.Map map;
 #endregion
 	void Awake()
 	{
@@ -112,6 +113,7 @@ public class GameCursor : MonoBehaviour
 #if !UNITY_EDITOR
 		Screen.showCursor = false;
 #endif
+		map = GameObject.Find("Map").GetComponent<TerrainManager>().map;
 	}
 	
 	// Update is called once per frame
@@ -121,7 +123,10 @@ public class GameCursor : MonoBehaviour
 		if (Physics.Raycast(ray, out m_Hit, Mathf.Infinity, Terrain.LAYER_MASK))
 		{
 			// Find the tile based on triangles			
-			ja2.TerrainTile tile = GameObject.Find("Map").GetComponent<TerrainManager>().GetTile(m_Hit.triangleIndex, m_Hit.transform.gameObject);
+			Terrain terrain = m_Hit.transform.gameObject.GetComponent<Terrain>();
+			ja2.TerrainPartition.TriangleMap tile_x_y = terrain.GetTile(m_Hit.triangleIndex);
+			ja2.TerrainTile tile = map.GetTile(tile_x_y.x, tile_x_y.y);
+
 			Vector3 v0 = ja2.TerrainPartition.TileVertex(tile.x, tile.y, 0);
 			Vector3 v1 = ja2.TerrainPartition.TileVertex(tile.x, tile.y, 1);
 			transform.position = new Vector3(v1.x, 0, v0.z);
