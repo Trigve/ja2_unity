@@ -106,6 +106,7 @@ public class MercenaryController : MonoBehaviourEx
 		// Beginning position must actual transform position because we will
 		// never be in the center of tile
 		Vector3 beg_pos = parentTransform.position;
+		Vector3 tile_beg_pos = terrainManager.GetPosition(mercenary.tile);
 
 		// Set walk state
 		animator.SetBool(walkParam, true);
@@ -135,15 +136,15 @@ public class MercenaryController : MonoBehaviourEx
 			{
 				if (debugPathDraw)
 				{
-					Debug.DrawLine(beg_pos, target_pos);
-					Debug.DrawLine(parentTransform.position, target_pos);
+					Debug.DrawLine(tile_beg_pos, target_pos);
+					Debug.DrawLine(parentTransform.position, target_pos, Color.red);
 				}
 			}
 			else
 			{
 				if (debugPathDraw)
 				{
-					line_render.SetPosition(0, beg_pos);
+					line_render.SetPosition(0, tile_beg_pos);
 					line_render.SetPosition(1, target_pos);
 
 					line_render.SetPosition(2, parentTransform.position);
