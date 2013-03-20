@@ -124,6 +124,12 @@ public class MercenaryController : MonoBehaviourEx
 		{
 			// Update the distance to target
 			distance_to_go = distance - accumulateTranslate;
+			// Compute angle change from offset; There will be always some
+			// offset from center of tile, and therefor we need to always
+			// direct the object toward the center because otherwise
+			// the accumulated offset could cause that we will end up in between
+			// tiles or other weird position
+			parentTransform.LookAt(target_pos);
 			// Debug drawing of distance
 			if (!line_render.enabled)
 			{
