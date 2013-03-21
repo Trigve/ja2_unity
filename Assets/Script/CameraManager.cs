@@ -36,7 +36,7 @@ public class CameraManager : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
 	{
 		// Recalculate camera on windo size
 		if (initialWindowSize.width != camera.pixelWidth || initialWindowSize.height != camera.pixelHeight)
