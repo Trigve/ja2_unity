@@ -96,6 +96,8 @@ public class MercenaryController : MonoBehaviourEx
 	//! Move as coroutine.
 	virtual public IEnumerator Move_Coro(ushort NumberOfTiles)
 	{
+		// Does the position of GO need to be clamped to center of tile
+		bool clamp_position = false;
 		// Start updating position
 		updatePosition = true;
 		// Reset accumulate translation
@@ -131,6 +133,9 @@ public class MercenaryController : MonoBehaviourEx
 			// We're in the proximity of error
 			if (distance_to_go <= MOVE_DIFF)
 			{
+				// If we're way off, clamp position to center
+				clamp_position = (distance_to_go <= -MOVE_DIFF);
+
 				break;
 			}
 			// Compute angle change from offset; There will be always some
@@ -186,6 +191,11 @@ public class MercenaryController : MonoBehaviourEx
 
 		// Need to adjust position of mercenary
 		mercenary.tile = target_tile;
+		// Need to update position
+		if (clamp_position)
+		{
+			UpdatePosition();
+		}
 	}
 
 	//! Rotate.
