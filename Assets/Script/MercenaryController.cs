@@ -6,7 +6,7 @@ public class MercenaryController : MonoBehaviourEx
 {
 #region Constants
 	//! This constant is dependent of transition time.
-	protected const float MOVE_DIFF = 0.06f;
+	protected const float MOVE_DIFF = 0.05f;
 #endregion
 #region Static
 	static protected int walkParam = Animator.StringToHash("walk");
