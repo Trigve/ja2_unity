@@ -128,6 +128,11 @@ public class MercenaryController : MonoBehaviourEx
 		{
 			// Update the distance to target
 			distance_to_go = distance - accumulateTranslate;
+			// We're in the proximity of error
+			if (distance_to_go <= MOVE_DIFF)
+			{
+				break;
+			}
 			// Compute angle change from offset; There will be always some
 			// offset from center of tile, and therefor we need to always
 			// direct the object toward the center because otherwise
@@ -153,11 +158,6 @@ public class MercenaryController : MonoBehaviourEx
 					line_render_red.SetPosition(0, parentTransform.position);
 					line_render_red.SetPosition(1, target_pos);
 				}
-			}
-
-			if (distance_to_go <= MOVE_DIFF)
-			{
-				break;
 			}
 			// Update actual tile
 			RaycastHit hit;
