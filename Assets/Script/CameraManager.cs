@@ -4,7 +4,7 @@ using System.Collections;
 public class CameraManager : MonoBehaviour
 {
 #region Enums
-	private enum Direction
+	public enum Direction
 	{
 		LEFT,
 		RIGHT,
@@ -35,32 +35,30 @@ public class CameraManager : MonoBehaviour
 		RecalculateCamera();
 	}
 	
-	// Update is called once per frame
-	void FixedUpdate ()
+	//! Move camera in given direction.
+	public void Move(Direction Dir)
 	{
 		// Recalculate camera on windo size
 		if (initialWindowSize.width != camera.pixelWidth || initialWindowSize.height != camera.pixelHeight)
 			RecalculateCamera();
-
-		if (Input.GetKey(KeyCode.LeftArrow))
+		// Check direction as first
+		if (CheckDirection(Dir))
 		{
-			if(CheckDirection(Direction.LEFT))
-				transform.Translate(0, 0, -amount, Space.World);
-		}
-		else if (Input.GetKey(KeyCode.RightArrow))
-		{
-			if(CheckDirection(Direction.RIGHT))
-				transform.Translate(0, 0, amount, Space.World);
-		}
-		else if (Input.GetKey(KeyCode.DownArrow))
-		{
-			if(CheckDirection(Direction.BOTTOM))
-				transform.Translate(1, 0, 0, Space.World);
-		}
-		else if (Input.GetKey(KeyCode.UpArrow))
-		{
-			if(CheckDirection(Direction.TOP))
-				transform.Translate(-1, 0, 0, Space.World);
+			switch(Dir)
+			{
+				case Direction.LEFT:
+					transform.Translate(0, 0, -amount, Space.World);
+					break;
+				case Direction.RIGHT:
+					transform.Translate(0, 0, amount, Space.World);
+					break;
+				case Direction.BOTTOM:
+					transform.Translate(1, 0, 0, Space.World);
+					break;
+				case Direction.TOP:
+					transform.Translate(-1, 0, 0, Space.World);
+					break;
+			}
 		}
 	}
 

@@ -11,13 +11,32 @@ public sealed class World : Singleton<World>
 
 public sealed class World : MonoSingleton<World>
 {
+#region Attributes
+	//! Main camera.
+	private CameraManager cameraMain;
+#endregion
 	public int a;
 
+#region Operations
 	public override void Init()
 	{
-		// Load data from save-game
-		a = 5;
+		cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraManager>();
 	}
+
+	void FixedUpdate()
+	{
+		// Camera movement
+		if (Input.GetKey(KeyCode.LeftArrow))
+			cameraMain.Move(CameraManager.Direction.LEFT);
+		else if (Input.GetKey(KeyCode.RightArrow))
+			cameraMain.Move(CameraManager.Direction.RIGHT);
+		else if (Input.GetKey(KeyCode.DownArrow))
+			cameraMain.Move(CameraManager.Direction.BOTTOM);
+		else if (Input.GetKey(KeyCode.UpArrow))
+			cameraMain.Move(CameraManager.Direction.TOP);
+	}
+#endregion
+	
 }
 
 /*
