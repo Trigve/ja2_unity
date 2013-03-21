@@ -175,14 +175,14 @@ public class MercenaryController : MonoBehaviourEx
 			// Wait till next update
 			yield return null;
 		}
+		// Don't update position
+		updatePosition = false;
 		// Stop animations
 		animator.SetBool(walkParam, false);
 
 		// Wait for transition to happen
 		while(!animator.IsInTransition(0))
 			yield return null;
-		// Don't update position anymore
-		updatePosition = false;
 		// Wait till transition end
 		while(animator.IsInTransition(0))
 		{
