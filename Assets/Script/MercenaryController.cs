@@ -6,9 +6,11 @@ public class MercenaryController : MonoBehaviourEx
 {
 #region Constants
 	//! This constant is dependent of transition time.
-	protected const float MOVE_DIFF = 0.05f;
+	protected const float MOVE_DIFF = 0.5f;
+	protected const float MOVE_DIFF_TRANSITION = 0.03f;
 #endregion
 #region Static
+	static private int idleState = Animator.StringToHash("Base Layer.Idle");
 	static protected int walkParam = Animator.StringToHash("walk");
 #endregion
 #region Attributes
@@ -133,6 +135,21 @@ public class MercenaryController : MonoBehaviourEx
 			// We're in the proximity of error
 			if (distance_to_go <= MOVE_DIFF)
 			{
+				// No transition comes to play
+				animator.SetBool(walkParam, false);
+				yield return null;
+
+				while (true)
+				{
+					distance_to_go = distance - accumulateTranslate;
+					if (distance_to_go <= MOVE_DIFF_TRANSITION)
+					{
+						// Stop updating pos
+						updatePosition = false;
+						break;
+					}
+					yield return null;
+				}
 				// If we're way off, clamp position to center
 				clamp_position = (distance_to_go <= -MOVE_DIFF);
 
@@ -175,20 +192,11 @@ public class MercenaryController : MonoBehaviourEx
 			// Wait till next update
 			yield return null;
 		}
-		// Don't update position
-		updatePosition = false;
-		// Stop animations
-		animator.SetBool(walkParam, false);
-
-		// Wait for transition to happen
-		while(!animator.IsInTransition(0))
-			yield return null;
-		// Wait till transition end
-		while(animator.IsInTransition(0))
+		// Must be in idle and no transition
+		while (!(animator.GetCurrentAnimatorStateInfo(0).nameHash == idleState && !animator.IsInTransition(0)))
 		{
 			yield return null;
 		}
-
 		// Need to adjust position of mercenary
 		mercenary.tile = target_tile;
 		// Need to update position
