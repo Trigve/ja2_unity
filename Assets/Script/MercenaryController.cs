@@ -70,14 +70,7 @@ public class MercenaryController : MonoBehaviourEx
 		// Not in transition or in transition and need to update
 		if (updatePosition)
 		{
-			Vector3 pos_to_translate = new Vector3(0, animator.deltaPosition.y, new Vector3(animator.deltaPosition.x, 0, animator.deltaPosition.z).magnitude);
-			// Reset y of parent, don't want to hover
-			Vector3 pos_to_translate_without_y = new Vector3(pos_to_translate.x, 0, pos_to_translate.z);
-			parentTransform.Translate(pos_to_translate_without_y, Space.Self);
-			// Set the y position to  actual object
-			transform.Translate(new Vector3(0, pos_to_translate.y, 0), Space.Self);
-
-			accumulateTranslate += pos_to_translate.z;
+			Translate(new Vector3(0, animator.deltaPosition.y, new Vector3(animator.deltaPosition.x, 0, animator.deltaPosition.z).magnitude));
 		}
 
 		parentTransform.rotation *= animator.deltaRotation;
@@ -284,6 +277,18 @@ public class MercenaryController : MonoBehaviourEx
 		byte lower_bound = (byte)Mathf.FloorToInt(angle_count);
 		// Compute new rotation look
 		return (ja2.Mercenary.LookDirection)(((angle_count - lower_bound >= 0.5f ? lower_bound + 1 : lower_bound) % 8));
+	}
+
+	//! Implementation of actual translation.
+	private void Translate(Vector3 Translation)
+	{
+		// Reset y of parent, don't want to hover
+		Vector3 pos_to_translate_without_y = new Vector3(Translation.x, 0, Translation.z);
+		parentTransform.Translate(pos_to_translate_without_y, Space.Self);
+		// Set the y position to  actual object
+		transform.Translate(new Vector3(0, Translation.y, 0), Space.Self);
+
+		accumulateTranslate += Translation.z;
 	}
 
 	//! Update current position.
