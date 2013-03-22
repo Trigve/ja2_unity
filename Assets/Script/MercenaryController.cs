@@ -193,13 +193,7 @@ public class MercenaryController : MonoBehaviourEx
 				}
 			}
 			// Update actual tile
-			RaycastHit hit;
-			Ray ray = new Ray(new Vector3(parentTransform.position.x, 1, parentTransform.position.z), Vector3.down);
-			if (Physics.Raycast(ray, out hit, Mathf.Infinity, Terrain.LAYER_MASK))
-			{
-				ja2.TerrainPartition.TriangleMap tile_x_y = hit.transform.gameObject.GetComponent<Terrain>().GetTile(hit.triangleIndex);
-				mercenary.tile = terrainManager.map.GetTile(tile_x_y.x, tile_x_y.y);
-			}
+			UpdateTilePosition();
 			// Wait till next update
 			yield return null;
 		}
@@ -295,6 +289,18 @@ public class MercenaryController : MonoBehaviourEx
 	protected void UpdatePosition()
 	{
 		parentTransform.position = new Vector3(terrainManager.GetPosition(mercenary.tile, 1).x, 0, terrainManager.GetPosition(mercenary.tile, 0).z);
+	}
+
+	//! Update tile position of mercenary.
+	private void UpdateTilePosition()
+	{
+		RaycastHit hit;
+		Ray ray = new Ray(new Vector3(parentTransform.position.x, 1, parentTransform.position.z), Vector3.down);
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity, Terrain.LAYER_MASK))
+		{
+			ja2.TerrainPartition.TriangleMap tile_x_y = hit.transform.gameObject.GetComponent<Terrain>().GetTile(hit.triangleIndex);
+			mercenary.tile = terrainManager.map.GetTile(tile_x_y.x, tile_x_y.y);
+		}
 	}
 
 	//! Update current orientation.
