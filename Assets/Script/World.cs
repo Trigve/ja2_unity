@@ -26,9 +26,8 @@ public sealed class World : MonoSingleton<World>
 		cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraManager>();
 	}
 
-	void Start()
+	void Awake()
 	{
-		cameraMove = false;
 		// Instantiate cursor if not found
 		GameObject cursor_go;
 		if ((cursor_go = GameObject.Find("Cursor")) == null)
@@ -39,6 +38,12 @@ public sealed class World : MonoSingleton<World>
 			// Save it
 			cursor = cursor_go.GetComponent<GameCursor>();
 		}
+	}
+
+	void Start()
+	{
+		cameraMove = false;
+		
 	}
 
 	void FixedUpdate()
