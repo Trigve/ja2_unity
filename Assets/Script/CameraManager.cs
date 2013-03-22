@@ -45,19 +45,22 @@ public class CameraManager : MonoBehaviour
 		// Check direction as first
 		if (CheckDirection(Dir))
 		{
+			// Compute actual amount to move
+			float amount_to_move = amount * Ratio;
+
 			switch(Dir)
 			{
 				case Direction.LEFT:
-					transform.Translate(0, 0, -amount * Ratio, Space.World);
+					transform.Translate(0, 0, -amount_to_move, Space.World);
 					break;
 				case Direction.RIGHT:
-					transform.Translate(0, 0, amount * Ratio, Space.World);
+					transform.Translate(0, 0, amount_to_move, Space.World);
 					break;
 				case Direction.BOTTOM:
-					transform.Translate(amount * Ratio, 0, 0, Space.World);
+					transform.Translate(amount_to_move, 0, 0, Space.World);
 					break;
 				case Direction.TOP:
-					transform.Translate(-amount * Ratio, 0, 0, Space.World);
+					transform.Translate(-amount_to_move, 0, 0, Space.World);
 					break;
 			}
 		}
