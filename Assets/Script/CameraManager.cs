@@ -24,7 +24,7 @@ public class CameraManager : MonoBehaviour
 	//! Max Y.
 	public float MaxY = 20F;
 	//! Amount to shift camera.
-	public int amount = 1;
+	public float amount;
 	//! Camera angle.
 	private const float Angle = 30F;
 	//! Initial window size.
