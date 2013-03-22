@@ -16,6 +16,8 @@ public sealed class World : MonoSingleton<World>
 	private CameraManager cameraMain;
 	//! Camera move in progress.
 	private bool cameraMove;
+	//! Game cursor.
+	private GameCursor cursor;
 #endregion
 
 #region Operations
@@ -27,6 +29,16 @@ public sealed class World : MonoSingleton<World>
 	void Start()
 	{
 		cameraMove = false;
+		// Instantiate cursor if not found
+		GameObject cursor_go;
+		if ((cursor_go = GameObject.Find("Cursor")) == null)
+		{
+			var prefab_class = Resources.Load("Prefabs/Cursor", typeof(GameObject));
+			cursor_go = (GameObject)Instantiate(prefab_class);
+			cursor_go.name = prefab_class.name;
+			// Save it
+			cursor = cursor_go.GetComponent<GameCursor>();
+		}
 	}
 
 	void FixedUpdate()
