@@ -151,7 +151,7 @@ public class MercenaryController : MonoBehaviourEx
 					if (!(distance_to_go_pre > distance_to_go))
 					{
 						print("Stall");
-						parentTransform.Translate(0, 0, MOVE_DIFF_TRANSITION, Space.Self);
+						Translate(new Vector3(0, 0, MOVE_DIFF_TRANSITION));
 						break;
 					}
 
