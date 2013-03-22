@@ -6,6 +6,7 @@ public class CameraManager : MonoBehaviour
 #region Enums
 	public enum Direction
 	{
+		NONE = 0,
 		LEFT,
 		RIGHT,
 		TOP,
