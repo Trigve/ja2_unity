@@ -43,7 +43,7 @@ public class CameraManager : MonoBehaviour
 		if (initialWindowSize.width != camera.pixelWidth || initialWindowSize.height != camera.pixelHeight)
 			RecalculateCamera();
 		// Check direction as first
-		if (CheckDirection(Dir))
+		if (CheckDirection(Dir, Ratio))
 		{
 			// Compute actual amount to move
 			float amount_to_move = amount * Ratio;
@@ -66,7 +66,7 @@ public class CameraManager : MonoBehaviour
 		}
 	}
 
-	private bool CheckDirection(Direction Dir)
+	public bool CheckDirection(Direction Dir, float Ratio)
 	{
 		bool ret = false;
 		Vector3 point_to_check;
@@ -85,20 +85,21 @@ public class CameraManager : MonoBehaviour
 		Vector3 last_tile_pos_1 = terrain_manager.GetPosition(last_tile, 1);
 		Vector3 last_tile_pos_2 = terrain_manager.GetPosition(last_tile, 2);
 
+		float amount_ratio = amount * Ratio;
 		// Check position
 		switch(Dir)
 		{
 			case Direction.LEFT:
-				ret = point_on_plane.z - amount > ja2.TerrainPartition.TILE_WIDTH;
+				ret = point_on_plane.z - amount_ratio > ja2.TerrainPartition.TILE_WIDTH;
 				break;
 			case Direction.TOP:
-				ret = point_on_plane.x - amount > ja2.TerrainPartition.TILE_HEIGHT;
+				ret = point_on_plane.x - amount_ratio > ja2.TerrainPartition.TILE_HEIGHT;
 				break;
 			case Direction.BOTTOM:
-				ret = point_on_plane.x + amount < last_tile_pos_2.x;
+				ret = point_on_plane.x + amount_ratio < last_tile_pos_1.x;
 				break;
 			case Direction.RIGHT:
-				ret = point_on_plane.z + amount < last_tile_pos_2.z;
+				ret = point_on_plane.z + amount_ratio < last_tile_pos_2.z;
 				break;
 		}
 		
