@@ -144,12 +144,18 @@ public class MercenaryController : MonoBehaviourEx
 					distance_to_go = distance - accumulateTranslate;
 					if (distance_to_go <= MOVE_DIFF_TRANSITION)
 					{
+#if JA_MERCENARY_CONTROLLER_PRINT_MOVE
+						print("To go in transition: " + distance_to_go);
+#endif
 						// Stop updating pos
 						updatePosition = false;
 						break;
 					}
 					yield return null;
 				}
+#if JA_MERCENARY_CONTROLLER_PRINT_MOVE
+				print("Distance: " + Vector3.Distance(target_pos, parentTransform.position));
+#endif
 				// If we're way off, clamp position to center
 				clamp_position = (distance_to_go <= -MOVE_DIFF);
 
@@ -195,13 +201,22 @@ public class MercenaryController : MonoBehaviourEx
 		// Must be in idle and no transition
 		while (!(animator.GetCurrentAnimatorStateInfo(0).nameHash == idleState && !animator.IsInTransition(0)))
 		{
+#if JA_MERCENARY_CONTROLLER_PRINT_MOVE
+			print("Waiting...");
+#endif
 			yield return null;
 		}
+#if JA_MERCENARY_CONTROLLER_PRINT_MOVE
+		print("Off Distance: " + Vector3.Distance(target_pos, parentTransform.position));
+#endif
 		// Need to adjust position of mercenary
 		mercenary.tile = target_tile;
 		// Need to update position
 		if (clamp_position)
 		{
+#if JA_MERCENARY_CONTROLLER_PRINT_MOVE
+			print("Clamping position.");
+#endif
 			UpdatePosition();
 		}
 	}
