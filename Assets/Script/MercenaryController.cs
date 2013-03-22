@@ -156,6 +156,8 @@ public class MercenaryController : MonoBehaviourEx
 					}
 
 					distance_to_go_pre = distance_to_go;
+					// Update tile position
+					UpdateTilePosition();
 					yield return null;
 				}
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
