@@ -139,6 +139,8 @@ public class MercenaryController : MonoBehaviourEx
 				animator.SetBool(walkParam, false);
 				yield return null;
 
+				// Store actual distance to go
+				float distance_to_go_pre = distance_to_go;
 				while (true)
 				{
 					distance_to_go = distance - accumulateTranslate;
@@ -151,6 +153,16 @@ public class MercenaryController : MonoBehaviourEx
 						updatePosition = false;
 						break;
 					}
+					// We're stalling in one place because transition isn't
+					// long enough, move a bit closer
+					if (!(distance_to_go_pre > distance_to_go))
+					{
+						print("Stall");
+						parentTransform.Translate(0, 0, MOVE_DIFF_TRANSITION, Space.Self);
+						break;
+					}
+
+					distance_to_go_pre = distance_to_go;
 					yield return null;
 				}
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
