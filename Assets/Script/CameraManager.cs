@@ -36,7 +36,7 @@ public class CameraManager : MonoBehaviour
 	}
 	
 	//! Move camera in given direction.
-	public void Move(Direction Dir)
+	public void Move(Direction Dir, float Ratio = 1)
 	{
 		// Recalculate camera on windo size
 		if (initialWindowSize.width != camera.pixelWidth || initialWindowSize.height != camera.pixelHeight)
@@ -47,16 +47,16 @@ public class CameraManager : MonoBehaviour
 			switch(Dir)
 			{
 				case Direction.LEFT:
-					transform.Translate(0, 0, -amount, Space.World);
+					transform.Translate(0, 0, -amount * Ratio, Space.World);
 					break;
 				case Direction.RIGHT:
-					transform.Translate(0, 0, amount, Space.World);
+					transform.Translate(0, 0, amount * Ratio, Space.World);
 					break;
 				case Direction.BOTTOM:
-					transform.Translate(amount, 0, 0, Space.World);
+					transform.Translate(amount * Ratio, 0, 0, Space.World);
 					break;
 				case Direction.TOP:
-					transform.Translate(-amount, 0, 0, Space.World);
+					transform.Translate(-amount * Ratio, 0, 0, Space.World);
 					break;
 			}
 		}
