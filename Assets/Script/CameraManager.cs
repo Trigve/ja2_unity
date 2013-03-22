@@ -53,10 +53,10 @@ public class CameraManager : MonoBehaviour
 					transform.Translate(0, 0, amount, Space.World);
 					break;
 				case Direction.BOTTOM:
-					transform.Translate(1, 0, 0, Space.World);
+					transform.Translate(amount, 0, 0, Space.World);
 					break;
 				case Direction.TOP:
-					transform.Translate(-1, 0, 0, Space.World);
+					transform.Translate(-amount, 0, 0, Space.World);
 					break;
 			}
 		}
