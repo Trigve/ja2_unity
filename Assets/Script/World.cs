@@ -15,7 +15,6 @@ public sealed class World : MonoSingleton<World>
 	//! Main camera.
 	private CameraManager cameraMain;
 #endregion
-	public int a;
 
 #region Operations
 	public override void Init()
@@ -26,13 +25,13 @@ public sealed class World : MonoSingleton<World>
 	void FixedUpdate()
 	{
 		// Camera movement
-		if (Input.GetKey(KeyCode.LeftArrow))
+		if (Input.mousePosition.x <= 20 || Input.GetKey(KeyCode.LeftArrow))
 			cameraMain.Move(CameraManager.Direction.LEFT);
-		else if (Input.GetKey(KeyCode.RightArrow))
+		else if (Input.mousePosition.x >= Screen.width - 20 || Input.GetKey(KeyCode.RightArrow))
 			cameraMain.Move(CameraManager.Direction.RIGHT);
-		else if (Input.GetKey(KeyCode.DownArrow))
+		else if (Input.mousePosition.y <= 20 || Input.GetKey(KeyCode.DownArrow))
 			cameraMain.Move(CameraManager.Direction.BOTTOM);
-		else if (Input.GetKey(KeyCode.UpArrow))
+		else if (Input.mousePosition.y >= Screen.height - 20 || Input.GetKey(KeyCode.UpArrow))
 			cameraMain.Move(CameraManager.Direction.TOP);
 	}
 #endregion
