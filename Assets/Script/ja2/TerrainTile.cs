@@ -66,6 +66,6 @@ namespace ja2
 			y = Y;
 			terrainTypeArray = new byte[4];
 		}
-		#endregion
+#endregion
 	}
 }
