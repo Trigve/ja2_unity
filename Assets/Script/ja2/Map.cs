@@ -46,7 +46,7 @@ namespace ja2
 		//! Get tile checked
 		private TerrainTile GetTileChecked(int X, int Y)
 		{
-			if ((X + Y * width) >= m_Tiles.Length)
+			if (X < 0 || Y < 0 || GetTileIndex(X, Y) >= m_Tiles.Length)
 				return null;
 
 			return GetTile(X, Y);
