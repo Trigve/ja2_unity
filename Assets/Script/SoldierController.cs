@@ -314,7 +314,7 @@ public class SoldierController : MonoBehaviourEx
 	//! Convert look direction to move direction.
 	static protected ja2.Map.Direction LookDirToMoveDir(ja2.Soldier.LookDirection Direction)
 	{
-		ja2.Map.Direction move_dir;
+		ja2.Map.Direction move_dir = 0;
 		switch(Direction)
 		{
 			case ja2.Soldier.LookDirection.EAST:
@@ -340,9 +340,6 @@ public class SoldierController : MonoBehaviourEx
 				break;
 			case ja2.Soldier.LookDirection.NORTHEAST:
 				move_dir = ja2.Map.Direction.NORTH_EAST;
-				break;
-			default:
-				throw new System.ArgumentException();
 				break;
 		}
 
