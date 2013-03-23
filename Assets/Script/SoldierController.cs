@@ -19,7 +19,7 @@ public class SoldierController : MonoBehaviourEx
 	//! Is rotating.
 	public bool isRotating {get; private set;}
 	//! Mercenary unit data.
-	protected ja2.Mercenary mercenary;
+	protected ja2.Soldier mercenary;
 	//! Terrain manager.
 	protected TerrainManager terrainManager;
 	//! Animator.
@@ -77,7 +77,7 @@ public class SoldierController : MonoBehaviourEx
 	}
 
 	//! Set mercenary.
-	public void SetMercenary(ja2.Mercenary Mercenary)
+	public void SetMercenary(ja2.Soldier Mercenary)
 	{
 		mercenary = Mercenary;
 	}
@@ -223,13 +223,13 @@ public class SoldierController : MonoBehaviourEx
 	}
 
 	//! Rotate.
-	public void Rotate(ja2.Mercenary.LookDirection Direction)
+	public void Rotate(ja2.Soldier.LookDirection Direction)
 	{
 		StartCoroutine(Rotate_CoRo(Direction));
 	}
 
 	//! Rotate as coroutine
-	public IEnumerator Rotate_CoRo(ja2.Mercenary.LookDirection Direction)
+	public IEnumerator Rotate_CoRo(ja2.Soldier.LookDirection Direction)
 	{
 		isRotating = true;
 
@@ -256,13 +256,13 @@ public class SoldierController : MonoBehaviourEx
 	/*!
 		If bool is true, right direction is used. Otherwise left.
 	*/
-	private Quaternion DirectionToRotation(ja2.Mercenary.LookDirection To)
+	private Quaternion DirectionToRotation(ja2.Soldier.LookDirection To)
 	{
 		return Quaternion.AngleAxis((byte)To * 45, Vector3.up);
 	}
 
 	//! Get orientation from old orientation and angle.
-	private ja2.Mercenary.LookDirection OrientationFromAngle(Quaternion Orientation)
+	private ja2.Soldier.LookDirection OrientationFromAngle(Quaternion Orientation)
 	{
 		Vector3 vec;
 		float angle;
@@ -272,7 +272,7 @@ public class SoldierController : MonoBehaviourEx
 		// Lower bound
 		byte lower_bound = (byte)Mathf.FloorToInt(angle_count);
 		// Compute new rotation look
-		return (ja2.Mercenary.LookDirection)(((angle_count - lower_bound >= 0.5f ? lower_bound + 1 : lower_bound) % 8));
+		return (ja2.Soldier.LookDirection)(((angle_count - lower_bound >= 0.5f ? lower_bound + 1 : lower_bound) % 8));
 	}
 
 	//! Implementation of actual translation.
@@ -312,33 +312,33 @@ public class SoldierController : MonoBehaviourEx
 	}
 
 	//! Convert look direction to move direction.
-	static protected ja2.Map.Direction LookDirToMoveDir(ja2.Mercenary.LookDirection Direction)
+	static protected ja2.Map.Direction LookDirToMoveDir(ja2.Soldier.LookDirection Direction)
 	{
 		ja2.Map.Direction move_dir;
 		switch(Direction)
 		{
-			case ja2.Mercenary.LookDirection.EAST:
+			case ja2.Soldier.LookDirection.EAST:
 				move_dir = ja2.Map.Direction.EAST;
 				break;
-			case ja2.Mercenary.LookDirection.SOUTHEAST:
+			case ja2.Soldier.LookDirection.SOUTHEAST:
 				move_dir = ja2.Map.Direction.SOUTH_EAST;
 				break;
-			case ja2.Mercenary.LookDirection.SOUTH:
+			case ja2.Soldier.LookDirection.SOUTH:
 				move_dir = ja2.Map.Direction.SOUTH;
 				break;
-			case ja2.Mercenary.LookDirection.SOUTHWEST:
+			case ja2.Soldier.LookDirection.SOUTHWEST:
 				move_dir = ja2.Map.Direction.SOUTH_WEST;
 				break;
-			case ja2.Mercenary.LookDirection.WEST:
+			case ja2.Soldier.LookDirection.WEST:
 				move_dir = ja2.Map.Direction.WEST;
 				break;
-			case ja2.Mercenary.LookDirection.NORTHWEST:
+			case ja2.Soldier.LookDirection.NORTHWEST:
 				move_dir = ja2.Map.Direction.NORTH_WEST;
 				break;
-			case ja2.Mercenary.LookDirection.NORTH:
+			case ja2.Soldier.LookDirection.NORTH:
 				move_dir = ja2.Map.Direction.NORTH;
 				break;
-			case ja2.Mercenary.LookDirection.NORTHEAST:
+			case ja2.Soldier.LookDirection.NORTHEAST:
 				move_dir = ja2.Map.Direction.NORTH_EAST;
 				break;
 			default:

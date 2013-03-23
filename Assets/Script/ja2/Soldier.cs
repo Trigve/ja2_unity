@@ -4,7 +4,7 @@ using System;
 
 namespace ja2
 {
-	public class Mercenary
+	public class Soldier
 	{
 #region Enums
 		public enum LookDirection
@@ -30,13 +30,13 @@ namespace ja2
 #endregion
 
 #region Construction
-		public Mercenary()
+		public Soldier()
 		{
 			// Default direction
 			lookDirection = LookDirection.SOUTHEAST;
 		}
 
-		public Mercenary(TerrainTile Tile)
+		public Soldier(TerrainTile Tile)
 			: this()
 		{
 			tile = Tile;
