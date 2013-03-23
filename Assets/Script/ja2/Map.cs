@@ -41,7 +41,7 @@ namespace ja2
 		//! Get tile.
 		public TerrainTile GetTile(int X, int Y)
 		{
-			return m_Tiles[X + Y * width];
+			return m_Tiles[GetTileIndex(X, Y)];
 		}
 		//! Get tile checked
 		private TerrainTile GetTileChecked(int X, int Y)
