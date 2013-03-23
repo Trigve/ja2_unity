@@ -51,6 +51,13 @@ namespace ja2
 
 			return GetTile(X, Y);
 		}
+
+		//! Get tile index.
+		public int GetTileIndex(int X, int Y)
+		{
+			return (X + Y * width);
+		}
+
 		//! Get the all neighbors.
 		/*!
 			The tiles are returned in this order: NORTH, NORTH-EAST, EAST, SOUTH-EAST, SOUTH, SOUTH-WEST, WEST, NORTH-WEST.
