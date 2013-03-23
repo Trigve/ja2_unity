@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class MercenaryController : MonoBehaviourEx
+public class SoldierController : MonoBehaviourEx
 {
 #region Constants
 	//! This constant is dependent of transition time.
