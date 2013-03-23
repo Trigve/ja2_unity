@@ -45,6 +45,10 @@ public class TerrainManager : MonoBehaviour
 	{
 		if(Map_.width % ja2.TerrainPartition.PARTITION_WIDTH != 0 || Map_.width % ja2.TerrainPartition.PARTITION_WIDTH != 0)
 			throw new System.ArgumentException("Map width/height must be normalized to terrain partition width/height.");
+		// Create component
+		mapInstance = ScriptableObject.CreateInstance<MapInstance>();
+		mapInstance.map = Map_;
+
 		// Need to create terrain partitions
 		int partition_width = Map_.width / ja2.TerrainPartition.PARTITION_WIDTH;
 		int partition_height = Map_.height / ja2.TerrainPartition.PARTITION_HEIGHT;
@@ -64,8 +68,6 @@ public class TerrainManager : MonoBehaviour
 				// Set layer
 				terrain_go.layer = Terrain.LAYER;
 				// Create component
-				mapInstance = ScriptableObject.CreateInstance<MapInstance>();
-				mapInstance.map = Map_;
 				var terrain = terrain_go.AddComponent<Terrain>();
 				terrain.CreatePartition(j, i, mapInstance, MatManager);
 			}
