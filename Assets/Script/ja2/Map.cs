@@ -37,6 +37,11 @@ namespace ja2
 		private TerrainTile[] m_Tiles;
 #endregion
 
+#region Properties
+		//! Number of tiles.
+		public int size { get { return m_Tiles.Length; } }
+#endregion
+
 #region Operations
 		//! Get tile.
 		public TerrainTile GetTile(int X, int Y)
