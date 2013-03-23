@@ -6,6 +6,8 @@ public class GameCursor : MonoBehaviour
 #region Attributes
 	private RaycastHit m_Hit;
 	private ja2.Map map;
+	//! Actual tile cursor is at.
+	public ja2.TerrainTile tile { get; private set; }
 #endregion
 	void Awake()
 	{
@@ -96,7 +98,7 @@ public class GameCursor : MonoBehaviour
 			// Find the tile based on triangles			
 			Terrain terrain = m_Hit.transform.gameObject.GetComponent<Terrain>();
 			ja2.TerrainPartition.TriangleMap tile_x_y = terrain.GetTile(m_Hit.triangleIndex);
-			ja2.TerrainTile tile = map.GetTile(tile_x_y.x, tile_x_y.y);
+			tile = map.GetTile(tile_x_y.x, tile_x_y.y);
 
 			Vector3 v0 = ja2.TerrainPartition.TileVertex(tile.x, tile.y, 0);
 			Vector3 v1 = ja2.TerrainPartition.TileVertex(tile.x, tile.y, 1);
