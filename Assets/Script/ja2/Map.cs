@@ -63,6 +63,11 @@ namespace ja2
 			return (X + Y * width);
 		}
 
+		//! HACK!!!.
+		public TerrainTile GetTile(int Index)
+		{
+			return m_Tiles[Index];
+		}
 		//! Get the all neighbors.
 		/*!
 			The tiles are returned in this order: NORTH, NORTH-EAST, EAST, SOUTH-EAST, SOUTH, SOUTH-WEST, WEST, NORTH-WEST.
