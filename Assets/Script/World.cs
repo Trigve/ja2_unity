@@ -18,6 +18,10 @@ public sealed class World : MonoSingleton<World>
 	private bool cameraMove;
 	//! Game cursor.
 	private GameCursor cursor;
+	//! Hover cursor.
+	private GameObject hover;
+	//! Selected mercenary.
+	private GameObject soldierSelected;
 #endregion
 
 #region Operations
@@ -38,6 +42,13 @@ public sealed class World : MonoSingleton<World>
 			// Save it
 			cursor = cursor_go.GetComponent<GameCursor>();
 		}
+		// Instantiate hover
+		if ((hover = GameObject.Find("Hover")) == null)
+		{
+			var prefab_class = Resources.Load("Prefabs/Hover", typeof(GameObject));
+			hover = (GameObject)Instantiate(prefab_class);
+			hover.name = prefab_class.name;
+		}
 	}
 
 	void Start()
@@ -55,6 +66,33 @@ public sealed class World : MonoSingleton<World>
 			// Need to move
 			if (dir != CameraManager.Direction.NONE)
 				StartCoroutine(MoveCamera_Coro(dir));
+		}
+		// Process mercenary selection
+		if (Input.GetMouseButtonDown(0))
+		{
+			GameObject old_selection = soldierSelected;
+			// Find all mercenaries
+			GameObject[] mercenaries = GameObject.FindGameObjectsWithTag("Mercenary");
+			foreach (GameObject mercenary_go in mercenaries)
+			{
+				// Get component
+				var mercenary_ctrl = mercenary_go.GetComponentInChildren<SoldierController>();
+				if (mercenary_ctrl.position == cursor.tile)
+				{
+					// Same selection, do nothing
+					if (old_selection == mercenary_go)
+					{
+						old_selection = null;
+						break;
+					}
+					// Associate new selection
+					soldierSelected = mercenary_go;
+					// Attach
+					hover.transform.parent = mercenary_go.transform;
+					hover.transform.localPosition = Vector3.zero;
+					break;
+				}
+			}
 		}
 	}
 
