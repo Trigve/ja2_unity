@@ -260,7 +260,7 @@ namespace ja2
 		}
 #endregion
 
-		#region Constructor
+#region Constructor
 		public Map(int Width, int Height, string TerrainName)
 		{
 			width = Width;
@@ -290,4 +290,4 @@ namespace ja2
 		}
 		#endregion
 	}
-}
+} /*ja*/
