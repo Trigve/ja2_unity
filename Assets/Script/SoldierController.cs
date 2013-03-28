@@ -89,7 +89,7 @@ public class SoldierController : MonoBehaviourEx
 	}
 
 	//! Move as coroutine.
-	virtual public IEnumerator Move_Coro(ushort NumberOfTiles)
+	public IEnumerator Move_Coro(ushort NumberOfTiles)
 	{
 		// Does the position of GO need to be clamped to center of tile
 		bool clamp_position = false;
@@ -223,13 +223,13 @@ public class SoldierController : MonoBehaviourEx
 	}
 
 	//! Rotate.
-	public void Rotate(ja2.Soldier.LookDirection Direction)
+	public void Rotate(ja2.LookDirection Direction)
 	{
 		StartCoroutine(Rotate_CoRo(Direction));
 	}
 
 	//! Rotate as coroutine
-	public IEnumerator Rotate_CoRo(ja2.Soldier.LookDirection Direction)
+	public IEnumerator Rotate_CoRo(ja2.LookDirection Direction)
 	{
 		isRotating = true;
 
@@ -256,13 +256,13 @@ public class SoldierController : MonoBehaviourEx
 	/*!
 		If bool is true, right direction is used. Otherwise left.
 	*/
-	private Quaternion DirectionToRotation(ja2.Soldier.LookDirection To)
+	private Quaternion DirectionToRotation(ja2.LookDirection To)
 	{
 		return Quaternion.AngleAxis((byte)To * 45, Vector3.up);
 	}
 
 	//! Get orientation from old orientation and angle.
-	private ja2.Soldier.LookDirection OrientationFromAngle(Quaternion Orientation)
+	private ja2.LookDirection OrientationFromAngle(Quaternion Orientation)
 	{
 		Vector3 vec;
 		float angle;
@@ -272,7 +272,7 @@ public class SoldierController : MonoBehaviourEx
 		// Lower bound
 		byte lower_bound = (byte)Mathf.FloorToInt(angle_count);
 		// Compute new rotation look
-		return (ja2.Soldier.LookDirection)(((angle_count - lower_bound >= 0.5f ? lower_bound + 1 : lower_bound) % 8));
+		return (ja2.LookDirection)(((angle_count - lower_bound >= 0.5f ? lower_bound + 1 : lower_bound) % 8));
 	}
 
 	//! Implementation of actual translation.
@@ -312,33 +312,33 @@ public class SoldierController : MonoBehaviourEx
 	}
 
 	//! Convert look direction to move direction.
-	static protected ja2.Map.Direction LookDirToMoveDir(ja2.Soldier.LookDirection Direction)
+	static protected ja2.Map.Direction LookDirToMoveDir(ja2.LookDirection Direction)
 	{
 		ja2.Map.Direction move_dir = 0;
 		switch(Direction)
 		{
-			case ja2.Soldier.LookDirection.EAST:
+			case ja2.LookDirection.EAST:
 				move_dir = ja2.Map.Direction.EAST;
 				break;
-			case ja2.Soldier.LookDirection.SOUTHEAST:
+			case ja2.LookDirection.SOUTHEAST:
 				move_dir = ja2.Map.Direction.SOUTH_EAST;
 				break;
-			case ja2.Soldier.LookDirection.SOUTH:
+			case ja2.LookDirection.SOUTH:
 				move_dir = ja2.Map.Direction.SOUTH;
 				break;
-			case ja2.Soldier.LookDirection.SOUTHWEST:
+			case ja2.LookDirection.SOUTHWEST:
 				move_dir = ja2.Map.Direction.SOUTH_WEST;
 				break;
-			case ja2.Soldier.LookDirection.WEST:
+			case ja2.LookDirection.WEST:
 				move_dir = ja2.Map.Direction.WEST;
 				break;
-			case ja2.Soldier.LookDirection.NORTHWEST:
+			case ja2.LookDirection.NORTHWEST:
 				move_dir = ja2.Map.Direction.NORTH_WEST;
 				break;
-			case ja2.Soldier.LookDirection.NORTH:
+			case ja2.LookDirection.NORTH:
 				move_dir = ja2.Map.Direction.NORTH;
 				break;
-			case ja2.Soldier.LookDirection.NORTHEAST:
+			case ja2.LookDirection.NORTHEAST:
 				move_dir = ja2.Map.Direction.NORTH_EAST;
 				break;
 		}

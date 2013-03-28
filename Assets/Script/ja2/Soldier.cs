@@ -6,20 +6,6 @@ namespace ja2
 {
 	public class Soldier
 	{
-#region Enums
-		public enum LookDirection
-		{
-			EAST = 0,
-			SOUTHEAST = 1,
-			SOUTH = 2,
-			SOUTHWEST = 3,
-			WEST = 4,
-			NORTHWEST = 5,
-			NORTH = 6,
-			NORTHEAST = 7,
-		}
-#endregion
-
 #region Attributes
 		//! Name/Description.
 		public string name;
