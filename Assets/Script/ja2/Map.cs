@@ -126,6 +126,84 @@ namespace ja2
 			return GetTileChecked(x, y);
 		}
 
+		public static Direction GetDirection(TerrainTile From, TerrainTile To)
+		{
+			Direction dir = Direction.NONE;
+			// Same y
+			if (From.y == To.y)
+			{
+				if (From.x < To.x)
+					dir = Direction.EAST;
+				else
+					dir = Direction.WEST;
+			}
+			else
+			{
+				if (From.y % 2 == 1)
+				{
+
+					switch (From.y - To.y)
+					{
+						// Row up
+						case 1:
+							if (From.x == To.x)
+								dir = Direction.NORTH_WEST;
+							else if (From.x < To.x)
+								dir = Direction.NORTH_EAST;
+							break;
+						// Row down
+						case -1:
+							if (From.x == To.x)
+								dir = Direction.SOUTH_WEST;
+							else if (From.x < To.x)
+								dir = Direction.SOUTH_EAST;
+							break;
+						// 2 Row up
+						case 2:
+							if (From.x == To.x)
+								dir = Direction.NORTH;
+							break;
+						// 2 Row down
+						case -2:
+							if (From.x == To.x)
+								dir = Direction.SOUTH;
+							break;
+					}
+				}
+				else
+				{
+					switch (From.y - To.y)
+					{
+						// Row up
+						case 1:
+							if (From.x == To.x)
+								dir = Direction.NORTH_EAST;
+							else if (From.x > To.x)
+								dir = Direction.NORTH_WEST;
+							break;
+						// Row down
+						case -1:
+							if (From.x == To.x)
+								dir = Direction.SOUTH_EAST;
+							else if (From.x > To.x)
+								dir = Direction.SOUTH_WEST;
+							break;
+						// 2 Row up
+						case 2:
+							if (From.x == To.x)
+								dir = Direction.NORTH;
+							break;
+						// 2 Row down
+						case -2:
+							if (From.x == To.x)
+								dir = Direction.SOUTH;
+							break;
+					}
+				}
+			}
+
+			return dir;
+		}
 		//! Get tile in given direction and distance.
 		public TerrainTile GetTile(TerrainTile Tile, Direction Dir, ushort Step)
 		{
