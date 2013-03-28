@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public sealed class Tuple<T1, T2>
+public struct Tuple<T1, T2>
 {
 	public readonly T1 t1;
 	public readonly T2 t2;
