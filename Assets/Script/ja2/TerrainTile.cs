@@ -16,6 +16,13 @@ namespace ja2
 			SOUTH = 2,
 			EAST = 3,
 		}
+
+		[Flags]
+		public enum Type
+		{
+			NONE = 0,
+			REGULAR = 1,
+		}
 #endregion
 		#region Constants
 		private const byte VERTEX_COUNT = 4;
@@ -39,6 +46,9 @@ namespace ja2
 		*/
 		[SerializeField]
 		private byte[] terrainTypeArray;
+		//! Terrain type.
+		[SerializeField]
+		private Type type_;
 #endregion
 
 #region Properties
@@ -57,14 +67,21 @@ namespace ja2
 		{
 			terrainTypeArray[(int)Vertex_] = Type;
 		}
-		#endregion
 
-		#region Construction
-		public TerrainTile(int X, int Y)
+		//! Is tile walkable.
+		public bool walkable()
+		{
+			return ((type_ & Type.REGULAR) != 0);
+		}
+#endregion
+
+#region Construction
+		public TerrainTile(int X, int Y, Type Type_)
 		{
 			x = X;
 			y = Y;
 			terrainTypeArray = new byte[4];
+			type_ = Type_;
 		}
 #endregion
 	}
