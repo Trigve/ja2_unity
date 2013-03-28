@@ -13,9 +13,6 @@ public class TerrainManager : MonoBehaviour
 	//! Map instance.
 	[SerializeField]
 	private MapInstance mapInstance;
-	//! Graph.
-	[SerializeField]
-	private path.Graph graph;
 #endregion
 
 #region Properties
@@ -75,49 +72,6 @@ public class TerrainManager : MonoBehaviour
 				terrain.CreatePartition(j, i, mapInstance, MatManager);
 			}
 		}
-		// Helper set to avoid duplicates
-		var duplicate_edges = new System.Collections.Generic.HashSet<string>();
-		// Mapping to nodes
-		var duplicate_nodes = new System.Collections.Generic.Dictionary<int, int>();
-		// Create graph
-		var nodes = new System.Collections.Generic.List<int>();
-		var edges = new System.Collections.Generic.List<path.Edge>();
-		for (int j = 1; j < Map_.height - 1; ++j)
-		{
-			for (int i = 0; i < Map_.width; ++i)
-			{
-				// On each odd lines start from 1
-				if ((i > 0 && j % 2 == 0) || (j % 2 == 1 && i < Map_.width - 1))
-				{
-					// Add node
-					nodes.Add(Map_.GetTileIndex(i, j));
-					duplicate_nodes[Map_.GetTileIndex(i, j)] = nodes.Count - 1;
-					// Push edges
-					ja2.TerrainTile[] neighbors = Map_.GetAllNeighbors(Map_.GetTile(i, j));
-					foreach (ja2.TerrainTile tile in neighbors)
-					{
-						// Only if valid
-						if (tile != null)
-						{
-							// Isn't duplicate
-							string duplicate_name = i + "_" + j + " " + tile.x + "_" + tile.y;
-							if (!duplicate_edges.Contains(duplicate_name))
-							{
-								// Nodes exist
-								if (duplicate_nodes.ContainsKey(Map_.GetTileIndex(i, j)) && duplicate_nodes.ContainsKey(Map_.GetTileIndex(tile.x, tile.y)))
-								{
-									edges.Add(new path.Edge(nodes[duplicate_nodes[Map_.GetTileIndex(i, j)]], nodes[duplicate_nodes[Map_.GetTileIndex(tile.x, tile.y)]]));
-									//								edges.Add(new path.Edge(Map_.GetTileIndex(i, j), Map_.GetTileIndex(tile.x, tile.y)));
-									duplicate_edges.Add(duplicate_name);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		// Create graph
-		graph = new path.Graph(nodes.ToArray(), edges.ToArray(), null);
 	}
 #endregion
 }
