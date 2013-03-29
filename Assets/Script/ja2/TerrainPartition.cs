@@ -145,8 +145,6 @@ namespace ja2
 			mesh.tangents = uv3;
 			mesh.RecalculateNormals();
 
-			mesh.RecalculateNormals();
-
 			return mesh;
 		}
 
