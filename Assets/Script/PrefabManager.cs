@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PrefabManager
+public static class PrefabManager
 {
 	//! Instantiate prefab.
 	static public GameObject Create(string Name)
