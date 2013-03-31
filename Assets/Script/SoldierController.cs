@@ -66,11 +66,10 @@ public class SoldierController : MonoBehaviourEx
 
 	void OnAnimatorMove()
 	{
-
 		// Not in transition or in transition and need to update
 		if (updatePosition)
 		{
-			Translate(new Vector3(0, animator.deltaPosition.y, new Vector3(animator.deltaPosition.x, 0, animator.deltaPosition.z).magnitude));
+			Translate(animator.deltaPosition);
 		}
 
 		parentTransform.rotation *= animator.deltaRotation;
@@ -271,13 +270,11 @@ public class SoldierController : MonoBehaviourEx
 	//! Implementation of actual translation.
 	private void Translate(Vector3 Translation)
 	{
-		// Reset y of parent, don't want to hover
 		Vector3 pos_to_translate_without_y = new Vector3(Translation.x, 0, Translation.z);
-		parentTransform.Translate(pos_to_translate_without_y, Space.Self);
-		// Set the y position to  actual object
-		transform.Translate(new Vector3(0, Translation.y, 0), Space.Self);
-
-		accumulateTranslate += Translation.z;
+		parentTransform.position += pos_to_translate_without_y;
+		transform.position += new Vector3(0, Translation.y, 0);
+		// Need to compute forward translation diff
+		accumulateTranslate += parentTransform.InverseTransformDirection(pos_to_translate_without_y).z;
 	}
 
 	//! Update current position.
