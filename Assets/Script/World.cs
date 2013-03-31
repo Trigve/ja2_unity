@@ -2,13 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-/*
-public sealed class World : Singleton<World>
-{
-	public int a;
-}
-*/
-
 public sealed class World : MonoSingleton<World>
 {
 #region Attributes
