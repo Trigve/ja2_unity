@@ -236,7 +236,7 @@ public class SoldierController : MonoBehaviourEx
 		float time_to_pass = 0.1f * Mathf.Abs((byte)mercenary.lookDirection - (byte)Direction);
 		float start = Time.time;
 		Quaternion start_rotation = parentTransform.rotation;
-		Quaternion end_rotation = DirectionToRotation(Direction);
+		Quaternion end_rotation = ja2.LookDirectionConverter.DirectionToRotation(Direction);
 
 		while (Time.time - start < time_to_pass)
 		{
@@ -252,14 +252,7 @@ public class SoldierController : MonoBehaviourEx
 
 		isRotating = false;
 	}
-	//! Get the direction and angle for given LookAts.
-	/*!
-		If bool is true, right direction is used. Otherwise left.
-	*/
-	private Quaternion DirectionToRotation(ja2.LookDirection To)
-	{
-		return Quaternion.AngleAxis((byte)To * 45, Vector3.up);
-	}
+	
 
 	//! Get orientation from old orientation and angle.
 	private ja2.LookDirection OrientationFromAngle(Quaternion Orientation)
@@ -308,7 +301,7 @@ public class SoldierController : MonoBehaviourEx
 	//! Update current orientation.
 	protected void UpdateOrientation()
 	{
-		parentTransform.rotation = DirectionToRotation(mercenary.lookDirection);
+		parentTransform.rotation = ja2.LookDirectionConverter.DirectionToRotation(mercenary.lookDirection);
 	}
 
 	//! Convert look direction to move direction.

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,6 +55,15 @@ namespace ja2
 			}
 
 			return direction;
+		}
+
+		//! Get the direction and angle for given LookAts.
+		/*!
+			If bool is true, right direction is used. Otherwise left.
+		*/
+		public static Quaternion DirectionToRotation(LookDirection To)
+		{
+			return Quaternion.AngleAxis((byte)To * 45, Vector3.up);
 		}
 #endregion
 	}
