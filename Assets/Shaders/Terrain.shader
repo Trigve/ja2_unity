@@ -9,55 +9,47 @@ Shader "Custom/Terrain"
 	}
 	SubShader
 	{
-		Pass
-		{
+		Lighting On
+		Tags { "RenderType" = "Opaque" }
 CGPROGRAM
-#pragma vertex vert
-#pragma fragment frag
-#include "UnityCG.cginc"
+#pragma surface surf Lambert vertex:vert
 
 sampler2D _TerrainTex;
 sampler2D _SplatTex;
 sampler2D _NoiseTex;
 float _NoiseRatio;
 
-struct v2f
+struct Input
 {
-	float4 pos : SV_POSITION;
-	fixed4 color : COLOR;
-	float2 uv1 : TEXCOORD0;
-	float2 uv2 : TEXCOORD1;
-	float2 uv3 : TEXCOORD2;
-	float2 uv4 : TEXCOORD3;
+	float2 custom_uv1;
+	float2 custom_uv2;
+	float2 custom_uv3;
+	float2 custom_uv4;
 };
 
 float4 _TerrainTex_ST;
 float4 _NoiseTex_ST;
 
-v2f vert (appdata_full v)
+void vert (inout appdata_full v, out Input o)
 {
-	v2f o;
-	o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
-	o.color = v.color;
-	o.uv1 = TRANSFORM_TEX (v.texcoord, _TerrainTex);
-	o.uv2 = TRANSFORM_TEX (v.texcoord1, _TerrainTex);
-	o.uv3 = v.tangent.xy;
-	o.uv4 = TRANSFORM_TEX (float2(v.vertex.x / _NoiseRatio, v.vertex.z / _NoiseRatio), _NoiseTex);
+	UNITY_INITIALIZE_OUTPUT(Input, o);
 
-	return o;
+	o.custom_uv1 = TRANSFORM_TEX (v.texcoord, _TerrainTex);
+	o.custom_uv2 = TRANSFORM_TEX (v.texcoord1, _TerrainTex);
+	o.custom_uv3 = v.tangent.xy;
+	o.custom_uv4 = TRANSFORM_TEX (float2(v.vertex.x / _NoiseRatio, v.vertex.z / _NoiseRatio), _NoiseTex);
 }
 
-half4 frag (v2f i) : COLOR
+void surf(Input IN, inout SurfaceOutput o)
 {
-	half4 mat_1 = tex2D(_TerrainTex, i.uv1);
-	half4 mat_2 = tex2D(_TerrainTex, i.uv2);
-	half4 splat = tex2D(_SplatTex, i.uv3.xy);
-	half4 noise = tex2D(_NoiseTex, i.uv4);
+	half4 mat_1 = tex2D(_TerrainTex, IN.custom_uv1);
+	half4 mat_2 = tex2D(_TerrainTex, IN.custom_uv2);
+	half4 splat = tex2D(_SplatTex, IN.custom_uv3);
+	half4 noise = tex2D(_NoiseTex, IN.custom_uv4);
 	
-	return (i.color * lerp(mat_1, mat_2, splat.a)) * noise * 1.2;
-
+	o.Albedo = (lerp(mat_1, mat_2, splat.a) * noise * 1.2).rgb;
 }
 ENDCG
-		}
 	}
+	Fallback "Diffuse"
 }
