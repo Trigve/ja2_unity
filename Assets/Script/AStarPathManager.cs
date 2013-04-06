@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-public class AStarPathManager : MonoSingleton<AStarPathManager>
+public class AStarPathManager : MonoBehaviourEx
 {
 #region Attributes
 	private TerrainManager terrainManager;
