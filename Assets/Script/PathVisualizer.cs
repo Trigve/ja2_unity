@@ -24,7 +24,7 @@ public class PathVisualizer : MonoBehaviourEx
 		// Mesh for path visualizer
 		Mesh mesh = new Mesh();
 		// Create arrays needed
-		var vertices = new Vector3[Tiles.Length * 4 - 1];
+		var vertices = new Vector3[(Tiles.Length - 1) * 4];
 		var uv1 = new Vector2[vertices.Length];
 		var triangles = new int[(vertices.Length / 4) * 2 * 3];
 		// Vertex iterator
