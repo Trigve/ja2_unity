@@ -16,7 +16,6 @@ public class PathVisualizer : MonoBehaviourEx
 	{
 		terrainManager = GameObject.Find("Map").GetComponent<TerrainManager>();
 		meshFilter = GetComponent<MeshFilter>();
-		transform.position = Vector3.zero;
 	}
 
 	//! Create path visualization.
