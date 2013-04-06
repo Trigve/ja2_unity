@@ -42,19 +42,19 @@ public class PathVisualizer : MonoBehaviourEx
 				// Get actual direction
 				ja2.Map.Direction dir = ja2.Map.GetDirection(previous, tile);
 				// Set vertices
-				vertices[actual_vertex++] = new Vector3(terrainManager.GetPosition(tile, 0).x, 0, terrainManager.GetPosition(tile, 1).z);
-				vertices[actual_vertex++] = new Vector3(terrainManager.GetPosition(tile, 2).x, 0, terrainManager.GetPosition(tile, 1).z);
-				vertices[actual_vertex++] = new Vector3(terrainManager.GetPosition(tile, 2).x, 0, terrainManager.GetPosition(tile, 3).z);
-				vertices[actual_vertex++] = new Vector3(terrainManager.GetPosition(tile, 0).x, 0, terrainManager.GetPosition(tile, 3).z);
+				vertices[actual_vertex++] = new Vector3(terrainManager.GetPosition(tile, 0).x, 0, terrainManager.GetPosition(tile, 0).z);
+				vertices[actual_vertex++] = new Vector3(terrainManager.GetPosition(tile, 1).x, 0, terrainManager.GetPosition(tile, 1).z);
+				vertices[actual_vertex++] = new Vector3(terrainManager.GetPosition(tile, 2).x, 0, terrainManager.GetPosition(tile, 2).z);
+				vertices[actual_vertex++] = new Vector3(terrainManager.GetPosition(tile, 3).x, 0, terrainManager.GetPosition(tile, 3).z);
 
 				// Hardcoded for now, need to change
 				float texel_step = 0.125f;
 				byte rot = (byte)ja2.LookDirectionConverter.Convert(dir);
 
-				uv1[actual_vertex - 4] = new Vector2(texel_step * rot, 1);
-				uv1[actual_vertex - 3] = new Vector2(texel_step * rot, 0);
-				uv1[actual_vertex - 2] = new Vector2(texel_step * rot + texel_step, 0);
-				uv1[actual_vertex - 1] = new Vector2(texel_step * rot + texel_step, 1);
+				uv1[actual_vertex - 4] = new Vector2(texel_step * rot + texel_step / 2, 1);
+				uv1[actual_vertex - 3] = new Vector2(texel_step * rot, 0.5f);
+				uv1[actual_vertex - 2] = new Vector2(texel_step * rot + texel_step / 2, 0);
+				uv1[actual_vertex - 1] = new Vector2(texel_step * rot + texel_step, 0.5f);
 
 				int triangle_index = (((actual_vertex / 4) - 1) * 3 * 2);
 
