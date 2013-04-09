@@ -68,7 +68,7 @@ public class LevelManager : MonoBehaviourEx
 			foreach (GameObject mercenary_go in mercenaries)
 			{
 				// Get component
-				var mercenary_ctrl = mercenary_go.GetComponentInChildren<SoldierController>();
+				var mercenary_ctrl = mercenary_go.GetComponent<SoldierController>();
 				if (mercenary_ctrl.position == cursor.tile)
 				{
 					// Same selection, do nothing
