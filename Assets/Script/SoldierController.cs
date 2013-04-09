@@ -24,8 +24,6 @@ public class SoldierController : MonoBehaviourEx
 	protected TerrainManager terrainManager;
 	//! Animator.
 	protected Animator animator;
-	//! Distance moved.
-	private float accumulateTranslate;
 	//! Update position in move handler.
 	private bool updatePosition = true;
 	//! Parent object transform.
@@ -94,8 +92,6 @@ public class SoldierController : MonoBehaviourEx
 		bool clamp_position = false;
 		// Start updating position
 		updatePosition = true;
-		// Reset accumulate translation
-		accumulateTranslate = 0;
 		// Compute target position
 		ja2.TerrainTile target_tile = terrainManager.map.GetTile(mercenary.tile, LookDirToMoveDir(mercenary.lookDirection), NumberOfTiles);
 		Vector3 target_pos = terrainManager.GetPosition(target_tile);
@@ -107,28 +103,30 @@ public class SoldierController : MonoBehaviourEx
 		// Set walk state
 		animator.SetBool(walkParam, true);
 
-		Vector3 old_pos = (target_pos - beg_pos).normalized;
-		// Full distance to target
-		float distance = Vector3.Distance(beg_pos, target_pos);
-		// Actual distance to target
-		float distance_to_go = distance;
+		// Normal vector of target plane
+		Vector3 target_normal_plane = (beg_pos - target_pos).normalized;
 		while (true)
 		{
-			// Update the distance to target
-			distance_to_go = distance - accumulateTranslate;
+			// Actual distance to target
+			float distance_to_go = utils.Vector3Helper.DistanceSigned(transform.position, target_pos, target_normal_plane);
 			// We're in the proximity of error
 			if (distance_to_go <= MOVE_DIFF)
 			{
+#if JA_MERCENARY_CONTROLLER_PRINT_MOVE
+				print("Stopping walk: " + distance_to_go);
+#endif
 				// No transition comes to play
 				animator.SetBool(walkParam, false);
 				yield return null;
-
+				// Actual signed distance, if < 0 we're beyond the target
+				float approx_distance = 0;
 				// Store actual distance to go
 				float distance_to_go_pre = distance_to_go;
 				while (true)
 				{
-					distance_to_go = distance - accumulateTranslate;
-					if (distance_to_go <= MOVE_DIFF_TRANSITION)
+					distance_to_go = utils.Vector3Helper.DistanceSigned(transform.position, target_pos, target_normal_plane);
+					// We're in proximity of diff transition error or we're beyond the center of tile
+					if (distance_to_go < MOVE_DIFF_TRANSITION)
 					{
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
 						print("To go in transition: " + distance_to_go);
@@ -141,7 +139,7 @@ public class SoldierController : MonoBehaviourEx
 					// long enough, move a bit closer
 					if (!(distance_to_go_pre > distance_to_go))
 					{
-						print("Stall");
+						print("Stall: " + distance_to_go_pre + ", " + distance_to_go);
 						Translate(new Vector3(0, 0, MOVE_DIFF_TRANSITION));
 						break;
 					}
@@ -152,10 +150,11 @@ public class SoldierController : MonoBehaviourEx
 					yield return null;
 				}
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
-				print("Distance: " + Vector3.Distance(target_pos, parentTransform.position));
+				print("Distance: " + utils.Vector3Helper.DistanceSigned(parentTransform.position, target_pos, target_normal_plane));
 #endif
-				// If we're way off, clamp position to center
-				clamp_position = (distance_to_go <= -MOVE_DIFF);
+				// If we're beyond and off at least MOVE_DIFF_TRANSITION, clamp
+				// position to center
+				clamp_position = (distance_to_go < 0);
 
 				break;
 			}
@@ -185,7 +184,7 @@ public class SoldierController : MonoBehaviourEx
 			yield return null;
 		}
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
-		print("Off Distance: " + Vector3.Distance(target_pos, parentTransform.position));
+		print("Off Distance: " + utils.Vector3Helper.DistanceSigned(parentTransform.position, target_pos, target_normal_plane));
 #endif
 		// Need to adjust position of mercenary
 		mercenary.tile = target_tile;
@@ -251,8 +250,6 @@ public class SoldierController : MonoBehaviourEx
 		Vector3 pos_to_translate_without_y = new Vector3(Translation.x, 0, Translation.z);
 		parentTransform.position += pos_to_translate_without_y;
 		transform.position += new Vector3(0, Translation.y, 0);
-		// Need to compute forward translation diff
-		accumulateTranslate += parentTransform.InverseTransformDirection(pos_to_translate_without_y).z;
 	}
 
 	//! Update current position.
