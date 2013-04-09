@@ -160,7 +160,7 @@ public class SoldierController : MonoBehaviourEx
 			// direct the object toward the center because otherwise
 			// the accumulated offset could cause that we will end up in between
 			// tiles or other weird position
-			transform.LookAt(target_pos);
+			transform.LookAt(new Vector3(target_pos.x, transform.position.y, target_pos.z));
 			// Debug drawing of distance
 			if (debugPathDraw)
 			{
