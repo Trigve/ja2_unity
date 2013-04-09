@@ -94,7 +94,7 @@ public class SoldierController : MonoBehaviourEx
 		Vector3 target_normal_plane = (beg_pos - target_pos).normalized;
 		while (true)
 		{
-			// Actual distance to target
+			// Actual distance to targetm if < 0 we're beyond the target
 			float distance_to_go = utils.Vector3Helper.DistanceSigned(transform.position, target_pos, target_normal_plane);
 			// We're in the proximity of error
 			if (distance_to_go <= MOVE_DIFF)
@@ -104,8 +104,6 @@ public class SoldierController : MonoBehaviourEx
 #endif
 				// No transition comes to play
 				animator.SetBool(walkParam, false);
-				// Actual signed distance, if < 0 we're beyond the target
-				float approx_distance = 0;
 				yield return new WaitForFixedUpdate();
 				// Store actual distance to go
 				float distance_to_go_pre = distance_to_go;
