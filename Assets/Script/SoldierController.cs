@@ -26,8 +26,6 @@ public class SoldierController : MonoBehaviourEx
 	protected Animator animator;
 	//! Update position in move handler.
 	private bool updatePosition = true;
-	//! Parent object transform.
-	private Transform parentTransform;
 #endregion
 
 #region Properties
@@ -53,7 +51,6 @@ public class SoldierController : MonoBehaviourEx
 		isRotating = false;
 		terrainManager = GameObject.Find("Map").GetComponent<TerrainManager>();
 		animator = GetComponent<Animator>();
-		parentTransform = transform.parent.transform;
 	}
 
 	protected void Start()
@@ -70,7 +67,7 @@ public class SoldierController : MonoBehaviourEx
 			Translate(animator.deltaPosition);
 		}
 
-		parentTransform.rotation *= animator.deltaRotation;
+		transform.rotation *= animator.deltaRotation;
 	}
 
 	//! Set mercenary.
@@ -97,7 +94,7 @@ public class SoldierController : MonoBehaviourEx
 		Vector3 target_pos = terrainManager.GetPosition(target_tile);
 		// Beginning position must actual transform position because we will
 		// never be in the center of tile
-		Vector3 beg_pos = parentTransform.position;
+		Vector3 beg_pos = transform.position;
 		Vector3 tile_beg_pos = terrainManager.GetPosition(mercenary.tile);
 
 		// Set walk state
@@ -150,7 +147,7 @@ public class SoldierController : MonoBehaviourEx
 					yield return null;
 				}
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
-				print("Distance: " + utils.Vector3Helper.DistanceSigned(parentTransform.position, target_pos, target_normal_plane));
+				print("Distance: " + utils.Vector3Helper.DistanceSigned(transform.position, target_pos, target_normal_plane));
 #endif
 				// If we're beyond and off at least MOVE_DIFF_TRANSITION, clamp
 				// position to center
@@ -163,12 +160,12 @@ public class SoldierController : MonoBehaviourEx
 			// direct the object toward the center because otherwise
 			// the accumulated offset could cause that we will end up in between
 			// tiles or other weird position
-			parentTransform.LookAt(target_pos);
+			transform.LookAt(target_pos);
 			// Debug drawing of distance
 			if (debugPathDraw)
 			{
 				Debug.DrawLine(tile_beg_pos, target_pos);
-				Debug.DrawLine(parentTransform.position, target_pos, Color.red);
+				Debug.DrawLine(transform.position, target_pos, Color.red);
 			}
 			// Update actual tile
 			UpdateTilePosition();
@@ -184,7 +181,7 @@ public class SoldierController : MonoBehaviourEx
 			yield return null;
 		}
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
-		print("Off Distance: " + utils.Vector3Helper.DistanceSigned(parentTransform.position, target_pos, target_normal_plane));
+		print("Off Distance: " + utils.Vector3Helper.DistanceSigned(transform.position, target_pos, target_normal_plane));
 #endif
 		// Need to adjust position of mercenary
 		mercenary.tile = target_tile;
@@ -211,15 +208,15 @@ public class SoldierController : MonoBehaviourEx
 
 		float time_to_pass = 0.1f * Mathf.Abs((byte)mercenary.lookDirection - (byte)Direction);
 		float start = Time.time;
-		Quaternion start_rotation = parentTransform.rotation;
+		Quaternion start_rotation = transform.rotation;
 		Quaternion end_rotation = ja2.LookDirectionConverter.DirectionToRotation(Direction);
 
 		while (Time.time - start < time_to_pass)
 		{
 			// Update rotation of GO
-			parentTransform.rotation = Quaternion.Lerp(start_rotation, end_rotation, (Time.time - start) / time_to_pass);
+			transform.rotation = Quaternion.Lerp(start_rotation, end_rotation, (Time.time - start) / time_to_pass);
 			// Compute actual direction			
-			mercenary.lookDirection = OrientationFromAngle(parentTransform.rotation);
+			mercenary.lookDirection = OrientationFromAngle(transform.rotation);
 
 			yield return null;
 		}
@@ -248,21 +245,21 @@ public class SoldierController : MonoBehaviourEx
 	private void Translate(Vector3 Translation)
 	{
 		Vector3 pos_to_translate_without_y = new Vector3(Translation.x, 0, Translation.z);
-		parentTransform.position += pos_to_translate_without_y;
+		transform.position += pos_to_translate_without_y;
 		transform.position += new Vector3(0, Translation.y, 0);
 	}
 
 	//! Update current position.
 	protected void UpdatePosition()
 	{
-		parentTransform.position = new Vector3(terrainManager.GetPosition(mercenary.tile, 1).x, 0, terrainManager.GetPosition(mercenary.tile, 0).z);
+		transform.position = new Vector3(terrainManager.GetPosition(mercenary.tile, 1).x, 0, terrainManager.GetPosition(mercenary.tile, 0).z);
 	}
 
 	//! Update tile position of mercenary.
 	private void UpdateTilePosition()
 	{
 		RaycastHit hit;
-		Ray ray = new Ray(new Vector3(parentTransform.position.x, 1, parentTransform.position.z), Vector3.down);
+		Ray ray = new Ray(new Vector3(transform.position.x, 1, transform.position.z), Vector3.down);
 		if (Physics.Raycast(ray, out hit, Mathf.Infinity, Terrain.LAYER_MASK))
 		{
 			ja2.TerrainPartition.TriangleMap tile_x_y = hit.transform.gameObject.GetComponent<Terrain>().GetTile(hit.triangleIndex);
@@ -273,7 +270,7 @@ public class SoldierController : MonoBehaviourEx
 	//! Update current orientation.
 	protected void UpdateOrientation()
 	{
-		parentTransform.rotation = ja2.LookDirectionConverter.DirectionToRotation(mercenary.lookDirection);
+		transform.rotation = ja2.LookDirectionConverter.DirectionToRotation(mercenary.lookDirection);
 	}
 
 	//! Convert look direction to move direction.
