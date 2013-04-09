@@ -24,8 +24,8 @@ public class SoldierController : MonoBehaviourEx
 	protected TerrainManager terrainManager;
 	//! Animator.
 	protected Animator animator;
-	//! Update position in move handler.
-	private bool updatePosition = true;
+	//! Rigid body.
+	private Rigidbody rigidBody;
 #endregion
 
 #region Properties
@@ -51,23 +51,13 @@ public class SoldierController : MonoBehaviourEx
 		isRotating = false;
 		terrainManager = GameObject.Find("Map").GetComponent<TerrainManager>();
 		animator = GetComponent<Animator>();
+		rigidBody = GetComponent<Rigidbody>();
 	}
 
 	protected void Start()
 	{
 		UpdatePosition();
 		UpdateOrientation();
-	}
-
-	void OnAnimatorMove()
-	{
-		// Not in transition or in transition and need to update
-		if (updatePosition)
-		{
-			Translate(animator.deltaPosition);
-		}
-
-		transform.rotation *= animator.deltaRotation;
 	}
 
 	//! Set mercenary.
@@ -87,8 +77,8 @@ public class SoldierController : MonoBehaviourEx
 	{
 		// Does the position of GO need to be clamped to center of tile
 		bool clamp_position = false;
-		// Start updating position
-		updatePosition = true;
+		// Save constraints
+		RigidbodyConstraints rigid_body_constrains = rigidBody.constraints;
 		// Compute target position
 		ja2.TerrainTile target_tile = terrainManager.map.GetTile(mercenary.tile, LookDirToMoveDir(mercenary.lookDirection), NumberOfTiles);
 		Vector3 target_pos = terrainManager.GetPosition(target_tile);
@@ -114,9 +104,9 @@ public class SoldierController : MonoBehaviourEx
 #endif
 				// No transition comes to play
 				animator.SetBool(walkParam, false);
-				yield return null;
 				// Actual signed distance, if < 0 we're beyond the target
 				float approx_distance = 0;
+				yield return new WaitForFixedUpdate();
 				// Store actual distance to go
 				float distance_to_go_pre = distance_to_go;
 				while (true)
@@ -128,8 +118,6 @@ public class SoldierController : MonoBehaviourEx
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
 						print("To go in transition: " + distance_to_go);
 #endif
-						// Stop updating pos
-						updatePosition = false;
 						break;
 					}
 					// We're stalling in one place because transition isn't
@@ -144,8 +132,10 @@ public class SoldierController : MonoBehaviourEx
 					distance_to_go_pre = distance_to_go;
 					// Update tile position
 					UpdateTilePosition();
-					yield return null;
+					yield return new WaitForFixedUpdate();
 				}
+				// Stop updating pos
+				rigidBody.constraints |= RigidbodyConstraints.FreezePosition;
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
 				print("Distance: " + utils.Vector3Helper.DistanceSigned(transform.position, target_pos, target_normal_plane));
 #endif
@@ -170,7 +160,7 @@ public class SoldierController : MonoBehaviourEx
 			// Update actual tile
 			UpdateTilePosition();
 			// Wait till next update
-			yield return null;
+			yield return new WaitForFixedUpdate();
 		}
 		// Must be in idle and no transition
 		while (!(animator.GetCurrentAnimatorStateInfo(0).nameHash == idleState && !animator.IsInTransition(0)))
@@ -178,7 +168,7 @@ public class SoldierController : MonoBehaviourEx
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
 			print("Waiting...");
 #endif
-			yield return null;
+			yield return new WaitForFixedUpdate();
 		}
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
 		print("Off Distance: " + utils.Vector3Helper.DistanceSigned(transform.position, target_pos, target_normal_plane));
@@ -193,6 +183,8 @@ public class SoldierController : MonoBehaviourEx
 #endif
 			UpdatePosition();
 		}
+		// Reset constraints
+		rigidBody.constraints = rigid_body_constrains;
 	}
 
 	//! Rotate.
