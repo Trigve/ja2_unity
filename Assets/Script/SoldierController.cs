@@ -1,3 +1,5 @@
+#define JA_MERCENARY_CONTROLLER_PRINT_MOVE
+
 using UnityEngine;
 using System.Collections;
 using System;
@@ -120,13 +122,12 @@ public class SoldierController : MonoBehaviourEx
 					}
 					// We're stalling in one place because transition isn't
 					// long enough, move a bit closer
-					if (!(distance_to_go_pre > distance_to_go))
+					if (animator.GetCurrentAnimatorStateInfo(0).nameHash == idleState)
 					{
 						print("Stall: " + distance_to_go_pre + ", " + distance_to_go);
-						Translate(new Vector3(0, 0, MOVE_DIFF_TRANSITION));
+						rigidBody.MovePosition(target_pos);
 						break;
 					}
-
 					distance_to_go_pre = distance_to_go;
 					// Update tile position
 					UpdateTilePosition();
@@ -229,14 +230,6 @@ public class SoldierController : MonoBehaviourEx
 		byte lower_bound = (byte)Mathf.FloorToInt(angle_count);
 		// Compute new rotation look
 		return (ja2.LookDirection)(((angle_count - lower_bound >= 0.5f ? lower_bound + 1 : lower_bound) % 8));
-	}
-
-	//! Implementation of actual translation.
-	private void Translate(Vector3 Translation)
-	{
-		Vector3 pos_to_translate_without_y = new Vector3(Translation.x, 0, Translation.z);
-		transform.position += pos_to_translate_without_y;
-		transform.position += new Vector3(0, Translation.y, 0);
 	}
 
 	//! Update current position.
