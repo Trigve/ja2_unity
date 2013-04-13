@@ -43,6 +43,22 @@ public class LevelManager : MonoBehaviourEx
 #endregion
 
 #region Operations
+	//! Create full mercenary GO.
+	public GameObject CreateSoldier(ja2.Soldier Soldier_)
+	{
+		// Load prefab of soldier
+		var soldier_go = PrefabManager.Create("Soldier");
+		// Associate solder
+		soldier_go.GetComponent<SoldierController>().SetMercenary(Soldier_);
+		// Create skinned mesh on parameters
+		charEntityManager.Create(Soldier_.character, soldier_go);
+		// Activate now, because now is everything set up and we won't get
+		// any errors from bones mismatch etc
+		soldier_go.SetActive(true);
+
+		return soldier_go;
+	}
+
 	void Awake()
 	{
 		terrainManager = GameObject.Find("Map").GetComponent<TerrainManager>();
