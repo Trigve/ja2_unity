@@ -74,9 +74,9 @@ public class AStarPathManager : MonoBehaviourEx
 			}
 			foreach (var node in lastPath.OpenSet())
 			{
-				Gizmos.color = new Color(node.t1 / lastPath.f_x_End, lastPath.f_x_End / node.t1, 0);
+				Gizmos.color = new Color(node._1 / lastPath.f_x_End, lastPath.f_x_End / node._1, 0);
 
-				Vector3 tile_from = terrainManager.GetPosition(node.t2);
+				Vector3 tile_from = terrainManager.GetPosition(node._2);
 				tile_from.y = 0.1f;
 
 				Gizmos.DrawCube(tile_from, new Vector3(0.1f, 0.1f, 0.1f));
