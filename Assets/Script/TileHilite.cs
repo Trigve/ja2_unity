@@ -8,8 +8,6 @@ public class TileHilite : MonoBehaviour
 	public ja2.TerrainTile tile;
 	//! Mesh filter.
 	private MeshFilter meshFilter;
-	//! Mesh renderer.
-	private MeshRenderer meshRenderer;
 	//! Terrain manager.
 	private TerrainManager terrainManager;
 #endregion
@@ -18,7 +16,6 @@ public class TileHilite : MonoBehaviour
 	{
 		// Get components
 		meshFilter = GetComponent<MeshFilter>();
-		meshRenderer = GetComponent<MeshRenderer>();
 		terrainManager = GameObject.Find("Map").GetComponent<TerrainManager>();
 	}
 	// Use this for initialization
