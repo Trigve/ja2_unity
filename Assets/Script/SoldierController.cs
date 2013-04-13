@@ -124,7 +124,7 @@ public class SoldierController : MonoBehaviourEx
 					// long enough, move a bit closer
 					if (animator.GetCurrentAnimatorStateInfo(0).nameHash == idleState)
 					{
-						print("Stall: " + distance_to_go_pre + ", " + distance_to_go);
+						Debug.LogWarning("Stall: " + distance_to_go_pre + ", " + distance_to_go);
 						rigidBody.MovePosition(target_pos);
 						break;
 					}
