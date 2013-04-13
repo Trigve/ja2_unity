@@ -23,6 +23,12 @@ public class LevelManager : MonoBehaviourEx
 	private Dictionary<SoldierController, SoldierPathManager> soldiersPaths;
 	//! Path visualizer.
 	private PathVisualizer pathVisualizer;
+	//! Character definition manager.
+	private ja2.CharacterDefinitionManager charDefManager;
+	//! Clothes manager.
+	private ja2.ClothManager clothManager;
+	//! Character entity manager.
+	private CharacterEntityManager charEntityManager;
 #endregion
 
 #region Operations
@@ -55,6 +61,10 @@ public class LevelManager : MonoBehaviourEx
 		var path_visualizer_go = PrefabManager.Create("PathVisualizer");
 		path_visualizer_go.transform.parent = transform;
 		pathVisualizer = path_visualizer_go.GetComponent<PathVisualizer>();
+
+		charDefManager = new ja2.CharacterDefinitionManager(Application.dataPath + "/Resources/Data");
+		clothManager = new ja2.ClothManager(Application.dataPath + "/Resources/Data");
+		charEntityManager = new CharacterEntityManager(charDefManager, clothManager);
 	}
 
 	void Update()
