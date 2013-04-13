@@ -13,6 +13,8 @@ namespace ja2
 		public TerrainTile tile;
 		//! Look direction.
 		public LookDirection lookDirection { get; set; }
+		//! Character used for given soldier.
+		public Character character { get; private set; }
 #endregion
 
 #region Construction
@@ -22,10 +24,11 @@ namespace ja2
 			lookDirection = LookDirection.SOUTHEAST;
 		}
 
-		public Soldier(TerrainTile Tile)
+		public Soldier(TerrainTile Tile, Character Character_)
 			: this()
 		{
 			tile = Tile;
+			character = Character_;
 		}
 #endregion
 	}
