@@ -44,7 +44,7 @@ namespace ja2
 
 #region Properties
 		//! Get final tile.
-		new public TerrainTile end { get { return base.end.tile; } }
+		public TerrainTile end { get { return base.end_.tile; } }
 		//! Get final f(x).
 		public float f_x_End { get { return initialEstimate; } }
 #endregion

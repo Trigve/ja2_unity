@@ -49,7 +49,7 @@ namespace path
 		//! Start.
 		protected readonly K start;
 		//! End;
-		protected readonly K end;
+		protected readonly K end_;
 		//! Initial estimate of path.
 		protected float initialEstimate;
 		//! Open set.
@@ -80,7 +80,7 @@ namespace path
 			// Reset for start node
 			g_score[start] = 0;
 			// Recalculate estimate distance.
-			f_score[start] = g_score[start] + Heurestic(start, end);
+			f_score[start] = g_score[start] + Heurestic(start, end_);
 
 			initialEstimate = f_score[start];
 
@@ -98,9 +98,9 @@ namespace path
 				K current = openSetPriority.Pop().tile;
 				openSet.Remove(current);
 				// Got the goal
-				if (current.Equals(end))
+				if (current.Equals(end_))
 				{
-					result = ReconstructPath(cameFrom, end).ToArray();
+					result = ReconstructPath(cameFrom, end_).ToArray();
 					return State.DONE;
 				}
 				closedSet.Add(current);
@@ -121,7 +121,7 @@ namespace path
 					{
 						cameFrom[neigh] = current;
 						g_score[neigh] = tentative_g;
-						f_score[neigh] = tentative_g + Heurestic(neigh, end);
+						f_score[neigh] = tentative_g + Heurestic(neigh, end_);
 
 						if (!openSet.Contains(neigh))
 						{
@@ -164,7 +164,7 @@ namespace path
 		protected AStarPath(K From, K To)
 		{
 			start = From;
-			end = To;
+			end_ = To;
 		}
 #endregion
 	}
