@@ -31,6 +31,17 @@ public class LevelManager : MonoBehaviourEx
 	private CharacterEntityManager charEntityManager;
 #endregion
 
+#region Properies
+	//! Get terrain manager/map.
+	public TerrainManager terrain
+	{
+		get
+		{
+			return terrainManager;
+		}
+	}
+#endregion
+
 #region Operations
 	void Awake()
 	{
