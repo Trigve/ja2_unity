@@ -1,6 +1,8 @@
 using System;
 using System.Xml;
+using System.IO;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ja2
 {
@@ -20,7 +22,9 @@ namespace ja2
 			// Not loaded yet
 			if (!clothes.ContainsKey(Name))
 			{
-				XmlReader xml = XmlReader.Create(wrkPath + "/" + Name + ".xml");
+				string full_path = wrkPath + '/' + Name;
+				XmlReader xml = XmlReader.Create(new StringReader(((TextAsset)Resources.Load(full_path, typeof(TextAsset))).text));
+				
 				// Parse file
 				xml.Read();
 				// Root node
@@ -53,7 +57,7 @@ namespace ja2
 
 				} while (xml.ReadToNextSibling("group"));
 				// Add new group
-				clothes[item_name] = group_dict;
+				clothes[Name] = group_dict;
 			}
 
 			return clothes[Name][Group];
