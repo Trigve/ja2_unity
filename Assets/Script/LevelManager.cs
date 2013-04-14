@@ -89,8 +89,8 @@ public class LevelManager : MonoBehaviourEx
 		path_visualizer_go.transform.parent = transform;
 		pathVisualizer = path_visualizer_go.GetComponent<PathVisualizer>();
 
-		charDefManager = new ja2.CharacterDefinitionManager(Application.dataPath + "/Resources/Data");
-		clothManager = new ja2.ClothManager(Application.dataPath + "/Resources/Data");
+		charDefManager = new ja2.CharacterDefinitionManager("Data");
+		clothManager = new ja2.ClothManager("Data");
 		charEntityManager = new CharacterEntityManager(charDefManager, clothManager);
 	}
 
