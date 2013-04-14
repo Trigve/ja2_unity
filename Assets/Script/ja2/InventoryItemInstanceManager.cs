@@ -26,6 +26,9 @@ namespace ja2
 				case "torso_clothing":
 					instance = new ja2.InventoryItemInstanceTorsoClothing(inventory_item._1, Status, new ja2.TorsoClothing(inventory_item._2.src));
 					break;
+				case "head_clothing":
+					instance = new ja2.InventoryItemInstanceHeadClothing(inventory_item._1, Status, new ja2.HeadClothing(inventory_item._2.src));
+					break;
 				default:
 					throw new Exception("Unknown inventory item type.");
 			}

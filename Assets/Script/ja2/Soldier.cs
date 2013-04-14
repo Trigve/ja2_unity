@@ -15,6 +15,8 @@ namespace ja2
 		public LookDirection lookDirection { get; set; }
 		//! Character group.
 		private CharacterGroup group;
+		//! Head.
+		private Head head;
 		//! Torso.
 		private Torso torso;
 #endregion
@@ -26,6 +28,12 @@ namespace ja2
 			torso.clothingInstance = Clothing;
 		}
 
+		//! Add head clothing.
+		public void AddHeadClothing(InventoryItemInstanceHeadClothing Clothing)
+		{
+			head.clothingInstance = Clothing;
+		}
+
 		//! Get character for given soldier.
 		public Character character()
 		{
@@ -33,6 +41,9 @@ namespace ja2
 			// Find all clothing and add it to character
 			if (torso.clothingInstance != null)
 				character_.AddClothing(torso.clothingInstance.clothing.source);
+			if (head.clothingInstance != null)
+				character_.AddClothing(head.clothingInstance.clothing.source);
+
 
 			return character_;
 		}
@@ -44,6 +55,7 @@ namespace ja2
 			// Default direction
 			lookDirection = LookDirection.SOUTHEAST;
 			torso = new Torso();
+			head = new Head();
 		}
 
 		public Soldier(TerrainTile Tile, CharacterGroup Group)
