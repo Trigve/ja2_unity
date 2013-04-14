@@ -46,7 +46,9 @@ public sealed class CharacterEntityManager
 		foreach (var clothing in clothes_prefabs)
 			clothing.transform.parent = char_object.transform;
 		// Combine mesh
-		MeshCombiner.Combine(char_object, CharGO);
+		var combinded_go = new GameObject("CombinedMesh");
+		combinded_go.transform.parent = CharGO.transform;
+		MeshCombiner.Combine(char_object, combinded_go);
 		// Destroy temporary object
 		GameObject.DestroyImmediate(char_object);
 	}
