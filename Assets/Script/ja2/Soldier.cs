@@ -13,8 +13,29 @@ namespace ja2
 		public TerrainTile tile;
 		//! Look direction.
 		public LookDirection lookDirection { get; set; }
-		//! Character used for given soldier.
-		public Character character { get; private set; }
+		//! Character group.
+		private CharacterGroup group;
+		//! Torso.
+		private Torso torso;
+#endregion
+
+#region Operations
+		//! Add torso clothing.
+		public void AddTorsoClothing(InventoryItemInstanceTorsoClothing Clothing)
+		{
+			torso.clothingInstance = Clothing;
+		}
+
+		//! Get character for given soldier.
+		public Character character()
+		{
+			var character_ = new Character(group);
+			// Find all clothing and add it to character
+			if (torso.clothingInstance != null)
+				character_.AddClothing(torso.clothingInstance.clothing.source);
+
+			return character_;
+		}
 #endregion
 
 #region Construction
@@ -22,13 +43,14 @@ namespace ja2
 		{
 			// Default direction
 			lookDirection = LookDirection.SOUTHEAST;
+			torso = new Torso();
 		}
 
-		public Soldier(TerrainTile Tile, Character Character_)
+		public Soldier(TerrainTile Tile, CharacterGroup Group)
 			: this()
 		{
 			tile = Tile;
-			character = Character_;
+			group = Group;
 		}
 #endregion
 	}
