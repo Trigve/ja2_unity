@@ -12,7 +12,10 @@ public sealed class CharacterEntityManager
 
 #region Operations
 	//! Generate character.
-	public void Create(ja2.Character Char, GameObject CharGO)
+	/*!
+		\return Game object that consist of combined mesh.
+	*/
+	public GameObject Create(ja2.Character Char, GameObject CharGO)
 	{
 		// All clothes prefabs
 		var clothes_prefabs = new List<GameObject>();
@@ -51,6 +54,8 @@ public sealed class CharacterEntityManager
 		MeshCombiner.Combine(char_object, combinded_go);
 		// Destroy temporary object
 		GameObject.DestroyImmediate(char_object);
+
+		return combinded_go;
 	}
 #endregion
 
