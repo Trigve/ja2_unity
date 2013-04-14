@@ -52,6 +52,9 @@ public sealed class CharacterEntityManager
 		var combinded_go = new GameObject("CombinedMesh");
 		combinded_go.transform.parent = CharGO.transform;
 		MeshCombiner.Combine(char_object, combinded_go);
+		// Need to reset local position and rotation
+		combinded_go.transform.localPosition = Vector3.zero;
+		combinded_go.transform.localRotation = Quaternion.identity;
 		// Destroy temporary object
 		GameObject.DestroyImmediate(char_object);
 
