@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ja2
 {
@@ -49,9 +50,9 @@ namespace ja2
 #region Construction
 		public CharacterDefinitionManager(String Path_)
 		{
-			string full_path = Path_ + '/' + "character.xml";
+			string full_path = Path_ + '/' + "character";
 			// If file doesn't exist
-			XmlReader xml = XmlReader.Create(full_path);
+			XmlReader xml = XmlReader.Create(new StringReader(((TextAsset)Resources.Load(full_path, typeof(TextAsset))).text));
 			// Parse file
 			xml.Read();
 			// Root node
