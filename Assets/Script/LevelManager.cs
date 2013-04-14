@@ -50,8 +50,8 @@ public class LevelManager : MonoBehaviourEx
 		var soldier_go = PrefabManager.Create("Soldier");
 		// Associate solder
 		soldier_go.GetComponent<SoldierController>().SetMercenary(Soldier_);
-		// Create skinned mesh on parameters
-		charEntityManager.Create(Soldier_.character(), soldier_go);
+		// Create skinned mesh on parameters and save it
+		soldier_go.GetComponent<CombinedMesh>().combinedMesh = charEntityManager.Create(Soldier_.character(), soldier_go);
 		// Activate now, because now is everything set up and we won't get
 		// any errors from bones mismatch etc
 		soldier_go.SetActive(true);
