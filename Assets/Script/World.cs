@@ -10,33 +10,19 @@ using System;
 public sealed class World : MonoSingleton<World>
 {
 #region Attributes
-	//! Inventory item manager.
-	private ja2.InventoryItemManager inventoryItemManager;
+	private ja2.InventoryItemInstanceManager inventoryInstanceManager;
 #endregion
 
 #region Operations
 	public override void Init()
 	{
-		inventoryItemManager = new ja2.InventoryItemManager("Data");
+		inventoryInstanceManager = new ja2.InventoryItemInstanceManager();
 	}
 
 	//! Create inventory item instance.
 	public ja2.InventoryItemInstance CreateInventoryItem(string Name, sbyte Status)
 	{
-		ja2.InventoryItemInstance instance;
-		// Load inventory as first
-		var inventory_item = inventoryItemManager.load(Name);
-		// Based on type create instance
-		switch(inventory_item._2.type)
-		{
-			case "torso_clothing":
-				instance = new ja2.InventoryItemInstanceTorsoClothing(inventory_item._1, Status, new ja2.TorsoClothing(inventory_item._2.src));
-				break;
-			default:
-				throw new Exception("Unknown inventory item type.");
-		}
-
-		return instance;
+		return inventoryInstanceManager.Create(Name, Status);
 	}
 #endregion
 }
