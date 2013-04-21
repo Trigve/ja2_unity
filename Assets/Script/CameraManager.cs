@@ -141,7 +141,7 @@ public class CameraManager : MonoBehaviour
 		camera.nearClipPlane = Offset;
 		camera.farClipPlane = Offset + xw;
 		// Set the dimensions with wide aspect ration
-		camera.orthographicSize = world_width / 2;
+		camera.orthographicSize = world_height / 2;
 		// Find if we are beyond the terrain
 		Ray ray = Camera.main.ViewportPointToRay(new Vector3(0, 0, 0));
 		float point;
