@@ -127,7 +127,6 @@ public class CameraManager : MonoBehaviour
 		// Set orientation
 		transform.rotation = Quaternion.AngleAxis(90, Vector3.down) * Quaternion.AngleAxis(Angle, Vector3.right);
 		
-		float world_width = Screen.width / WorldWidthRatio;
 		float world_height = Screen.height / WorldHeightRatio;
 
 		// Compute length of line of sight AFTER (below) the base plane
