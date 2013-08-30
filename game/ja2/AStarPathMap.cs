@@ -35,11 +35,11 @@ namespace ja2
 #endregion
 	}
 
-	public sealed class AStarPathMap : path.AStarPath<TileKey>
+	public sealed class AStarPathMap : ja2.AStarPath<TileKey>
 	{
 #region Attributes
 		//! Terrain manager used.
-		private TerrainManager terrainManager;
+		private ITerrainManager terrainManager;
 #endregion
 
 #region Properties
@@ -118,7 +118,7 @@ namespace ja2
 #endregion
 
 #region Construction
-		public AStarPathMap(TerrainManager TerrainManager_, TerrainTile From, TerrainTile To)
+		public AStarPathMap(ITerrainManager TerrainManager_, TerrainTile From, TerrainTile To)
 			: base(new TileKey(From), new TileKey(To))
 		{
 			terrainManager = TerrainManager_;

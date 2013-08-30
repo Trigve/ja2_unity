@@ -1,9 +1,10 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using ja2;
 
 [Serializable]
-public class TerrainManager : MonoBehaviour
+public class TerrainManager : MonoBehaviour, ja2.ITerrainManager
 {
 #region Constants
 	//! Partition name.

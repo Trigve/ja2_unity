@@ -287,6 +287,8 @@ namespace ja2
 			}
 			// Set some debug tile
 			SetTileTerrainType(GetTile(2, 3), 1);
+			SetTileTerrainType(GetTile(13, 6), 1);
+			SetTileTerrainType(GetTile(width - 1, height - 1), 1);
 		}
 		#endregion
 	}

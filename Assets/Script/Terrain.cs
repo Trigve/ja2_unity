@@ -25,13 +25,13 @@ public sealed class Terrain : MonoBehaviour
 		TerrainTileSet tile_set = MatManager.GetTerrainSet(Map.map.terrainName);
 		// Create terrain partition
 		terrainPartition = new ja2.TerrainPartition();
-		Mesh mesh = terrainPartition.Create(X, Y, Map, tile_set);
+		Mesh mesh = terrainPartition.Create(X, Y, Map.map, tile_set);
 		// Add needed components
 		GetComponent<MeshFilter>().mesh = mesh;
 		GetComponent<MeshCollider>().sharedMesh = mesh;
 		var mesh_renderer = gameObject.GetComponent<MeshRenderer>();
 		// Set map material
-		mesh_renderer.sharedMaterial = Resources.Load("Materials/" + tile_set.materialName, typeof(Material)) as Material;
+		mesh_renderer.sharedMaterial = Resources.LoadAssetAtPath("Assets/Materials/" + tile_set.materialName + ".mat", typeof(Material)) as Material;
 	}
 	//! Get tile for given triangle.
 	public ja2.TerrainPartition.TriangleMap GetTile(int Triangle)

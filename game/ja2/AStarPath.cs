@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using utils;
 
-namespace path
+namespace ja2
 {
 	public abstract class AStarPath<K> where K : IEquatable<K>
 	{

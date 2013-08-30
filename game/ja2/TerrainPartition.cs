@@ -41,9 +41,9 @@ namespace ja2
 
 
 #region Operations
-		public Mesh Create(int X, int Y, MapInstance Map_, TerrainTileSet TileSet)
+		public Mesh Create(int X, int Y, Map Map_, TerrainTileSet TileSet)
 		{
-			Map map = Map_.map;
+			Map map = Map_;
 			// Create vertex array
 			Vector3[] array_vec = new Vector3[PARTITION_WIDTH * PARTITION_HEIGHT * 4];
 			// Create triangles array
