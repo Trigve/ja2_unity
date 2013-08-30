@@ -59,6 +59,20 @@ public class LevelManager : MonoBehaviourEx
 		return soldier_go;
 	}
 
+	//! Update soldier GO.
+	public void UpdateSoldier(ja2.Soldier Soldier_, GameObject SoldierGO)
+	{
+
+		var combined_mesh_com = SoldierGO.GetComponent<CombinedMesh>();
+		// Remove old combined mesh
+		Destroy(combined_mesh_com.combinedMesh);
+		// Create new
+		combined_mesh_com.combinedMesh = charEntityManager.Create(Soldier_.character(), SoldierGO);
+		// Must use task here because of unity bug - When mesh is replaced,
+		// animation stops to play and is shown in T-pose
+		new utils.Task(RebuildCharacterWorkaround(SoldierGO));
+	}
+
 	void Awake()
 	{
 		terrainManager = GameObject.Find("Map").GetComponent<TerrainManager>();
@@ -155,5 +169,14 @@ public class LevelManager : MonoBehaviourEx
 			soldiersPaths.Remove(it);
 		}
 	}
+
+	//! Bug workaround task for soldier mesh rebuild.
+	System.Collections.IEnumerator RebuildCharacterWorkaround(GameObject SoldierGO)
+	{
+		SoldierGO.SetActive(false);
+		yield return new WaitForFixedUpdate();
+		SoldierGO.SetActive(true);
+	}
+
 #endregion
 }
