@@ -142,6 +142,9 @@ public class CameraManager : MonoBehaviour
 		camera.farClipPlane = Offset + xw;
 		// Set the dimensions with wide aspect ration
 		camera.orthographicSize = world_height / 2;
+		// Set the quality setting for shadows because otherwise shadow wouldn't
+		// shown
+		QualitySettings.shadowDistance = xw;
 		// Find if we are beyond the terrain
 		Ray ray = Camera.main.ViewportPointToRay(new Vector3(0, 0, 0));
 		float point;
