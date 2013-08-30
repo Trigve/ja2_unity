@@ -11,3 +11,4 @@ bin/
 *.csproj
 *.sln
 *.unityproj
+Assets/*.dll
