@@ -1,4 +1,4 @@
-#define JA_MERCENARY_CONTROLLER_PRINT_MOVE
+//#define JA_MERCENARY_CONTROLLER_PRINT_MOVE
 
 using UnityEngine;
 using System.Collections;
@@ -20,6 +20,8 @@ public class SoldierController : MonoBehaviourEx
 	public bool debugPathDraw;
 	//! Is rotating.
 	public bool isRotating {get; private set;}
+	//! Combined mesh.
+	public GameObject combinedMesh { get; set; }
 	//! Mercenary unit data.
 	protected ja2.Soldier mercenary;
 	//! Terrain manager.

@@ -51,7 +51,7 @@ public class LevelManager : MonoBehaviourEx
 		// Associate solder
 		soldier_go.GetComponent<SoldierController>().SetMercenary(Soldier_);
 		// Create skinned mesh on parameters and save it
-		soldier_go.GetComponent<CombinedMesh>().combinedMesh = charEntityManager.Create(Soldier_.character(), soldier_go);
+		soldier_go.GetComponent<SoldierController>().combinedMesh = charEntityManager.Create(Soldier_.character(), soldier_go);
 		// Activate now, because now is everything set up and we won't get
 		// any errors from bones mismatch etc
 		soldier_go.SetActive(true);
@@ -63,7 +63,7 @@ public class LevelManager : MonoBehaviourEx
 	public void UpdateSoldier(ja2.Soldier Soldier_, GameObject SoldierGO)
 	{
 
-		var combined_mesh_com = SoldierGO.GetComponent<CombinedMesh>();
+		var combined_mesh_com = SoldierGO.GetComponent<SoldierController>();
 		// Remove old combined mesh
 		Destroy(combined_mesh_com.combinedMesh);
 		// Create new
