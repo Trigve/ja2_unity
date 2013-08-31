@@ -3,8 +3,9 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using ja2;
 
-public class SoldierController : MonoBehaviourEx
+public class SoldierController : MonoBehaviourEx, ISoldierController
 {
 #region Constants
 	//! This constant is dependent of transition time.
