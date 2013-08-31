@@ -28,7 +28,7 @@ public class LevelManager : MonoBehaviourEx
 	//! Clothes manager.
 	private ja2.ClothManager clothManager;
 	//! Character entity manager.
-	private CharacterEntityManager charEntityManager;
+	private ja2.CharacterEntityManager charEntityManager;
 #endregion
 
 #region Properies
@@ -105,7 +105,7 @@ public class LevelManager : MonoBehaviourEx
 
 		charDefManager = new ja2.CharacterDefinitionManager("Data");
 		clothManager = new ja2.ClothManager("Data");
-		charEntityManager = new CharacterEntityManager(charDefManager, clothManager);
+		charEntityManager = new ja2.CharacterEntityManager(charDefManager, clothManager);
 	}
 
 	void Update()

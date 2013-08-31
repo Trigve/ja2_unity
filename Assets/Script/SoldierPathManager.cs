@@ -7,7 +7,7 @@ public sealed class SoldierPathManager
 	//! Soldier controller.
 	private SoldierController soldier;
 	//! Actions for given soldier.
-	private SoldierActionController soldierActions;
+	private ja2.SoldierActionController soldierActions;
 #endregion
 
 #region Properties
@@ -44,7 +44,7 @@ public sealed class SoldierPathManager
 		// Last direction
 		ja2.Map.Direction last_direction = ja2.Map.Direction.NONE;
 		// Create action controller
-		soldierActions = new SoldierActionController(Soldier);
+		soldierActions = new ja2.SoldierActionController(Soldier);
 		// Actual vertex
 		foreach (var tile in Tiles)
 		{
@@ -59,12 +59,12 @@ public sealed class SoldierPathManager
 					// Queue move first if needed
 					if (move_distance > 0)
 					{
-						var action = new SoldierActionMove(move_distance);
+						var action = new ja2.SoldierActionMove(move_distance);
 						soldierActions.Add(action);
 						move_distance = 0;
 					}
 					// Set rotation
-					soldierActions.Add(new SoldierActionRotate(ja2.LookDirectionConverter.Convert(dir)));
+					soldierActions.Add(new ja2.SoldierActionRotate(ja2.LookDirectionConverter.Convert(dir)));
 				}
 //				byte rot = (byte)ja2.LookDirectionConverter.Convert(dir);
 				// Must be move
@@ -78,7 +78,7 @@ public sealed class SoldierPathManager
 		// Queue move if was any
 		if (move_distance != 0)
 		{
-			var action = new SoldierActionMove(move_distance);
+			var action = new ja2.SoldierActionMove(move_distance);
 			soldierActions.Add(action);
 		}
 	}
