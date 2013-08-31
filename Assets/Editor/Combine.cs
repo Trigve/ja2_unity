@@ -16,6 +16,6 @@ public class Combine : EditorWindow
 		GameObject animator_go = new GameObject("Animator");
 		animator_go.AddComponent<Animator>();
 
-		AssetDatabase.CreateAsset(MeshCombiner.Combine(obj, animator_go), "Assets/Mesh/Combined.asset");
+		AssetDatabase.CreateAsset(utils.MeshCombiner.Combine(obj, animator_go), "Assets/Mesh/Combined.asset");
 	}
 }
