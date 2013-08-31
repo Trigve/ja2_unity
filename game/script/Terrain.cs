@@ -32,6 +32,8 @@ public sealed class Terrain : MonoBehaviour
 		var mesh_renderer = gameObject.GetComponent<MeshRenderer>();
 		// Set map material
 		mesh_renderer.sharedMaterial = Resources.LoadAssetAtPath("Assets/Materials/" + tile_set.materialName + ".mat", typeof(Material)) as Material;
+		// Don't cast shadows
+		mesh_renderer.castShadows = false;
 	}
 	//! Get tile for given triangle.
 	public ja2.TerrainPartition.TriangleMap GetTile(int Triangle)
