@@ -7,7 +7,7 @@ using System;
 /*!
 	All global game data goes here.
 */
-public sealed class World : MonoSingleton<World>
+public sealed class World : utils.MonoSingleton<World>
 {
 #region Attributes
 	private ja2.InventoryItemInstanceManager inventoryInstanceManager;

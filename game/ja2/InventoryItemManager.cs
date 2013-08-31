@@ -27,12 +27,12 @@ namespace ja2
 		//! Actual working path.
 		private readonly string wrkPath;
 		//! Map of all items.
-		private Dictionary<string, Tuple<InventoryItem, InventoryItemRef>> items = new Dictionary<string, Tuple<InventoryItem, InventoryItemRef>>();
+		private Dictionary<string, utils.Tuple<InventoryItem, InventoryItemRef>> items = new Dictionary<string, utils.Tuple<InventoryItem, InventoryItemRef>>();
 #endregion
 
 #region Operations
 		//! Load an inventory.
-		public Tuple<InventoryItem, InventoryItemRef> load(string Name)
+		public utils.Tuple<InventoryItem, InventoryItemRef> load(string Name)
 		{
 			// Not loaded yet
 			if (!items.ContainsKey(Name))
@@ -52,7 +52,7 @@ namespace ja2
 				xml.ReadToDescendant("ref");
 				var item_ref = new InventoryItemRef(xml.GetAttribute("type"), xml.GetAttribute("src"));
 				// Add new item
-				items[Name] = new Tuple<InventoryItem, InventoryItemRef>(new InventoryItem(inventory_class, size, weight, name), item_ref);
+				items[Name] = new utils.Tuple<InventoryItem, InventoryItemRef>(new InventoryItem(inventory_class, size, weight, name), item_ref);
 			}
 
 			return items[Name];

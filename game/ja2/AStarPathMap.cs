@@ -106,12 +106,12 @@ namespace ja2
 		}
 
 		//! Get open set.
-		public Tuple<float, ja2.TerrainTile>[] OpenSet()
+		public utils.Tuple<float, ja2.TerrainTile>[] OpenSet()
 		{
-			var ret = new List<Tuple<float, ja2.TerrainTile>>();
+			var ret = new List<utils.Tuple<float, ja2.TerrainTile>>();
 
 			foreach (var item in openSet)
-				ret.Add(new Tuple<float, ja2.TerrainTile>(f_score[item], item.tile));
+				ret.Add(new utils.Tuple<float, ja2.TerrainTile>(f_score[item], item.tile));
 
 			return ret.ToArray();
 		}

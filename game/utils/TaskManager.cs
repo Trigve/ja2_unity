@@ -93,7 +93,7 @@ namespace utils
 		///
 		/// If autoStart is true (default) the task is automatically started
 		/// upon construction.
-		public Task(IEnumerator c, bool autoStart = true)
+		public Task(System.Collections.IEnumerator c, bool autoStart = true)
 		{
 			task = TaskManager.CreateTask(c);
 			task.Finished += TaskFinished;
@@ -123,7 +123,7 @@ namespace utils
 			task.Unpause();
 		}
 
-		static public Coroutine WaitForTask(IEnumerator Function)
+		static public Coroutine WaitForTask(System.Collections.IEnumerator Function)
 		{
 			var task = new Task(Function, false);
 			// Start explicitely and return Coroutine instance
@@ -163,13 +163,13 @@ namespace utils
 			public delegate void FinishedHandler(bool manual);
 			public event FinishedHandler Finished;
 
-			IEnumerator coroutine;
+			System.Collections.IEnumerator coroutine;
 			//! Default is stopped.
 			bool running = false;
 			bool paused;
 			bool stopped;
 
-			public TaskState(IEnumerator c)
+			public TaskState(System.Collections.IEnumerator c)
 			{
 				coroutine = c;
 			}
@@ -196,11 +196,11 @@ namespace utils
 				running = false;
 			}
 
-			IEnumerator CallWrapper()
+			System.Collections.IEnumerator CallWrapper()
 			{
 				yield return null;
 
-				IEnumerator e = coroutine;
+				System.Collections.IEnumerator e = coroutine;
 				while (running)
 				{
 					if (paused)
@@ -226,7 +226,7 @@ namespace utils
 
 		static TaskManager singleton;
 
-		public static TaskState CreateTask(IEnumerator coroutine)
+		public static TaskState CreateTask(System.Collections.IEnumerator coroutine)
 		{
 			if (singleton == null)
 			{

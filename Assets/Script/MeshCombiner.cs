@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 using HierarchyDict = System.Collections.Generic.Dictionary<string, UnityEngine.Transform>;
-using BoneTransformDict = System.Collections.Generic.Dictionary<string, Tuple<UnityEngine.Transform, string>>;
+using BoneTransformDict = System.Collections.Generic.Dictionary<string, utils.Tuple<UnityEngine.Transform, string>>;
 
 public class MeshCombiner
 {
@@ -32,7 +32,7 @@ public class MeshCombiner
 			{
 				// Bone doesn't exist, add it
 				if (!all_bones.ContainsKey(bone.name))
-					all_bones[bone.name] = new Tuple<Transform, string>(bone, bone.parent.name);
+					all_bones[bone.name] = new utils.Tuple<Transform, string>(bone, bone.parent.name);
 			}
 		}
 
