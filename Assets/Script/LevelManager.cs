@@ -47,7 +47,7 @@ public class LevelManager : MonoBehaviourEx
 	public GameObject CreateSoldier(ja2.Soldier Soldier_)
 	{
 		// Load prefab of soldier
-		var soldier_go = PrefabManager.Create("Soldier");
+		var soldier_go = utils.PrefabManager.Create("Soldier");
 		// Associate solder
 		soldier_go.GetComponent<SoldierController>().SetMercenary(Soldier_);
 		// Create skinned mesh on parameters and save it
@@ -77,7 +77,7 @@ public class LevelManager : MonoBehaviourEx
 	{
 		terrainManager = GameObject.Find("Map").GetComponent<TerrainManager>();
 		// Create A* path manager and GO
-		pathManager = PrefabManager.Create("AStartPathManager").GetComponent<AStarPathManager>();
+		pathManager = utils.PrefabManager.Create("AStartPathManager").GetComponent<AStarPathManager>();
 		pathManager.transform.parent = transform;
 
 		soldiersPaths = new Dictionary<SoldierController, SoldierPathManager>();
@@ -99,7 +99,7 @@ public class LevelManager : MonoBehaviourEx
 			hover.name = prefab_class.name;
 		}
 		// Create path visulizer child GO and get main component
-		var path_visualizer_go = PrefabManager.Create("PathVisualizer");
+		var path_visualizer_go = utils.PrefabManager.Create("PathVisualizer");
 		path_visualizer_go.transform.parent = transform;
 		pathVisualizer = path_visualizer_go.GetComponent<PathVisualizer>();
 

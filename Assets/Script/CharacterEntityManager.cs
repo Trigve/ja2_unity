@@ -32,13 +32,13 @@ public sealed class CharacterEntityManager
 			foreach (var cloth_item in cloth_item_group.items)
 				char_parts[cloth_item.part] = cloth_item.type;
 			// Add prefab
-			clothes_prefabs.Add(PrefabManager.Create(cloth_item_group.prefab));
+			clothes_prefabs.Add(utils.PrefabManager.Create(cloth_item_group.prefab));
 		}
 		// Get body part prefabs
 		var body_part_prefabs = new List<GameObject>();
 		foreach (var body_part in char_parts)
 		{
-			body_part_prefabs.Add(PrefabManager.Create(charDefManager.PartPrefab(body_part.Key, Char.group, body_part.Value)));
+			body_part_prefabs.Add(utils.PrefabManager.Create(charDefManager.PartPrefab(body_part.Key, Char.group, body_part.Value)));
 		}
 		// Create temporary object for holding all character parts
 		GameObject char_object = new GameObject();
