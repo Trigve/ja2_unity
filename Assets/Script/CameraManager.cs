@@ -130,15 +130,15 @@ public class CameraManager : MonoBehaviour
 		float world_height = Screen.height / WorldHeightRatio;
 
 		// Compute length of line of sight AFTER (below) the base plane
-		float qx = (world_height * Mathf.Cos(Mathf.Deg2Rad * Angle) + 2 * MaxY)/ (2 * Mathf.Sin(Mathf.Deg2Rad * Angle));
+		float qx = (world_height * Mathf.Cos(Mathf.Deg2Rad * Angle) + MaxY)/ (Mathf.Sin(Mathf.Deg2Rad * Angle));
 		// Compute the whole line of sight without offset
-		float xw = (world_height * Mathf.Cos(Mathf.Deg2Rad * Angle) + 2 * MaxY) / Mathf.Sin(Mathf.Deg2Rad * Angle);
+		float xw = (world_height * Mathf.Cos(Mathf.Deg2Rad * Angle) + MaxY) / Mathf.Sin(Mathf.Deg2Rad * Angle);
 		// The whole length of line of sight from camera till the base plane
 		float pos = xw - qx + Offset;
 		// Set camera position and frustum
 		camera.transform.position = new Vector3(Mathf.Cos(Mathf.Deg2Rad * Angle) * pos, Mathf.Sin(Mathf.Deg2Rad * Angle) * pos, 0);
-		camera.nearClipPlane = Offset;
-		camera.farClipPlane = Offset + xw;
+		camera.nearClipPlane = 0;
+		camera.farClipPlane = xw;
 		// Set the dimensions with wide aspect ration
 		camera.orthographicSize = world_height / 2;
 		// Set the quality setting for shadows because otherwise shadow wouldn't
