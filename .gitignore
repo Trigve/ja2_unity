@@ -10,7 +10,7 @@ Library/
 bin/
 ./*.csproj
 ./*.sln
-./*.unityproj
+*.unityproj
 Assets/*.dll
 
 # Selective
