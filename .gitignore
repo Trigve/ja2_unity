@@ -16,3 +16,9 @@ Assets/*.dll
 # Selective
 ja2_unity-csharp.sln
 ja2_unity.sln
+Assembly-CSharp-Editor-vs.csproj
+Assembly-CSharp-Editor.csproj
+Assembly-CSharp-firstpass-vs.csproj
+Assembly-CSharp-firstpass.csproj
+Assembly-CSharp-vs.csproj
+Assembly-CSharp.csproj
