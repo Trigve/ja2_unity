@@ -5,6 +5,7 @@ Temp
 *.user
 *.pidb
 *.userprefs
+*.mdb
 # Unity files
 Library/
 bin/
