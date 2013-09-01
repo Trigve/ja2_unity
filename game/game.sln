@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ja2", "ja2\ja2.csproj", "{66FE990A-B09F-4584-A1DF-109656AD6986}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EF37F705-8AA1-48BB-A3D1-C4D8E23719FA} = {EF37F705-8AA1-48BB-A3D1-C4D8E23719FA}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "utils", "utils\utils.csproj", "{EF37F705-8AA1-48BB-A3D1-C4D8E23719FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "script", "script\script.csproj", "{DA1F0B98-4B8C-49BD-8358-D0734BB0310E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{66FE990A-B09F-4584-A1DF-109656AD6986}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66FE990A-B09F-4584-A1DF-109656AD6986}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66FE990A-B09F-4584-A1DF-109656AD6986}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66FE990A-B09F-4584-A1DF-109656AD6986}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF37F705-8AA1-48BB-A3D1-C4D8E23719FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF37F705-8AA1-48BB-A3D1-C4D8E23719FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF37F705-8AA1-48BB-A3D1-C4D8E23719FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF37F705-8AA1-48BB-A3D1-C4D8E23719FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA1F0B98-4B8C-49BD-8358-D0734BB0310E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA1F0B98-4B8C-49BD-8358-D0734BB0310E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA1F0B98-4B8C-49BD-8358-D0734BB0310E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA1F0B98-4B8C-49BD-8358-D0734BB0310E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

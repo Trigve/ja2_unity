@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{66FE990A-B09F-4584-A1DF-109656AD6986}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ja2</RootNamespace>
+    <AssemblyName>ja2</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>C:\Program Files %28x86%29\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AStarPath.cs" />
+    <Compile Include="AStarPathMap.cs" />
+    <Compile Include="Character.cs" />
+    <Compile Include="CharacterDefinitionManager.cs" />
+    <Compile Include="CharacterEntityManager.cs" />
+    <Compile Include="CharacterGroup.cs" />
+    <Compile Include="CharacterPart.cs" />
+    <Compile Include="CharacterPartItem.cs" />
+    <Compile Include="CharacterType.cs" />
+    <Compile Include="Clothing.cs" />
+    <Compile Include="ClothItem.cs" />
+    <Compile Include="ClothItemGroup.cs" />
+    <Compile Include="ClothManager.cs" />
+    <Compile Include="Head.cs" />
+    <Compile Include="HeadClothing.cs" />
+    <Compile Include="Inventory.cs" />
+    <Compile Include="InventoryItem.cs" />
+    <Compile Include="InventoryItemClass.cs" />
+    <Compile Include="InventoryItemHolder.cs" />
+    <Compile Include="InventoryItemInstance.cs" />
+    <Compile Include="InventoryItemInstanceHeadClothing.cs" />
+    <Compile Include="InventoryItemInstanceManager.cs" />
+    <Compile Include="InventoryItemInstanceTorsoClothing.cs" />
+    <Compile Include="InventoryItemManager.cs" />
+    <Compile Include="InventoryItemProperties.cs" />
+    <Compile Include="InventoryType.cs" />
+    <Compile Include="ISoldierController.cs" />
+    <Compile Include="ITerrainManager.cs" />
+    <Compile Include="LookDirection.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Soldier.cs" />
+    <Compile Include="SoldierAction.cs" />
+    <Compile Include="SoldierActionController.cs" />
+    <Compile Include="SoldierActionMove.cs" />
+    <Compile Include="SoldierActionRotate.cs" />
+    <Compile Include="TerrainMaterialManager.cs" />
+    <Compile Include="TerrainPartition.cs" />
+    <Compile Include="TerrainTile.cs" />
+    <Compile Include="TerrainTileSet.cs" />
+    <Compile Include="TerrainTileSplat.cs" />
+    <Compile Include="TextureAtlasInfo.cs" />
+    <Compile Include="Torso.cs" />
+    <Compile Include="TorsoClothing.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\utils\utils.csproj">
+      <Project>{EF37F705-8AA1-48BB-A3D1-C4D8E23719FA}</Project>
+      <Name>utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>..\..\..\bin\pdb2mdb.exe $(TargetFileName)
+copy $(TargetFileName) ..\..\..\..\Assets\
+copy $(TargetFileName).mdb.mdb ..\..\..\..\Assets\$(TargetFileName).mdb</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
