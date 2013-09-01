@@ -5,7 +5,7 @@ using System;
 namespace ja2
 {
 	[Serializable]
-	sealed public class TerrainTile
+	sealed public class TerrainTile : ScriptableObject
 	{
 #region Enums
 		//! Vertex numbers.
@@ -76,12 +76,15 @@ namespace ja2
 #endregion
 
 #region Construction
-		public TerrainTile(int X, int Y, Type Type_)
+		public static TerrainTile Construct(int X, int Y, Type Type_)
 		{
-			x = X;
-			y = Y;
-			terrainTypeArray = new byte[4];
-			type_ = Type_;
+			var obj = CreateInstance<TerrainTile>();
+			obj.m_x = X;
+			obj.m_y = Y;
+			obj.terrainTypeArray = new byte[4];
+			obj.type_ = Type_;
+
+			return obj;
 		}
 #endregion
 	}

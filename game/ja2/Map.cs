@@ -277,7 +277,7 @@ namespace ja2
 					// For first and last row and first and last collumn set
 					// to non-walkable
 					TerrainTile.Type tile_type = (i > 0 && j % 2 == 0) || (j % 2 == 1 && i < width - 1) ? TerrainTile.Type.REGULAR : TerrainTile.Type.NONE;
-					TerrainTile tile = new TerrainTile(i, j, tile_type);
+					TerrainTile tile = TerrainTile.Construct(i, j, tile_type);
 					// Set random variant
 //					tile.variant = (byte)rnd.Next(0, 7);
 					tile.variant = 0;
