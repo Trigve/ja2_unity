@@ -93,7 +93,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>..\..\..\bin\pdb2mdb.exe $(TargetFileName)
-copy $(TargetFileName) ..\..\..\..\Assets\
+copy $(TargetFileName).mdb ..\..\..\..\Assets\$(TargetFileName)
 copy $(TargetFileName).mdb.mdb ..\..\..\..\Assets\$(TargetFileName).mdb</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
