@@ -1,26 +1,49 @@
 using UnityEngine;
-using System.Collections;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
+using System.IO;
 using System;
 using ja2;
 
-[Serializable]
-public class TerrainManager : MonoBehaviour, ja2.ITerrainManager
+//! Terrain component for terrain GO.
+public class TerrainManager : SerializableComponent, ja2.ITerrainManager
 {
 #region Constants
 	//! Partition name.
 	private const string PARTITION_NAME = "Terrain_";
 #endregion
 #region Attributes
-	//! Map instance.
-	[SerializeField]
-	private MapInstance mapInstance;
+	//! Map.
+	private ja2.Map map_;
 #endregion
 
 #region Properties
-	public ja2.Map map { get { return mapInstance.map; } }
+	public ja2.Map map
+	{
+		get
+		{
+			return map_;
+		}
+	}
 #endregion
 
 #region Operations
+	//! Set deserialized object instances.
+	protected override void DoProcessDeserialization(object[] SerializedObjects)
+	{
+		map_ = (Map)SerializedObjects[0];
+	}
+
+	//! Return object for serialization.
+	protected override object[] DoGetSerializedObjects()
+	{
+		var serialezd_objects = new object[1];
+		serialezd_objects[0] = map_;
+
+		return serialezd_objects;
+	}
+
 	//! Get tile position for given tile.
 	public Vector3 GetPosition(ja2.TerrainTile Tile, short Vertex)
 	{
@@ -47,8 +70,7 @@ public class TerrainManager : MonoBehaviour, ja2.ITerrainManager
 		if(Map_.width % ja2.TerrainPartition.PARTITION_WIDTH != 0 || Map_.width % ja2.TerrainPartition.PARTITION_WIDTH != 0)
 			throw new System.ArgumentException("Map width/height must be normalized to terrain partition width/height.");
 		// Create component
-		mapInstance = ScriptableObject.CreateInstance<MapInstance>();
-		mapInstance.map = Map_;
+		map_ = Map_;
 
 		// Need to create terrain partitions
 		int partition_width = Map_.width / ja2.TerrainPartition.PARTITION_WIDTH;
@@ -70,7 +92,7 @@ public class TerrainManager : MonoBehaviour, ja2.ITerrainManager
 				terrain_go.layer = Terrain.LAYER;
 				// Create component
 				var terrain = terrain_go.AddComponent<Terrain>();
-				terrain.CreatePartition(j, i, mapInstance, MatManager);
+				terrain.CreatePartition(j, i, map, MatManager);
 			}
 		}
 	}

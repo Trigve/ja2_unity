@@ -5,7 +5,7 @@ using System;
 namespace ja2
 {
 	[Serializable]
-	sealed public class TerrainTile : ScriptableObject
+	sealed public class TerrainTile
 	{
 #region Enums
 		//! Vertex numbers.
@@ -30,10 +30,8 @@ namespace ja2
 
 #region Attributes
 		//! X.
-		[SerializeField]
 		private int m_x;
 		//! Y.
-		[SerializeField]
 		private int m_y;
 		//! Type variant index.
 		/*!
@@ -44,10 +42,8 @@ namespace ja2
 		/*!
 			Maximum of 2 different type per tile could be specified which will be blended together.
 		*/
-		[SerializeField]
 		private byte[] terrainTypeArray;
 		//! Terrain type.
-		[SerializeField]
 		private Type type_;
 #endregion
 
@@ -76,15 +72,12 @@ namespace ja2
 #endregion
 
 #region Construction
-		public static TerrainTile Construct(int X, int Y, Type Type_)
+		public TerrainTile(int X, int Y, Type Type_)
 		{
-			var obj = CreateInstance<TerrainTile>();
-			obj.m_x = X;
-			obj.m_y = Y;
-			obj.terrainTypeArray = new byte[4];
-			obj.type_ = Type_;
-
-			return obj;
+			x = X;
+			y = Y;
+			terrainTypeArray = new byte[4];
+			type_ = Type_;
 		}
 #endregion
 	}

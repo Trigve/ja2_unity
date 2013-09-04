@@ -34,7 +34,6 @@ namespace ja2
 		//! Terrain name.
 		public string terrainName;
 		//! Terrain tiles.
-		[SerializeField]
 		private TerrainTile[] m_Tiles;
 #endregion
 
@@ -277,7 +276,7 @@ namespace ja2
 					// For first and last row and first and last collumn set
 					// to non-walkable
 					TerrainTile.Type tile_type = (i > 0 && j % 2 == 0) || (j % 2 == 1 && i < width - 1) ? TerrainTile.Type.REGULAR : TerrainTile.Type.NONE;
-					TerrainTile tile = TerrainTile.Construct(i, j, tile_type);
+					TerrainTile tile = new TerrainTile(i, j, tile_type);
 					// Set random variant
 //					tile.variant = (byte)rnd.Next(0, 7);
 					tile.variant = 0;
@@ -290,6 +289,6 @@ namespace ja2
 			SetTileTerrainType(GetTile(13, 6), 1);
 			SetTileTerrainType(GetTile(width - 1, height - 1), 1);
 		}
-		#endregion
+#endregion
 	}
 } /*ja*/

@@ -20,12 +20,12 @@ public sealed class Terrain : MonoBehaviour
 	private ja2.TerrainPartition terrainPartition;
 
 #region Operations
-	public void CreatePartition(int X, int Y, MapInstance Map, TerrainMaterialManager MatManager)
+	public void CreatePartition(int X, int Y, ja2.Map Map_, TerrainMaterialManager MatManager)
 	{
-		TerrainTileSet tile_set = MatManager.GetTerrainSet(Map.map.terrainName);
+		TerrainTileSet tile_set = MatManager.GetTerrainSet(Map_.terrainName);
 		// Create terrain partition
 		terrainPartition = new ja2.TerrainPartition();
-		Mesh mesh = terrainPartition.Create(X, Y, Map.map, tile_set);
+		Mesh mesh = terrainPartition.Create(X, Y, Map_, tile_set);
 		// Add needed components
 		GetComponent<MeshFilter>().mesh = mesh;
 		GetComponent<MeshCollider>().sharedMesh = mesh;

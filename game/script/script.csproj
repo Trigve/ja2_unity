@@ -33,6 +33,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="UnityEditor">
+      <HintPath>C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEditor.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -43,6 +46,9 @@
     <Compile Include="MapInstance.cs" />
     <Compile Include="MonoBehaviourEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializableComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Terrain.cs" />
     <Compile Include="TerrainManager.cs" />
   </ItemGroup>

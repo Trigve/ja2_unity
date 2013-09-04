@@ -34,8 +34,8 @@ namespace ja2
 		public const float TILE_WIDTH = 0.7071067F;
 		//! Tile width.
 		public const float TILE_HEIGHT = TILE_WIDTH;
-		[SerializeField]
 		//! Map for triangle -> Tile.
+		[SerializeField]
 		private TriangleMap[] m_TerrainMap;
 #endregion
 
