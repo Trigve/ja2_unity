@@ -42,7 +42,7 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 		}
 	}
 
-	//! Try to serialaze all game objects.
+	//! Try to serialize all game objects.
 	static void SendSerialize()
 	{
 		Object[] gos = GameObject.FindObjectsOfType(typeof(GameObject));
@@ -54,11 +54,29 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 		}
 	}
 
+	//! Try to serialize all game objects.
+	static void SendDeSerialize()
+	{
+		Object[] gos = GameObject.FindObjectsOfType(typeof(GameObject));
+		foreach (GameObject go in gos)
+		{
+			var serialize_component = go.GetComponent<SerializableComponent>();
+			if (serialize_component != null)
+				serialize_component.Deserialize();
+		}
+	}
+
 #region Construction
 	static InitOnLoad()
 	{
 		Debug.Log("InitOnLoad loaded...");
 		EditorApplication.playmodeStateChanged += Change;
+		// InitOnLoad() is ran not only on editor startup but also if we're in
+		// editor and some code needs to be reloaded. Therefor, all
+		// components in editor are default-serialized by unity, without
+		// executing our serialization code. We must the explicitly call
+		// deserializatin code.
+		SendDeSerialize();
 	}
 #endregion
 }
