@@ -7,6 +7,7 @@ using System;
 using ja2;
 
 //! Terrain component for terrain GO.
+[Serializable]
 public class TerrainManager : SerializableComponent, ja2.ITerrainManager
 {
 #region Constants
@@ -29,21 +30,6 @@ public class TerrainManager : SerializableComponent, ja2.ITerrainManager
 #endregion
 
 #region Operations
-	//! Set deserialized object instances.
-	protected override void DoProcessDeserialization(object[] SerializedObjects)
-	{
-		map_ = (Map)SerializedObjects[0];
-	}
-
-	//! Return object for serialization.
-	protected override object[] DoGetSerializedObjects()
-	{
-		var serialezd_objects = new object[1];
-		serialezd_objects[0] = map_;
-
-		return serialezd_objects;
-	}
-
 	//! Get tile position for given tile.
 	public Vector3 GetPosition(ja2.TerrainTile Tile, short Vertex)
 	{
