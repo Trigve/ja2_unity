@@ -1,4 +1,5 @@
 ﻿using System;
+﻿#define JA2_LOG_SERIALIZATION
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
@@ -26,7 +27,9 @@ public abstract class SerializableComponent : MonoBehaviourEx
 	//! Serialize data.
 	public void Serialize()
 	{
-		Debug.Log("SerializableComponent: Serialize");
+#if JA2_LOG_SERIALIZATION
+		Debug.Log("---SERIALIZE---");
+#endif
 
 		IFormatter formatter = new BinaryFormatter();
 		MemoryStream stream = new MemoryStream();
@@ -45,10 +48,11 @@ public abstract class SerializableComponent : MonoBehaviourEx
 	//! Deserialize data.
 	public void Deserialize()
 	{
+#if JA2_LOG_SERIALIZATION
+		Debug.Log("---DESERIALIZE---");
+#endif
 		if (m_Buffer != null)
 		{
-			Debug.Log("SerializableComponent: Deserialize");
-
 			IFormatter formatter = new BinaryFormatter();
 			MemoryStream stream = new MemoryStream(m_Buffer);
 			
