@@ -6,8 +6,13 @@ using System.Collections;
 [InitializeOnLoad]
 public class InitOnLoad : UnityEditor.AssetModificationProcessor
 {
-	private static bool isEdit = true;
+#region Constants
+	//! Temp file name for touching.
+	private const string TEMP_FILE_NAME = "__ja2_editor_change";
+#endregion
+	
 
+#region Operations
 	//! Hande pre-save action.
 	public static string[] OnWillSaveAssets(string[] Paths)
 	{
@@ -20,25 +25,19 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 	//! Handle the editor -> player change.
 	public static void Change()
 	{
-		if (EditorApplication.isPlaying || EditorApplication.isPaused)
+		// Editor -> Player
+		if (EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying)
 		{
-			if (isEdit)
-			{
-				isEdit = false;
-			}
+			Debug.Log("Change in EDIT");
+			SendSerialize();
+			// Touch file to signal we're going to player
+			System.IO.File.Create(Application.temporaryCachePath + "/" + TEMP_FILE_NAME);
 		}
-		else
+		// Player -> Editor
+		else if(!EditorApplication.isPlayingOrWillChangePlaymode && EditorApplication.isPlaying)
 		{
-			if (!isEdit)
-			{
-				isEdit = true;
-			}
-			// This is important, we're in editor and are begin to play
-			else
-			{
-				Debug.Log("Change in EDIT");
-				SendSerialize();				
-			}
+			// Remove file to signal we're going to editor
+			System.IO.File.Delete(Application.temporaryCachePath + "/" + TEMP_FILE_NAME);
 		}
 	}
 
@@ -65,6 +64,7 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 				serialize_component.Deserialize();
 		}
 	}
+#endregion
 
 #region Construction
 	static InitOnLoad()
@@ -76,7 +76,17 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 		// components in editor are default-serialized by unity, without
 		// executing our serialization code. We must the explicitly call
 		// deserializatin code.
-		SendDeSerialize();
+		try
+		{
+			// Only if not in player, otherwise double deserialization occurs
+			// (one here, another one in Awake() of serialization component)
+			if(!System.IO.File.Exists(Application.temporaryCachePath + "/" + TEMP_FILE_NAME))
+				SendDeSerialize();
+		}
+		catch(System.Exception e)
+		{
+			Debug.LogWarning("Exception while deserializing on init:" + e.ToString());
+		}
 	}
 #endregion
 }
