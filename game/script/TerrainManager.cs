@@ -67,7 +67,7 @@ public class TerrainManager : MonoBehaviourEx, ja2.ITerrainManager
 		int normalized_x = Tile.x - TerrainManager.PARTITION_WIDTH * partition_x;
 		int normalized_y = Tile.y - TerrainManager.PARTITION_HEIGHT * partition_y;
 
-		GameObject terrain_go = m_Partitions[partition_x + partition_y * PARTITION_WIDTH];
+		GameObject terrain_go = m_Partitions[partition_x + partition_y * (map_.width / PARTITION_WIDTH)];
 
 		return terrain_go.transform.TransformPoint(Terrain.TileVertex(normalized_x, normalized_y, Vertex));
 	}
