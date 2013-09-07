@@ -247,8 +247,8 @@ public class SoldierController : MonoBehaviourEx, ISoldierController
 		Ray ray = new Ray(new Vector3(transform.position.x, 1, transform.position.z), Vector3.down);
 		if (Physics.Raycast(ray, out hit, Mathf.Infinity, Terrain.LAYER_MASK))
 		{
-			ja2.TerrainPartition.TriangleMap tile_x_y = hit.transform.gameObject.GetComponent<Terrain>().GetTile(hit.triangleIndex);
-			mercenary.tile = terrainManager.map.GetTile(tile_x_y.x, tile_x_y.y);
+			ja2.TerrainTileHandle tile_handle = hit.transform.gameObject.GetComponent<Terrain>().GetTile(hit.triangleIndex);
+			mercenary.tile = terrainManager.map.GetTile(tile_handle);
 		}
 	}
 

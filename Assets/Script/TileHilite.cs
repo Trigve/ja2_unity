@@ -26,10 +26,10 @@ public class TileHilite : MonoBehaviour
 		int[] triangles = new int[6];
 		Color32[] colors = { new Color32(255, 0, 0, 125), new Color32(255, 0, 0, 125), new Color32(255, 0, 0, 125), new Color32(255, 0, 0, 125) };
 
-		vertices[0] = new Vector3(-ja2.TerrainPartition.TILE_HEIGHT, 0, 0);
-		vertices[1] = new Vector3(0, 0, -ja2.TerrainPartition.TILE_WIDTH);
-		vertices[2] = new Vector3(ja2.TerrainPartition.TILE_HEIGHT, 0, 0);
-		vertices[3] = new Vector3(0, 0, ja2.TerrainPartition.TILE_WIDTH);
+		vertices[0] = new Vector3(-Terrain.TILE_HEIGHT, 0, 0);
+		vertices[1] = new Vector3(0, 0, -Terrain.TILE_WIDTH);
+		vertices[2] = new Vector3(Terrain.TILE_HEIGHT, 0, 0);
+		vertices[3] = new Vector3(0, 0, Terrain.TILE_WIDTH);
 
 		triangles[0] = 0;
 		triangles[1] = 3;

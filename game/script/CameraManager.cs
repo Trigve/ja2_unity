@@ -105,10 +105,10 @@ public class CameraManager : MonoBehaviour
 		switch(Dir)
 		{
 			case Direction.LEFT:
-				ret = point_on_plane.z - amount_ratio > ja2.TerrainPartition.TILE_WIDTH;
+				ret = point_on_plane.z - amount_ratio > TerrainManager.TILE_WIDTH;
 				break;
 			case Direction.TOP:
-				ret = point_on_plane.x - amount_ratio > ja2.TerrainPartition.TILE_HEIGHT;
+				ret = point_on_plane.x - amount_ratio > TerrainManager.TILE_HEIGHT;
 				break;
 			case Direction.BOTTOM:
 				ret = point_on_plane.x + amount_ratio < last_tile_pos_1.x;
@@ -151,8 +151,8 @@ public class CameraManager : MonoBehaviour
 		new Plane(Vector3.up, 0).Raycast(ray, out point);
 		Vector3 point_on_plane = ray.GetPoint(point);
 		// Normalize position
-		transform.Translate(0, 0, -point_on_plane.z + ja2.TerrainPartition.TILE_WIDTH, Space.World);
-		transform.Translate(point_on_plane.x + ja2.TerrainPartition.TILE_HEIGHT, 0, 0, Space.World);
+		transform.Translate(0, 0, -point_on_plane.z + TerrainManager.TILE_WIDTH, Space.World);
+		transform.Translate(point_on_plane.x + TerrainManager.TILE_HEIGHT, 0, 0, Space.World);
 	}
 
 	private IEnumerator MoveCamera_Coro(CameraManager.Direction Dir)

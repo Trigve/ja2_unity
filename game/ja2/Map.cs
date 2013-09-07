@@ -48,6 +48,13 @@ namespace ja2
 		{
 			return m_Tiles[GetTileIndex(X, Y)];
 		}
+
+		//! Get tile for handle.
+		public TerrainTile GetTile(TerrainTileHandle Handle)
+		{
+			return GetTile(Handle.x, Handle.y);
+		}
+
 		//! Get tile checked
 		private TerrainTile GetTileChecked(int X, int Y)
 		{

@@ -94,11 +94,10 @@ public class GameCursor : MonoBehaviour
 		{
 			// Find the tile based on triangles			
 			Terrain terrain = m_Hit.transform.gameObject.GetComponent<Terrain>();
-			ja2.TerrainPartition.TriangleMap tile_x_y = terrain.GetTile(m_Hit.triangleIndex);
-			tile = m_TerrainManager.map.GetTile(tile_x_y.x, tile_x_y.y);
+			tile = m_TerrainManager.map.GetTile(terrain.GetTile(m_Hit.triangleIndex));
 
-			Vector3 v0 = ja2.TerrainPartition.TileVertex(tile.x, tile.y, 0);
-			Vector3 v1 = ja2.TerrainPartition.TileVertex(tile.x, tile.y, 1);
+			Vector3 v0 = Terrain.TileVertex(tile.x, tile.y, 0);
+			Vector3 v1 = Terrain.TileVertex(tile.x, tile.y, 1);
 			transform.position = new Vector3(v1.x, 0, v0.z);
 		}
 	}

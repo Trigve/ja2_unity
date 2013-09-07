@@ -4,9 +4,10 @@ using System;
 using ja2;
 
 [RequireComponent (typeof (MeshFilter), typeof (MeshRenderer), typeof (MeshCollider))]
+[Serializable]
 public sealed class Terrain : MonoBehaviour
 {
-
+#region Constants
 	//! Tile width.
 	public const float TILE_WIDTH = 0.7071067F;
 	//! Tile width.
@@ -15,35 +16,56 @@ public sealed class Terrain : MonoBehaviour
 	public const int LAYER = 8;
 	//! Layer mask
 	public const int LAYER_MASK = 1 << 8;
-	//	public TerrainGen terrainGen {get; private set;}
-	[SerializeField, HideInInspector]
-	private ja2.TerrainPartition terrainPartition;
+#endregion
+
+#region Atrributes
+	//! Mapping between Tile and triangles.
+	private ja2.TerrainTileHandle[] m_Mapping;
+#endregion
+
+#region Properties
+	public ja2.TerrainTileHandle[] mapping
+	{
+		set
+		{
+			m_Mapping = value;
+		}
+	}
+#endregion
 
 #region Operations
-	public void CreatePartition(int X, int Y, ja2.Map Map_, TerrainMaterialManager MatManager)
-	{
-		TerrainTileSet tile_set = MatManager.GetTerrainSet(Map_.terrainName);
-		// Create terrain partition
-		terrainPartition = new ja2.TerrainPartition();
-		Mesh mesh = terrainPartition.Create(X, Y, Map_, tile_set);
-		// Add needed components
-		GetComponent<MeshFilter>().mesh = mesh;
-		GetComponent<MeshCollider>().sharedMesh = mesh;
-		var mesh_renderer = gameObject.GetComponent<MeshRenderer>();
-		// Set map material
-		mesh_renderer.sharedMaterial = Resources.LoadAssetAtPath("Assets/Materials/" + tile_set.materialName + ".mat", typeof(Material)) as Material;
-		// Don't cast shadows
-		mesh_renderer.castShadows = false;
-	}
 	//! Get tile for given triangle.
-	public ja2.TerrainPartition.TriangleMap GetTile(int Triangle)
+	public ja2.TerrainTileHandle GetTile(int Triangle)
 	{
-		return terrainPartition.GetTile(Triangle);
+		return m_Mapping[Triangle];
 	}
-	//! Get tile position.
-	public Vector3 GetTilePosition(int X, int Y, short Vertex)
+
+	public static Vector3 TileVertex(int X, int Y, short Vertex)
 	{
-		return TerrainPartition.TileVertex(X, Y, Vertex);
+		Vector3 out_vec;
+
+		float z_pos = ((Y % 2) * TILE_WIDTH) + TILE_WIDTH + X * TILE_WIDTH * 2;
+		float x_pos = Y * TILE_WIDTH + TILE_WIDTH;
+
+		switch (Vertex)
+		{
+			case 0:
+				out_vec = new Vector3(x_pos - TILE_HEIGHT, 0, z_pos);
+				break;
+			case 1:
+				out_vec = new Vector3(x_pos, 0, z_pos - TILE_WIDTH);
+				break;
+			case 2:
+				out_vec = new Vector3(x_pos + TILE_HEIGHT, 0, z_pos);
+				break;
+			case 3:
+				out_vec = new Vector3(x_pos, 0, z_pos + TILE_WIDTH);
+				break;
+			default:
+				throw new ArgumentException("MapRenderer: Unknown tile vertex number.");
+		}
+
+		return out_vec;
 	}
-	#endregion
+#endregion
 }
