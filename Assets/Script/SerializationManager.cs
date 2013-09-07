@@ -60,24 +60,20 @@ public class SerializationManager : MonoBehaviour
 		foreach (var obj in all_obejcts)
 		{
 			Type object_type = obj.GetType();
-			// Find if we've got some needed attributes
-			Attribute[] attributes = System.Attribute.GetCustomAttributes(object_type);
-			foreach (var attr in attributes)
+			// Find if we've got [Serializable] for all class
+			if(FindCustomAttribute(System.Attribute.GetCustomAttributes(object_type), typeof(System.SerializableAttribute)))
 			{
-				// Got [Serializable]
-				if (attr.GetType() == typeof(System.SerializableAttribute))
+				// Get all fields
+				FieldInfo[] fields = object_type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+				StringList_t fields_to_serialize = new StringList_t();
+				for (int i = 0; i < fields.Length; ++i)
 				{
-					// Get all fields
-					FieldInfo[] fields = object_type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-					StringList_t fields_to_serialize = new StringList_t();
-					for (int i = 0; i < fields.Length; ++i)
 						fields_to_serialize.Add(fields[i].Name);
-					// Save field to map for given type
-					m_TypeMap[object_type] = fields_to_serialize.ToArray();
-					// Save object for serialization
-					object_to_serialize_set.Add(obj);
-					break;
 				}
+				// Save field to map for given type
+				m_TypeMap[object_type] = fields_to_serialize.ToArray();
+				// Save object for serialization
+				object_to_serialize_set.Add(obj);
 			}
 		}
 		m_SerializedObjects = new MonoBehaviour[object_to_serialize_set.Count];
@@ -158,6 +154,18 @@ public class SerializationManager : MonoBehaviour
 #endregion
 
 #region Private Methods
+	//! Find custom attribute
+	private bool FindCustomAttribute(Attribute[] Attributes, Type AttributeType)
+	{
+		foreach (var attr in Attributes)
+		{
+			// Got attribute
+			if (attr.GetType() == AttributeType)
+				return true;
+		}
+
+		return false;
+	}
 	//! Get field info.
 	private FieldInfo GetFieldInfo(Type Type_, string Name)
 	{
