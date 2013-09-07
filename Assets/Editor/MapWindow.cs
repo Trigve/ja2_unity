@@ -198,7 +198,17 @@ public class MapWindow : EditorWindow
 		if(GUILayout.Button("Create"))
 		{
 			var level_manager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-			// Reset position
+			// If we got some terrain already created, destroy it
+			if (level_manager.terrainManager.map != null)
+			{
+				foreach (var terrain_partition in level_manager.terrainManager.partitions)
+				{
+					// Destroy mesh as firs
+					AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(terrain_partition.GetComponent<MeshFilter>().sharedMesh));
+					// Destroy GO
+					GameObject.DestroyImmediate(terrain_partition);
+				}
+			}
 			// Create terrain
 			level_manager.terrainManager.map = new ja2.Map(m_Width, m_Height, "summer");
 			CreateTerrain(level_manager.terrainManager, new ja2.TerrainMaterialManager(Application.dataPath));
