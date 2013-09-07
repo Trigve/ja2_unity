@@ -29,7 +29,7 @@ public class TerrainManager : MonoBehaviourEx, ja2.ITerrainManager
 	}
 #endregion
 
-#region Operations
+#region Interface
 	//! Get tile position for given tile.
 	public Vector3 GetPosition(ja2.TerrainTile Tile, short Vertex)
 	{
