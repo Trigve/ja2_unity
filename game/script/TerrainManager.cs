@@ -8,7 +8,7 @@ using ja2;
 
 //! Terrain component for terrain GO.
 [Serializable]
-public class TerrainManager : SerializableComponent, ja2.ITerrainManager
+public class TerrainManager : MonoBehaviourEx, ja2.ITerrainManager
 {
 #region Constants
 	//! Partition name.
@@ -55,7 +55,7 @@ public class TerrainManager : SerializableComponent, ja2.ITerrainManager
 	{
 		if(Map_.width % ja2.TerrainPartition.PARTITION_WIDTH != 0 || Map_.width % ja2.TerrainPartition.PARTITION_WIDTH != 0)
 			throw new System.ArgumentException("Map width/height must be normalized to terrain partition width/height.");
-		// Create component
+
 		map_ = Map_;
 
 		// Need to create terrain partitions

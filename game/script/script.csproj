@@ -51,9 +51,6 @@
     <Compile Include="NonMoveableObjectManagerComponent.cs" />
     <Compile Include="PathVisualizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerializableComponent.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SoldierController.cs" />
     <Compile Include="SoldierPathManager.cs" />
     <Compile Include="Terrain.cs" />
