@@ -191,6 +191,28 @@ public class SerializationManager : MonoBehaviour
 	//! Desrialize type map if empty
 	private void DeserializeTypeMapOptional()
 	{
+		bool need_to_rebuild = false;
+
+		var new_go = new List<MonoBehaviour>();
+		// Find if some objects were removed
+		foreach (var go in m_SerializedObjects)
+		{
+			// At least one is out, need to rebuild type map
+			if (go == null)
+			{
+				need_to_rebuild = true;
+			}
+			else
+				new_go.Add(go);
+		}
+		// If something change
+		if (need_to_rebuild)
+		{
+			m_TypeMap = null;
+			m_SerializedObjects = new_go.ToArray();
+			Reload();
+		}
+		
 		if(m_TypeMap == null)
 		   DeserializeTypeMap();
 	}
