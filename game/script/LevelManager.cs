@@ -6,24 +6,23 @@ using System.Collections.Generic;
 	In each scene one instance of this component must exist.It handles level
 	specific stuff and is served as entry point.
 */
-//public class LevelManager : SerializableComponent
 public class LevelManager : MonoBehaviourEx
 {
 #region Attributes
 	//! Game cursor.
-	private GameCursor cursor;
+	public GameCursor cursor;
 	//! Hover cursor.
-	private GameObject hover;
+	public GameObject hover;
 	//! Selected mercenary.
 	private GameObject soldierSelected;
 	//! Terrain manager.
-	private TerrainManager m_TerrainManager;
+	public TerrainManager m_TerrainManager;
 	//! Path manager.
-	private AStarPathManager pathManager;
+	public AStarPathManager pathManager;
 	//! Soldier path manager.
 	private Dictionary<SoldierController, SoldierPathManager> soldiersPaths;
 	//! Path visualizer.
-	private PathVisualizer pathVisualizer;
+	public PathVisualizer pathVisualizer;
 	//! Character definition manager.
 	private ja2.CharacterDefinitionManager charDefManager;
 	//! Clothes manager.
@@ -80,20 +79,7 @@ public class LevelManager : MonoBehaviourEx
 
 	void Awake()
 	{
-		m_Serializer = GetComponentInChildren<NonMoveableObjectManagerComponent>();
-		m_TerrainManager = GetComponentInChildren<TerrainManager>();
-		// Create A* path manager and GO
-		pathManager = GetComponentInChildren<AStarPathManager>();
 		soldiersPaths = new Dictionary<SoldierController, SoldierPathManager>();
-		cursor = GetComponentInChildren<GameCursor>();
-		cursor.m_TerrainManager = m_TerrainManager;
-		// Instantiate hover
-		hover = GameObject.Find("Hover");
-		// Create path visulizer child GO and get main component
-		pathVisualizer = GetComponentInChildren<PathVisualizer>();
-
-		GetComponentInChildren<CameraManager>().m_TerrainManager = m_TerrainManager;
-
 		charDefManager = new ja2.CharacterDefinitionManager("Data");
 		clothManager = new ja2.ClothManager("Data");
 		charEntityManager = new ja2.CharacterEntityManager(charDefManager, clothManager);
