@@ -41,19 +41,19 @@ public class LevelManager : MonoBehaviourEx
 	}
 #endregion
 
-#region Operations
+#region Interface
 	//! Create full mercenary GO.
 	public GameObject CreateSoldier(ja2.Soldier Soldier_)
 	{
 		// Load prefab of soldier
 		var soldier_go = utils.PrefabManager.Create("Soldier");
-		
+
 		var soldier_controller = soldier_go.GetComponent<SoldierController>();
 		// Associate terrain
 		soldier_controller.terrainManager = m_TerrainManager;
 		// Associate solder
 		soldier_controller.SetMercenary(Soldier_);
-		
+
 		// Create skinned mesh on parameters and save it
 		soldier_go.GetComponent<SoldierController>().combinedMesh = charEntityManager.Create(Soldier_.character(), soldier_go);
 		// Activate now, because now is everything set up and we won't get
@@ -76,7 +76,33 @@ public class LevelManager : MonoBehaviourEx
 		// animation stops to play and is shown in T-pose
 		new utils.Task(RebuildCharacterWorkaround(SoldierGO));
 	}
+#endregion
 
+#region Interface Editor
+	//! Find terrain manager.
+	public TerrainManager Editor_FindTerrainManager()
+	{
+		return GetComponentInChildren<TerrainManager>();
+	}
+
+	//! Find NonMoveableObjectManager.
+	public NonMoveableObjectManagerComponent Editor_FindNonMoveable()
+	{
+		return GetComponentInChildren<NonMoveableObjectManagerComponent>();
+	}
+#endregion
+
+#region Operations
+	//! Bug workaround task for soldier mesh rebuild.
+	System.Collections.IEnumerator RebuildCharacterWorkaround(GameObject SoldierGO)
+	{
+		SoldierGO.SetActive(false);
+		yield return new WaitForFixedUpdate();
+		SoldierGO.SetActive(true);
+	}
+#endregion
+
+#region Messages
 	void Awake()
 	{
 		soldiersPaths = new Dictionary<SoldierController, SoldierPathManager>();
@@ -141,33 +167,10 @@ public class LevelManager : MonoBehaviourEx
 				paths_to_remove.Add(it.Key);
 		}
 		// Remove unneeded one
-		foreach(var it in paths_to_remove)
+		foreach (var it in paths_to_remove)
 		{
 			soldiersPaths.Remove(it);
 		}
-	}
-
-	//! Bug workaround task for soldier mesh rebuild.
-	System.Collections.IEnumerator RebuildCharacterWorkaround(GameObject SoldierGO)
-	{
-		SoldierGO.SetActive(false);
-		yield return new WaitForFixedUpdate();
-		SoldierGO.SetActive(true);
-	}
-
-#endregion
-
-#region Operations for Editor
-	//! Find terrain manager.
-	public TerrainManager Editor_FindTerrainManager()
-	{
-		return GetComponentInChildren<TerrainManager>();
-	}
-
-	//! Find NonMoveableObjectManager.
-	public NonMoveableObjectManagerComponent Editor_FindNonMoveable()
-	{
-		return GetComponentInChildren<NonMoveableObjectManagerComponent>();
 	}
 #endregion
 }
