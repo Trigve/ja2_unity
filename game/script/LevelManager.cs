@@ -82,7 +82,7 @@ public class LevelManager : MonoBehaviourEx
 	//! Find terrain manager.
 	public TerrainManager Editor_FindTerrainManager()
 	{
-		return GetComponentInChildren<TerrainManager>();
+		return terrainManager;
 	}
 
 	//! Find NonMoveableObjectManager.
