@@ -68,8 +68,6 @@ public class MapWindow : EditorWindow
 		}
 		// Set all GOs
 		TerrainManager_.partitions = partitions.ToArray();
-		// Refresh asset database because of terrain were added there
-		AssetDatabase.Refresh();
 	}
 
 	public Mesh CreatePartitionMesh(int X, int Y, ja2.Map Map_, ja2.TerrainTileSet TileSet, ja2.TerrainTileHandle[] TileMap)
@@ -204,6 +202,8 @@ public class MapWindow : EditorWindow
 			// Create terrain
 			level_manager.terrainManager.map = new ja2.Map(m_Width, m_Height, "summer");
 			CreateTerrain(level_manager.terrainManager, new ja2.TerrainMaterialManager(Application.dataPath));
+			// Refresh asset database because of terrain were added there
+			AssetDatabase.Refresh();
 		}
 	}
 #endregion
