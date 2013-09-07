@@ -6,6 +6,7 @@ using System.Collections.Generic;
 	In each scene one instance of this component must exist.It handles level
 	specific stuff and is served as entry point.
 */
+//public class LevelManager : SerializableComponent
 public class LevelManager : MonoBehaviourEx
 {
 #region Attributes
@@ -16,7 +17,7 @@ public class LevelManager : MonoBehaviourEx
 	//! Selected mercenary.
 	private GameObject soldierSelected;
 	//! Terrain manager.
-	private TerrainManager terrainManager;
+	private TerrainManager m_TerrainManager;
 	//! Path manager.
 	private AStarPathManager pathManager;
 	//! Soldier path manager.
@@ -32,12 +33,11 @@ public class LevelManager : MonoBehaviourEx
 #endregion
 
 #region Properies
-	//! Get terrain manager/map.
-	public TerrainManager terrain
+	public TerrainManager terrainManager
 	{
 		get
 		{
-			return terrainManager;
+			return m_TerrainManager;
 		}
 	}
 #endregion
@@ -48,8 +48,13 @@ public class LevelManager : MonoBehaviourEx
 	{
 		// Load prefab of soldier
 		var soldier_go = utils.PrefabManager.Create("Soldier");
+		
+		var soldier_controller = soldier_go.GetComponent<SoldierController>();
+		// Associate terrain
+		soldier_controller.terrainManager = m_TerrainManager;
 		// Associate solder
-		soldier_go.GetComponent<SoldierController>().SetMercenary(Soldier_);
+		soldier_controller.SetMercenary(Soldier_);
+		
 		// Create skinned mesh on parameters and save it
 		soldier_go.GetComponent<SoldierController>().combinedMesh = charEntityManager.Create(Soldier_.character(), soldier_go);
 		// Activate now, because now is everything set up and we won't get
@@ -75,33 +80,19 @@ public class LevelManager : MonoBehaviourEx
 
 	void Awake()
 	{
-		terrainManager = GameObject.Find("Map").GetComponent<TerrainManager>();
+		m_Serializer = GetComponentInChildren<NonMoveableObjectManagerComponent>();
+		m_TerrainManager = GetComponentInChildren<TerrainManager>();
 		// Create A* path manager and GO
-		pathManager = utils.PrefabManager.Create("AStartPathManager").GetComponent<AStarPathManager>();
-		pathManager.transform.parent = transform;
-
+		pathManager = GetComponentInChildren<AStarPathManager>();
 		soldiersPaths = new Dictionary<SoldierController, SoldierPathManager>();
-		// Instantiate cursor if not found
-		GameObject cursor_go;
-		if ((cursor_go = GameObject.Find("Cursor")) == null)
-		{
-			var prefab_class = Resources.Load("Prefabs/Cursor", typeof(GameObject));
-			cursor_go = (GameObject)Instantiate(prefab_class);
-			cursor_go.name = prefab_class.name;
-			// Save it
-			cursor = cursor_go.GetComponent<GameCursor>();
-		}
+		cursor = GetComponentInChildren<GameCursor>();
+		cursor.m_TerrainManager = m_TerrainManager;
 		// Instantiate hover
-		if ((hover = GameObject.Find("Hover")) == null)
-		{
-			var prefab_class = Resources.Load("Prefabs/Hover", typeof(GameObject));
-			hover = (GameObject)Instantiate(prefab_class);
-			hover.name = prefab_class.name;
-		}
+		hover = GameObject.Find("Hover");
 		// Create path visulizer child GO and get main component
-		var path_visualizer_go = utils.PrefabManager.Create("PathVisualizer");
-		path_visualizer_go.transform.parent = transform;
-		pathVisualizer = path_visualizer_go.GetComponent<PathVisualizer>();
+		pathVisualizer = GetComponentInChildren<PathVisualizer>();
+
+		GetComponentInChildren<CameraManager>().m_TerrainManager = m_TerrainManager;
 
 		charDefManager = new ja2.CharacterDefinitionManager("Data");
 		clothManager = new ja2.ClothManager("Data");
@@ -144,7 +135,7 @@ public class LevelManager : MonoBehaviourEx
 				{
 					// Search for path
 					var soldier_controller = soldierSelected.GetComponentInChildren<SoldierController>();
-					var path = pathManager.CreatePath(terrainManager, soldier_controller.position, cursor.tile);
+					var path = pathManager.CreatePath(m_TerrainManager, soldier_controller.position, cursor.tile);
 					// Parse path and create actions
 					soldiersPaths[soldier_controller] = new SoldierPathManager(soldier_controller, path);
 					// Visualize path
@@ -178,5 +169,19 @@ public class LevelManager : MonoBehaviourEx
 		SoldierGO.SetActive(true);
 	}
 
+#endregion
+
+#region Operations for Editor
+	//! Find terrain manager.
+	public TerrainManager Editor_FindTerrainManager()
+	{
+		return GetComponentInChildren<TerrainManager>();
+	}
+
+	//! Find NonMoveableObjectManager.
+	public NonMoveableObjectManagerComponent Editor_FindNonMoveable()
+	{
+		return GetComponentInChildren<NonMoveableObjectManagerComponent>();
+	}
 #endregion
 }

@@ -5,6 +5,7 @@ using System;
 public class AStarPathManager : MonoBehaviourEx
 {
 #region Attributes
+	private LevelManager levelManager;
 	private TerrainManager terrainManager;
 	//! Actual task.
 	utils.Task actualTask;
@@ -14,18 +15,16 @@ public class AStarPathManager : MonoBehaviourEx
 		things will happen.
 	*/
 	private ja2.AStarPathMap lastPath;
-#if UNITY_EDITOR
 	//! Time to sleep when drawing.
 	public float time = 0.2f;
-	
-#endif
 #endregion
 
 #region Operations
 	
 	void Awake()
 	{
-		terrainManager = GameObject.Find("Map").GetComponent<TerrainManager>();
+		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+		terrainManager = levelManager.terrainManager;
 	}
 
 	//! Create A* path.
@@ -39,7 +38,6 @@ public class AStarPathManager : MonoBehaviourEx
 
 	}
 
-#if UNITY_EDITOR
 	public void CreatePathDebug(TerrainManager TerrainManager_, ja2.TerrainTile From, ja2.TerrainTile To)
 	{
 		if (actualTask != null)
@@ -58,7 +56,6 @@ public class AStarPathManager : MonoBehaviourEx
 			state = lastPath.RunOnce();
 		} while (state == ja2.AStarPathMap.State.WAIT);
 	}
-#endif
 
 	void OnDrawGizmosSelected()
 	{

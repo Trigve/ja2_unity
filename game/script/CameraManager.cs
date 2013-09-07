@@ -31,6 +31,8 @@ public class CameraManager : MonoBehaviour
 	private Rect initialWindowSize = new Rect();
 	//! Camera move in progress.
 	private bool cameraMove = false;
+	//! Terrain manager.
+	public TerrainManager m_TerrainManager;
 	
 	// Use this for initialization
 	void Awake ()
@@ -93,11 +95,10 @@ public class CameraManager : MonoBehaviour
 		float point;
 		new Plane(Vector3.up, 0).Raycast(ray, out point);
 		Vector3 point_on_plane = ray.GetPoint(point);
-		var terrain_manager = GameObject.Find("Map").GetComponent<TerrainManager>();
-		ja2.Map map = terrain_manager.map;
+		ja2.Map map = m_TerrainManager.map;
 		ja2.TerrainTile last_tile = map.GetTile(map.width - 1, map.height - 1);
-		Vector3 last_tile_pos_1 = terrain_manager.GetPosition(last_tile, 1);
-		Vector3 last_tile_pos_2 = terrain_manager.GetPosition(last_tile, 2);
+		Vector3 last_tile_pos_1 = m_TerrainManager.GetPosition(last_tile, 1);
+		Vector3 last_tile_pos_2 = m_TerrainManager.GetPosition(last_tile, 2);
 
 		float amount_ratio = amount * Ratio;
 		// Check position

@@ -26,7 +26,7 @@ public class SoldierController : MonoBehaviourEx, ISoldierController
 	//! Mercenary unit data.
 	protected ja2.Soldier mercenary;
 	//! Terrain manager.
-	protected TerrainManager terrainManager;
+	public TerrainManager terrainManager;
 	//! Animator.
 	protected Animator animator;
 	//! Rigid body.
@@ -54,7 +54,6 @@ public class SoldierController : MonoBehaviourEx, ISoldierController
 	virtual public void Awake()
 	{
 		isRotating = false;
-		terrainManager = GameObject.Find("Map").GetComponent<TerrainManager>();
 		animator = GetComponent<Animator>();
 		rigidBody = GetComponent<Rigidbody>();
 	}

@@ -5,6 +5,7 @@ using System.Collections;
 public class PathVisualizer : MonoBehaviourEx
 {
 #region Attributes
+	private LevelManager levelManager;
 	//! Terrain manager.
 	private TerrainManager terrainManager;
 	//! Mesh filter.
@@ -14,7 +15,8 @@ public class PathVisualizer : MonoBehaviourEx
 #region Operations
 	void Awake()
 	{
-		terrainManager = GameObject.Find("Map").GetComponent<TerrainManager>();
+		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+		terrainManager = levelManager.terrainManager;
 		meshFilter = GetComponent<MeshFilter>();
 	}
 
