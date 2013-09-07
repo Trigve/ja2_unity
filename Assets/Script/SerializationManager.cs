@@ -30,6 +30,7 @@ public class SerializationManager : MonoBehaviour
 	private MappingType_t m_TypeMap;
 	//! All objects that need to be serialized.
 	[SerializeField]
+	[HideInInspector]
 	private MonoBehaviour[] m_SerializedObjects;
 #endregion
 
