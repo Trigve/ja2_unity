@@ -78,6 +78,7 @@
     <Compile Include="TerrainMaterialManager.cs" />
     <Compile Include="TerrainPartition.cs" />
     <Compile Include="TerrainTile.cs" />
+    <Compile Include="TerrainTileHandle.cs" />
     <Compile Include="TerrainTileSet.cs" />
     <Compile Include="TerrainTileSplat.cs" />
     <Compile Include="TextureAtlasInfo.cs" />
