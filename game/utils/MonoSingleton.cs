@@ -19,7 +19,6 @@ namespace utils
 					// Object not found, we create a temporary one
 					if (m_Instance == null)
 					{
-						Debug.LogWarning("No instance of " + typeof(T).ToString() + ", a temporary one is created.");
 						var go = new GameObject(typeof(T).ToString(), typeof(T));
 						// Don't show
 
