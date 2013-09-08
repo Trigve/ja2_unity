@@ -42,7 +42,7 @@ namespace ja2
 		public int size { get { return m_Tiles.Length; } }
 #endregion
 
-#region Operations
+#region Interface
 		//! Get tile.
 		public TerrainTile GetTile(int X, int Y)
 		{
@@ -53,15 +53,6 @@ namespace ja2
 		public TerrainTile GetTile(TerrainTileHandle Handle)
 		{
 			return GetTile(Handle.x, Handle.y);
-		}
-
-		//! Get tile checked
-		private TerrainTile GetTileChecked(int X, int Y)
-		{
-			if (X < 0 || Y < 0 || GetTileIndex(X, Y) >= m_Tiles.Length)
-				return null;
-
-			return GetTile(X, Y);
 		}
 
 		//! Get tile index.
@@ -266,6 +257,16 @@ namespace ja2
 		}
 #endregion
 
+#region Operations
+		//! Get tile checked
+		private TerrainTile GetTileChecked(int X, int Y)
+		{
+			if (X < 0 || Y < 0 || GetTileIndex(X, Y) >= m_Tiles.Length)
+				return null;
+
+			return GetTile(X, Y);
+		}
+#endregion
 #region Constructor
 		public Map(int Width, int Height, string TerrainName)
 		{
