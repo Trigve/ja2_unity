@@ -139,6 +139,9 @@ public class SerializationManager : MonoBehaviour
 			{
 				Type actual_type = obj.GetType();
 
+				// If obj has been destroyed,
+				if (obj == null)
+					Debug.Log("Serialization: Object has been destroyed, cannot deserialize.");
 				// First number of objects
 				int number_ofobjects = (int)formatter.Deserialize(stream);
 				// Now all fields
