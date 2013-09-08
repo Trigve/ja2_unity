@@ -57,7 +57,7 @@ public class SerializationManager : MonoBehaviour
 	private byte[] m_Buffer;
 #endregion
 
-#region Public Methods
+#region Interface
 	//! Reload.
 	public void Reload()
 	{
@@ -177,7 +177,7 @@ public class SerializationManager : MonoBehaviour
 	}
 #endregion
 
-#region Private Methods
+#region Operations
 	//! Find custom attribute
 	private bool FindCustomAttribute(Attribute[] Attributes, Type AttributeType)
 	{
