@@ -200,30 +200,38 @@ public class SerializationManager : MonoBehaviour
 		type_map_stream.Close();
 	}
 
-	//! Desrialize type map if empty
-	private void DeserializeTypeMapOptional()
+	//! Remove deleted object from serialized list.
+	/*!
+		\return true if at least deleted object was found and removed.
+	*/
+	private bool PurgeDeleted()
 	{
-		bool need_to_rebuild = false;
+		bool was_found = false;
 
 		var new_go = new List<MonoBehaviour>();
+
 		// Find if some objects were removed
 		foreach (var go in m_SerializedObjects)
 		{
-			// At least one is out, need to rebuild type map
+			// At least one is out, need to remove it
 			if (go == null)
-			{
-				need_to_rebuild = true;
-			}
+				was_found = true;
 			else
 				new_go.Add(go);
 		}
-		// If something change
-		if (need_to_rebuild)
-		{
-			m_TypeMap = null;
+		// Need to make new array of objects
+		if (was_found)
 			m_SerializedObjects = new_go.ToArray();
+
+		return was_found;
+	}
+
+	//! Desrialize type map if empty
+	private void DeserializeTypeMapOptional()
+	{
+		// If something change
+		if (PurgeDeleted())
 			Reload();
-		}
 		
 		if(m_TypeMap == null)
 		   DeserializeTypeMap();
