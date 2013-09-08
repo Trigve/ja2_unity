@@ -82,13 +82,9 @@ public class MapWindow : EditorWindow
 		Vector4[] uv3 = new Vector4[array_vec.Length];
 		
 		// Go through all tiles
-		int partition_begin_x = 0;
-		int partition_begin_y = 0;
-		int partition_height = TerrainManager.PARTITION_HEIGHT;
-		int partition_width = TerrainManager.PARTITION_WIDTH;
-		for (int i = partition_begin_y, last_vertex = 0; i < partition_height; ++i)
+		for (int i = 0, last_vertex = 0; i < TerrainManager.PARTITION_HEIGHT; ++i)
 		{
-			for (int j = partition_begin_x; j < partition_width; ++j)
+			for (int j = 0; j < TerrainManager.PARTITION_WIDTH; ++j)
 			{
 				// Get Tile
 				ja2.TerrainTile tile = Map_.GetTile(j + X * TerrainManager.PARTITION_WIDTH, i + Y * TerrainManager.PARTITION_HEIGHT);
