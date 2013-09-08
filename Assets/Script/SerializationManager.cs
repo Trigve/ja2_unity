@@ -89,9 +89,12 @@ public class SerializationManager : MonoBehaviour
 				StringList_t fields_to_serialize = new StringList_t();
 				for (int i = 0; i < fields.Length; ++i)
 				{
-					// Only if not mark with [SerializeField], because these are
-					// serialized by unity
-					if(!FindCustomAttribute(System.Attribute.GetCustomAttributes(fields[i]), typeof(UnityEngine.SerializeField)))
+					// Only if not mark with [SerializeField]( because these are
+					// serialized by unity) or [NonSerialized] (cannot use both
+					// at same time because otherwise unity wouldn't serializa
+					// the field).
+					if (!FindCustomAttribute(System.Attribute.GetCustomAttributes(fields[i]), typeof(NonSerializedAttribute)) &&
+						!FindCustomAttribute(System.Attribute.GetCustomAttributes(fields[i]), typeof(UnityEngine.SerializeField)))
 						fields_to_serialize.Add(fields[i].Name);
 				}
 				// Save field to map for given type
