@@ -78,20 +78,6 @@ public class LevelManager : MonoBehaviourEx
 	}
 #endregion
 
-#region Interface Editor
-	//! Find terrain manager.
-	public TerrainManager Editor_FindTerrainManager()
-	{
-		return terrainManager;
-	}
-
-	//! Find NonMoveableObjectManager.
-	public NonMoveableObjectManagerComponent Editor_FindNonMoveable()
-	{
-		return GetComponentInChildren<NonMoveableObjectManagerComponent>();
-	}
-#endregion
-
 #region Operations
 	//! Bug workaround task for soldier mesh rebuild.
 	System.Collections.IEnumerator RebuildCharacterWorkaround(GameObject SoldierGO)
