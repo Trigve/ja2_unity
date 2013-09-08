@@ -37,6 +37,14 @@ using MappingType_t = System.Collections.Generic.Dictionary<System.Type, string[
 [ExecuteInEditMode]
 public class SerializationManager : MonoBehaviour
 {
+#region Inner classes
+	//! Helper class, because unity couldn't serialize array of array.
+	[Serializable]
+	internal sealed class BufferHolder
+	{
+		public byte[] m_Buffer;
+	}
+#endregion
 #region  Attributes
 	//! Mapping for data type to fields serialize.
 	private MappingType_t m_TypeMap;
@@ -54,7 +62,7 @@ public class SerializationManager : MonoBehaviour
 	//! Buffer for holding serialized data.
 	[SerializeField]
 	[HideInInspector]
-	private byte[] m_Buffer;
+	private BufferHolder[] m_Buffer;
 #endregion
 
 #region Interface
@@ -109,12 +117,17 @@ public class SerializationManager : MonoBehaviour
 		// performance) so we can deserialize it. If reload was in progress,
 		// then it is already loaded
 		DeserializeTypeMapOptional();
-		
+		// Create new list of buffer
+		m_Buffer = new BufferHolder[m_SerializedObjects.Length];
+
 		IFormatter formatter = new BinaryFormatter();
-		MemoryStream stream = new MemoryStream();
+		
 		// Traverse each object need to be serialized
+		int i = 0;
 		foreach (var obj in m_SerializedObjects)
 		{
+			MemoryStream stream = new MemoryStream();
+
 			Type actual_type = obj.GetType();
 			// Find fields to serialize
 			var serialize_fields = m_TypeMap[actual_type];
@@ -127,11 +140,13 @@ public class SerializationManager : MonoBehaviour
 				formatter.Serialize(stream, field);
 				formatter.Serialize(stream, GetFieldInfo(actual_type, field).GetValue(obj));
 			}
+			stream.Close();
+			// Save to solo buffer
+			m_Buffer[i] = new BufferHolder();
+			m_Buffer[i].m_Buffer = stream.GetBuffer();
+			++i;
 		}
-		stream.Close();
-
-		m_Buffer = stream.GetBuffer();
-
+		
 		// Make the copy to deserialized list
 		m_DeserializedObjects = (MonoBehaviour[])m_SerializedObjects.Clone();
 	}
@@ -144,37 +159,42 @@ public class SerializationManager : MonoBehaviour
 		if (m_Buffer != null && m_Buffer.Length > 0)
 		{
 			IFormatter formatter = new BinaryFormatter();
-			MemoryStream stream = new MemoryStream(m_Buffer);
 
+			int j = 0;
 			// Traverse all objects to deserialize
 			foreach (var obj in m_DeserializedObjects)
 			{
-				Type actual_type = null;
 				// If obj has been destroyed,
 				if (obj == null)
 					Debug.LogWarning("Serialization: Object has been destroyed, cannot deserialize.");
 				// Get type only if valid
 				else
-					actual_type = obj.GetType();
-				// First number of objects
-				int number_ofobjects = (int)formatter.Deserialize(stream);
-				// Now all fields
-				for (int i = 0; i < number_ofobjects; ++i)
 				{
-					// Get field name
-					string field = (string)formatter.Deserialize(stream);
-					// Deserialize object
-					object deserialized_obj = formatter.Deserialize(stream);
-					// Set value only if still valid; Else value is discarded
-					if(obj != null)
+					MemoryStream stream = new MemoryStream(m_Buffer[j].m_Buffer);
+
+					Type actual_type = obj.GetType();
+					// First number of objects
+					int number_ofobjects = (int)formatter.Deserialize(stream);
+					// Now all fields
+					for (int i = 0; i < number_ofobjects; ++i)
+					{
+						// Get field name
+						string field = (string)formatter.Deserialize(stream);
+						// Deserialize object
+						object deserialized_obj = formatter.Deserialize(stream);
+						// Set value
 						GetFieldInfo(actual_type, field).SetValue(obj, deserialized_obj);
+					}
+
+					stream.Close();
+
+					// Let child handle deserialization post process
+					var post_process = obj as script.ISerializePostProcessable;
+					if (post_process != null)
+						post_process.PostProcess();
 				}
-				// Let child handle deserialization post process
-				var post_process = obj as script.ISerializePostProcessable;
-				if (post_process != null)
-					post_process.PostProcess();
+				++j;
 			}
-			stream.Close();
 		}
 	}
 #endregion
