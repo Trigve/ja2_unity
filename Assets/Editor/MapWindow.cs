@@ -208,6 +208,8 @@ public class MapWindow : EditorWindow
 			// Create terrain
 			level_manager.terrainManager.map = new ja2.Map(m_Width, m_Height, "summer");
 			CreateTerrain(level_manager.terrainManager, new ja2.TerrainMaterialManager(Application.dataPath));
+			// Terrain manager has changed
+			EditorUtility.SetDirty(level_manager.terrainManager);
 			// Refresh asset database because of terrain were added there
 			AssetDatabase.Refresh();
 		}
