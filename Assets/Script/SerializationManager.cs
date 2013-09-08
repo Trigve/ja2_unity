@@ -51,10 +51,6 @@ public class SerializationManager : MonoBehaviour
 #endregion
 
 #region Serialized Data
-	//! Buffer for Type map.
-	[SerializeField]
-	[HideInInspector]
-	private byte[] m_TypeMapBuffer;
 	//! Buffer for holding serialized data.
 	[SerializeField]
 	[HideInInspector]
@@ -98,9 +94,6 @@ public class SerializationManager : MonoBehaviour
 		}
 		m_SerializedObjects = new MonoBehaviour[object_to_serialize_set.Count];
 		object_to_serialize_set.CopyTo(m_SerializedObjects);
-		// Need to serialize type map to not to reload it on every player to
-		// editor change. It is needed only for "saving serialization".
-		SerializeTypeMap();
 	}
 
 	//! Try to serialize all game objects.
@@ -203,30 +196,6 @@ public class SerializationManager : MonoBehaviour
 		return Type_.GetField(Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 	}
 
-	//! Serialize type map.
-	private void SerializeTypeMap()
-	{
-		IFormatter formatter = new BinaryFormatter();
-		var type_map_stream = new MemoryStream();
-
-		// As first save type map to be able to know which fields to deserialize
-		formatter.Serialize(type_map_stream, m_TypeMap);
-		m_TypeMapBuffer = type_map_stream.GetBuffer();
-		
-		type_map_stream.Close();
-	}
-
-	//! Deserialize type map.
-	private void DeserializeTypeMap()
-	{
-		IFormatter formatter = new BinaryFormatter();
-		MemoryStream type_map_stream = new MemoryStream(m_TypeMapBuffer);
-
-		m_TypeMap = (MappingType_t)formatter.Deserialize(type_map_stream);
-		
-		type_map_stream.Close();
-	}
-
 	//! Remove deleted object from serialized list.
 	/*!
 		\return true if at least deleted object was found and removed.
@@ -256,12 +225,11 @@ public class SerializationManager : MonoBehaviour
 	//! Desrialize type map if empty
 	private void DeserializeTypeMapOptional()
 	{
-		// If something change
-		if (PurgeDeleted())
-			Reload();
-		
-		if(m_TypeMap == null)
-		   DeserializeTypeMap();
+		// Need to always reload because there could be situations that some
+		// object were added to be serialized but they wasn't added on init
+		// in to-be serialized list and therefor no change there and we're
+		// skipping them
+		Reload();
 	}
 #endregion
 
