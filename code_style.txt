@@ -1,0 +1,8 @@
+#region names:
+
+For fields, use "Fields.
+For properties, "Properties"
+For public methods, "Interface"
+For private, protected methods, "Operations"
+For messages, "Messages"
+For constructor, "Construction"
