@@ -202,7 +202,7 @@ public class MapWindow : EditorWindow
 					// Destroy mesh as firs
 					AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(terrain_partition.GetComponent<MeshFilter>().sharedMesh));
 					// Destroy GO
-					GameObject.DestroyImmediate(terrain_partition);
+					GameObject.DestroyImmediate(terrain_partition.gameObject);
 				}
 			}
 			// Create terrain
