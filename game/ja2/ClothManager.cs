@@ -8,7 +8,7 @@ namespace ja2
 {
 	public sealed class ClothManager
 	{
-#region Attributes
+#region Fields
 		//! Actual working path.
 		private readonly string wrkPath;
 		//! Map of all clothes.

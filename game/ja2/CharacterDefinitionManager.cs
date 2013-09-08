@@ -8,7 +8,7 @@ namespace ja2
 {
 	public sealed class CharacterDefinitionManager
 	{
-#region Attributes
+#region Fields
 		//! Dict for all character parts.
 		private Dictionary<CharacterPart, Dictionary<CharacterGroup, CharacterPartItem[]>> characterParts = new Dictionary<CharacterPart, Dictionary<CharacterGroup, CharacterPartItem[]>>();
 #endregion

@@ -9,7 +9,7 @@ namespace ja2
 	//! Inventory reference struct.
 	public struct InventoryItemRef
 	{
-#region Attributes
+#region Fields
 		public string type;
 		public string src;
 #endregion

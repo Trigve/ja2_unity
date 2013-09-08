@@ -28,7 +28,7 @@ namespace ja2
 		private const byte VERTEX_COUNT = 4;
 		#endregion
 
-#region Attributes
+#region Fields
 		//! X.
 		private int m_x;
 		//! Y.

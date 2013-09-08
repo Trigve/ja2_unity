@@ -3,7 +3,7 @@ namespace ja2
 	//! Define inventory item type.
 	public sealed class InventoryItem
 	{
-#region Attributes
+#region Fields
 		//! Item class for given item.
 		public readonly InventoryItemClass classType;
 		//! Size of item.

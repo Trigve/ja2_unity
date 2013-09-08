@@ -5,7 +5,7 @@ namespace ja2
 {
 	public class SoldierActionRotate : SoldierAction
 	{
-#region Attributes
+#region Fields
 		//! Look rotation.
 		private readonly ja2.LookDirection look;
 #endregion

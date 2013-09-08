@@ -26,7 +26,7 @@ namespace ja2
 		};
 		#endregion
 
-#region Attributes
+#region Fields
 		//! Map width.
 		public int width;
 		//! Map height.

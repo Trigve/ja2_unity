@@ -3,7 +3,7 @@ namespace ja2
 	//! Torso clothing inventory item implementation.
 	public class InventoryItemInstanceTorsoClothing : InventoryItemInstance
 	{
-#region Attributes
+#region Fields
 		//! Current clothing.
 		public readonly TorsoClothing clothing;
 #endregion

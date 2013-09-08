@@ -5,7 +5,7 @@ namespace ja2
 	//! Character representation
 	public sealed class Character
 	{
-#region Attributes
+#region Fields
 		//! Character group.
 		public readonly CharacterGroup group;
 		//! All clothes attached.

@@ -6,7 +6,7 @@ namespace ja2
 	*/
 	public abstract class Clothing
 	{
-#region Attributes
+#region Fields
 		//! Inventory type the clothing supports.
 		public readonly InventoryType inventoryType;
 		//! Source to concrete implementation.

@@ -7,7 +7,7 @@ namespace ja2
 	//! Encapsulate terrain tile to be able used in hash container.
 	public sealed class TileKey : IEquatable<TileKey>
 	{
-#region Attributes
+#region Fields
 		//! Tile associated.
 		public readonly TerrainTile tile;
 #endregion

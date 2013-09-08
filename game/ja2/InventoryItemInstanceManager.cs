@@ -8,7 +8,7 @@ namespace ja2
 	*/
 	public class InventoryItemInstanceManager
 	{
-#region Attributes
+#region Fields
 		//! Inventory item manager.
 		private ja2.InventoryItemManager inventoryItemManager;
 #endregion

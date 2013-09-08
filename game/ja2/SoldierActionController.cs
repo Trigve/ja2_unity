@@ -6,7 +6,7 @@ namespace ja2
 {
 	public sealed class SoldierActionController
 	{
-#region Attributes
+#region Fields
 		//! Soldier controller to which actions apply.
 		private ISoldierController soldierController;
 		//! All actions.

@@ -3,7 +3,7 @@ namespace ja2
 	//! Define what can be held in inventory.
 	public sealed class InventoryItemHolder
 	{
-#region Attributes
+#region Fields
 		//! Class for current holder.
 		public readonly InventoryItemClass classType;
 #endregion

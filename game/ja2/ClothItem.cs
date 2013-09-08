@@ -5,7 +5,7 @@ namespace ja2
 	//! Defines which part of body does clothing affects and how.
 	public struct ClothItem
 	{
-#region Attributes
+#region Fields
 		//! Character that is affected part.
 		public CharacterPart part;
 		//! Which type is needed for given character part.

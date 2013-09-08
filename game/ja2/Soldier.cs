@@ -6,7 +6,7 @@ namespace ja2
 {
 	public class Soldier
 	{
-#region Attributes
+#region Fields
 		//! Name/Description.
 		public string name;
 		//! Terrain which unit occupies, actual position.

@@ -23,7 +23,7 @@ namespace ja2
 			private const float EPSILON = 0.001f;
 #endregion
 
-#region Attributes
+#region Fields
 			//! f(x) value.
 			public readonly float f_x;
 			//! Tile used.

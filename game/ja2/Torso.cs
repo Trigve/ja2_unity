@@ -3,7 +3,7 @@ namespace ja2
 	//! Torso of body.
 	public sealed class Torso
 	{
-#region Attributes
+#region Fields
 		//! Torso clothing.
 		public InventoryItemInstanceTorsoClothing clothingInstance;
 #endregion

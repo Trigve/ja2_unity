@@ -7,7 +7,7 @@ namespace ja2
 	*/
 	public abstract class InventoryItemInstance
 	{
-#region Attributes
+#region Fields
 		//! Inventory item.
 		public readonly InventoryItem item;
 		//! Health status of item.

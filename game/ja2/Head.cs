@@ -7,7 +7,7 @@ namespace ja2
 	*/
 	public sealed class Head
 	{
-#region Attributes
+#region Fields
 		//! Head clothing if any.
 		public InventoryItemInstanceHeadClothing clothingInstance;
 #endregion

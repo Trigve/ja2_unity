@@ -12,14 +12,15 @@ namespace ja2
 
 	public sealed class TerrainMaterialManager
 	{
-		// Attributes
+#region Fields
 		//! Material map.
 		private MaterialMap_t  m_MaterialMap = new MaterialMap_t ();
 		//! Map of all splats.
 		private TerrainSplatMap_t m_TerrainSplatMap = new TerrainSplatMap_t();
+#endregion
 
 #region Operations
-	public TerrainTileSet GetTerrainSet(string Category)
+		public TerrainTileSet GetTerrainSet(string Category)
 	{
 	   return m_MaterialMap[Category];
 	}

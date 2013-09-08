@@ -5,12 +5,12 @@ namespace ja2
 {
 	public sealed class CharacterEntityManager
 	{
-		#region Attributes
+#region Fields
 		//! Character definition manager.
 		private ja2.CharacterDefinitionManager charDefManager;
 		//! Clothes manager.
 		private ja2.ClothManager clothesManager;
-		#endregion
+#endregion
 
 		#region Operations
 		//! Generate character.

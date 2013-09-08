@@ -3,7 +3,7 @@ namespace ja2
 	//! Head clothing inventory item type.
 	public class InventoryItemInstanceHeadClothing : InventoryItemInstance
 	{
-#region Attributes
+#region Fields
 		//! Clothing.
 		public HeadClothing clothing;
 #endregion

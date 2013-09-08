@@ -9,13 +9,15 @@ namespace ja2
 
 	public sealed class TerrainTileSet
 	{
-		// Attributes
+#region Fields
+
 		//! Splat used.
 		public readonly TerrainTileSplat splatUsed;
 		//! Material name used.
 		public readonly string materialName;
 		//! Map of terrain type id and terrain type.
 		private TerrainTypeMap_t m_TerrainTypeMap = new TerrainTypeMap_t();
+#endregion
 
 #region  Operations
 		//! Add terrain type.

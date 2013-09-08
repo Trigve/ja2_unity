@@ -2,7 +2,7 @@ namespace ja2
 {
 	public sealed class ClothItemGroup
 	{
-#region Attributes
+#region Fields
 		//! Prefab name.
 		public readonly string prefab;
 		//! Item parts.

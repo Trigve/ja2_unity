@@ -5,7 +5,7 @@ namespace ja2
 	//! Global properties of item as current position etc.
 	public sealed class InventoryItemProperties
 	{
-#region Attributes
+#region Fields
 		//! Referenced inventory item.
 		private InventoryItemInstance item;
 #endregion

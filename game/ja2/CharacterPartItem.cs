@@ -2,7 +2,7 @@ namespace ja2
 {
 	public struct CharacterPartItem
 	{
-#region Attributes
+#region Fields
 		//! Type for character.
 		public CharacterType type;
 		//! Used prefab.

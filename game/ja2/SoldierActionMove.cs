@@ -5,7 +5,8 @@ namespace ja2
 {
 	public class SoldierActionMove : SoldierAction
 	{
-#region Attributes
+#region Fields
+
 		//! Tile to move.
 		private readonly ushort tilesToMove;
 #endregion
