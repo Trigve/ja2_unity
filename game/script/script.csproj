@@ -44,6 +44,7 @@
     <Compile Include="AStarPathManager.cs" />
     <Compile Include="CameraManager.cs" />
     <Compile Include="GameCursor.cs" />
+    <Compile Include="ISerializePostProcessable.cs" />
     <Compile Include="LevelManager.cs" />
     <Compile Include="MapInstance.cs" />
     <Compile Include="MonoBehaviourEx.cs" />

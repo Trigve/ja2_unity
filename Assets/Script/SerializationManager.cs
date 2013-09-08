@@ -169,10 +169,12 @@ public class SerializationManager : MonoBehaviour
 					if(obj != null)
 						GetFieldInfo(actual_type, field).SetValue(obj, deserialized_obj);
 				}
+				// Let child handle deserialization post process
+				var post_process = obj as script.ISerializePostProcessable;
+				if (post_process != null)
+					post_process.PostProcess();
 			}
 			stream.Close();
-			// Let child hanlde deserialization if any
-//			DoProcessDeserialization();
 		}
 	}
 #endregion
