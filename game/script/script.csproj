@@ -46,7 +46,6 @@
     <Compile Include="GameCursor.cs" />
     <Compile Include="ISerializePostProcessable.cs" />
     <Compile Include="LevelManager.cs" />
-    <Compile Include="MapInstance.cs" />
     <Compile Include="MonoBehaviourEx.cs" />
     <Compile Include="NonMoveableObjectComponent.cs" />
     <Compile Include="NonMoveableObjectManagerComponent.cs" />
