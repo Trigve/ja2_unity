@@ -20,6 +20,18 @@ using MappingType_t = System.Collections.Generic.Dictionary<System.Type, string[
 	are saved, all fileds name are saved also so we know which fields to
 	deserialize. The object references that need to be serialized are serialized
 	by unity, which simplifies it a bit (no need to handle it explicitly).
+
+	We need to store 2 list for object that are processed by
+	serialization/deserialization. One for serialization, another by
+	deserialization. This because when the serialization was run, all objects
+	were valid. Then some objects were deleted but no serialization was done
+	and assemblies has been reloaded for instance. And if to-be serialized
+	obejcts were only reduced, then buffer holding the serialized data now 
+	has more objects store than actual is. When deserializing we could end
+	desrializing the object data to wrong object (because the one which was
+	serialized was removed from list for isntance). Therefor we must store
+	object instances which need to be deserialized and then check if some of
+	the instance is null and o appropriate steps.
 */
 [HideInInspector]
 [ExecuteInEditMode]
@@ -32,6 +44,10 @@ public class SerializationManager : MonoBehaviour
 	[SerializeField]
 	[HideInInspector]
 	private MonoBehaviour[] m_SerializedObjects;
+	//! All objects that need to be deserialized.
+	[SerializeField]
+	[HideInInspector]
+	private MonoBehaviour[] m_DeserializedObjects;
 #endregion
 
 #region Serialized Data
@@ -122,6 +138,9 @@ public class SerializationManager : MonoBehaviour
 		stream.Close();
 
 		m_Buffer = stream.GetBuffer();
+
+		// Make the copy to deserialized list
+		m_DeserializedObjects = (MonoBehaviour[])m_SerializedObjects.Clone();
 	}
 
 	public void Deserialize()
@@ -135,13 +154,15 @@ public class SerializationManager : MonoBehaviour
 			MemoryStream stream = new MemoryStream(m_Buffer);
 
 			// Traverse all objects to deserialize
-			foreach (var obj in m_SerializedObjects)
+			foreach (var obj in m_DeserializedObjects)
 			{
-				Type actual_type = obj.GetType();
-
+				Type actual_type = null;
 				// If obj has been destroyed,
 				if (obj == null)
-					Debug.Log("Serialization: Object has been destroyed, cannot deserialize.");
+					Debug.LogWarning("Serialization: Object has been destroyed, cannot deserialize.");
+				// Get type only if valid
+				else
+					actual_type = obj.GetType();
 				// First number of objects
 				int number_ofobjects = (int)formatter.Deserialize(stream);
 				// Now all fields
@@ -149,8 +170,11 @@ public class SerializationManager : MonoBehaviour
 				{
 					// Get field name
 					string field = (string)formatter.Deserialize(stream);
-					// Actual object
-					GetFieldInfo(actual_type, field).SetValue(obj, formatter.Deserialize(stream));
+					// Deserialize object
+					object deserialized_obj = formatter.Deserialize(stream);
+					// Set value only if still valid; Else value is discarded
+					if(obj != null)
+						GetFieldInfo(actual_type, field).SetValue(obj, deserialized_obj);
 				}
 			}
 			stream.Close();
