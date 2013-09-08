@@ -48,7 +48,6 @@
     <Compile Include="LevelManager.cs" />
     <Compile Include="MonoBehaviourEx.cs" />
     <Compile Include="NonMoveableObjectComponent.cs" />
-    <Compile Include="NonMoveableObjectManagerComponent.cs" />
     <Compile Include="PathVisualizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SoldierController.cs" />
