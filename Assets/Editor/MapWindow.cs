@@ -22,7 +22,7 @@ public class MapWindow : EditorWindow
 	}
 
 #region Operations
-	private void CreateTerrain(TerrainManager TerrainManager_, ja2.TerrainMaterialManager MatManager)
+	private void CreateTerrain(TerrainManager TerrainManager_, ja2.TerrainMaterialManager MatManager, string CurrentScenePath)
 	{
 		if (TerrainManager_.map.width % TerrainManager.PARTITION_WIDTH != 0 || TerrainManager_.map.width % TerrainManager.PARTITION_WIDTH != 0)
 			throw new System.ArgumentException("Map width/height must be normalized to terrain partition width/height.");
@@ -44,9 +44,10 @@ public class MapWindow : EditorWindow
 				// Create terrain mesh
 				Mesh mesh = CreatePartitionMesh(j, i, TerrainManager_.map, tile_set, tile_map);
 				// Save the mesh as the asset
-				AssetDatabase.CreateAsset(mesh, "Assets/terrain/" + terrain_name + ".asset");
+
+				AssetDatabase.CreateAsset(mesh, "Assets/Resources/Scenes/" + CurrentScenePath + terrain_name + ".asset");
 				// Create terrain GO
-				GameObject terrain_go = PrefabManagerEditor.Create("TerrainPartition");
+				GameObject terrain_go = utils.PrefabManager.Create("TerrainPartition");
 				partitions.Add(terrain_go);
 				terrain_go.name = terrain_name;
 				// Set parent
@@ -209,9 +210,13 @@ public class MapWindow : EditorWindow
 					GameObject.DestroyImmediate(terrain_partition.gameObject);
 				}
 			}
+			// Get current scene path
+			string current_scene = EditorApplication.currentScene;
+			string current_scene_path = current_scene.Substring(0, current_scene.LastIndexOf('/'));
+			current_scene_path = current_scene_path.Substring(current_scene_path.LastIndexOf('/') + 1) + "/";
 			// Create terrain
 			level_manager.terrainManager.map = new ja2.Map(m_Width, m_Height, "summer");
-			CreateTerrain(level_manager.terrainManager, new ja2.TerrainMaterialManager(Application.dataPath));
+			CreateTerrain(level_manager.terrainManager, new ja2.TerrainMaterialManager(Application.dataPath), current_scene_path);
 			// Terrain manager has changed
 			EditorUtility.SetDirty(level_manager.terrainManager);
 			// Refresh asset database because of terrain were added there
