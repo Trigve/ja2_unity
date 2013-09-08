@@ -34,23 +34,39 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 	public static void Change()
 	{
 		var serialization_manager = (SerializationManager)GameObject.FindObjectOfType(typeof(SerializationManager));
-		if (serialization_manager)
+
+		// Editor -> Player
+		if (EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying)
 		{
-			// Editor -> Player
-			if (EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying)
+			if (serialization_manager)
 			{
 				Debug.Log("Change in EDIT");
 				serialization_manager.Serialize();
 				// Touch file to signal we're going to player
 				System.IO.File.Create(Application.temporaryCachePath + "/" + TEMP_FILE_NAME);
 			}
-			// Player -> Editor
-			else if (!EditorApplication.isPlayingOrWillChangePlaymode && EditorApplication.isPlaying)
+		}
+		// Player -> Editor
+		else if (!EditorApplication.isPlayingOrWillChangePlaymode && EditorApplication.isPlaying)
+		{
+			if (serialization_manager)
 			{
 				// Remove file to signal we're going to editor
 				System.IO.File.Delete(Application.temporaryCachePath + "/" + TEMP_FILE_NAME);
 			}
 		}
+		// We're now in editor back
+		else if (!EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying)
+		{
+			// Change to default scene
+			if(EditorPrefs.HasKey(CustomScenePlay.DEFAULT_SCENE_KEY))
+			{
+				string scene = EditorPrefs.GetString(CustomScenePlay.DEFAULT_SCENE_KEY);
+				EditorPrefs.DeleteKey(CustomScenePlay.DEFAULT_SCENE_KEY);
+				EditorApplication.OpenScene(scene);
+			}
+		}
+		
 	}
 #endregion
 
