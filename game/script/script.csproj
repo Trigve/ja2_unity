@@ -53,6 +53,7 @@
     <Compile Include="SoldierController.cs" />
     <Compile Include="SoldierPathManager.cs" />
     <Compile Include="Terrain.cs" />
+    <Compile Include="TerrainLoader.cs" />
     <Compile Include="TerrainManager.cs" />
   </ItemGroup>
   <ItemGroup>

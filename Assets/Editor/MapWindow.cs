@@ -7,8 +7,6 @@ using UnityEditor;
 public class MapWindow : EditorWindow
 {
 #region Constants
-	//! Partition name.
-	private const string PARTITION_NAME = "Terrain_";
 #endregion
 
 	private int m_Width = 10;
@@ -22,57 +20,10 @@ public class MapWindow : EditorWindow
 	}
 
 #region Operations
-	private void CreateTerrain(TerrainManager TerrainManager_, ja2.TerrainMaterialManager MatManager, string CurrentScenePath)
+	public Mesh CreatePartitionMesh(int X, int Y, ja2.Map Map_, ja2.TerrainTileSet TileSet, out ja2.TerrainTileHandle[] TileMap)
 	{
-		if (TerrainManager_.map.width % TerrainManager.PARTITION_WIDTH != 0 || TerrainManager_.map.width % TerrainManager.PARTITION_WIDTH != 0)
-			throw new System.ArgumentException("Map width/height must be normalized to terrain partition width/height.");
-
-		ja2.TerrainTileSet tile_set = MatManager.GetTerrainSet(TerrainManager_.map.terrainName);
-
-		// All partitin GO
-		var partitions = new List<GameObject>();
-		// Need to create terrain partitions
-		int partition_width = TerrainManager_.map.width / TerrainManager.PARTITION_WIDTH;
-		int partition_height = TerrainManager_.map.height / TerrainManager.PARTITION_HEIGHT;
-		for (int i = 0; i < partition_height; ++i)
-		{
-			for (int j = 0; j < partition_width; ++j)
-			{
-				string terrain_name = PARTITION_NAME + j + "_" + i;
-				// Tile to vertex mapping
-				var tile_map = new ja2.TerrainTileHandle[TerrainManager.PARTITION_WIDTH * TerrainManager.PARTITION_HEIGHT * 2];
-				// Create terrain mesh
-				Mesh mesh = CreatePartitionMesh(j, i, TerrainManager_.map, tile_set, tile_map);
-				// Save the mesh as the asset
-
-				AssetDatabase.CreateAsset(mesh, "Assets/Resources/Scenes/" + CurrentScenePath + terrain_name + ".asset");
-				// Create terrain GO
-				GameObject terrain_go = utils.PrefabManager.Create("TerrainPartition");
-				partitions.Add(terrain_go);
-				terrain_go.name = terrain_name;
-				// Set parent
-				terrain_go.transform.parent = TerrainManager_.transform;
-				// Update position
-				Vector3 tile_vertex_0 = Terrain.TileVertex(j * TerrainManager.PARTITION_WIDTH, i * TerrainManager.PARTITION_HEIGHT, 0);
-				Vector3 tile_vertex_1 = Terrain.TileVertex(j * TerrainManager.PARTITION_WIDTH, i * TerrainManager.PARTITION_HEIGHT, 1);
-				terrain_go.transform.position = new Vector3(tile_vertex_0.x, 0, tile_vertex_1.z);
-				// Set layer
-				terrain_go.layer = Terrain.LAYER;
-				// Set tile mapping
-				terrain_go.GetComponent<Terrain>().mapping = tile_map;
-				terrain_go.GetComponent<MeshFilter>().mesh = mesh;
-				terrain_go.GetComponent<MeshCollider>().sharedMesh = mesh;
-				var mesh_renderer = terrain_go.GetComponent<MeshRenderer>();
-				// Set map material
-				mesh_renderer.sharedMaterial = AssetDatabase.LoadAssetAtPath("Assets/Materials/" + tile_set.materialName + ".mat", typeof(Material)) as Material;
-			}
-		}
-		// Set all GOs
-		TerrainManager_.partitions = partitions.ToArray();
-	}
-
-	public Mesh CreatePartitionMesh(int X, int Y, ja2.Map Map_, ja2.TerrainTileSet TileSet, ja2.TerrainTileHandle[] TileMap)
-	{
+		// Create tile map
+		TileMap = new ja2.TerrainTileHandle[TerrainManager.PARTITION_WIDTH * TerrainManager.PARTITION_HEIGHT * 2];
 		// Create vertex array
 		Vector3[] array_vec = new Vector3[TerrainManager.PARTITION_WIDTH * TerrainManager.PARTITION_HEIGHT * 4];
 		// Create triangles array
@@ -214,9 +165,11 @@ public class MapWindow : EditorWindow
 			string current_scene = EditorApplication.currentScene;
 			string current_scene_path = current_scene.Substring(0, current_scene.LastIndexOf('/'));
 			current_scene_path = current_scene_path.Substring(current_scene_path.LastIndexOf('/') + 1) + "/";
+			// Material manager
+			var material_manager = new ja2.TerrainMaterialManager(Application.dataPath);
 			// Create terrain
 			level_manager.terrainManager.map = new ja2.Map(m_Width, m_Height, "summer");
-			CreateTerrain(level_manager.terrainManager, new ja2.TerrainMaterialManager(Application.dataPath), current_scene_path);
+			script.TerrainLoader.CreateTerrain(level_manager.terrainManager, material_manager.GetTerrainSet(level_manager.terrainManager.map.terrainName), CreatePartitionMesh);
 			// Terrain manager has changed
 			EditorUtility.SetDirty(level_manager.terrainManager);
 			// Refresh asset database because of terrain were added there
