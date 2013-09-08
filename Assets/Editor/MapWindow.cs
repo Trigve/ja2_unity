@@ -197,9 +197,13 @@ public class MapWindow : EditorWindow
 			// If we got some terrain already created, destroy it
 			if (level_manager.terrainManager.map != null)
 			{
-				foreach (var terrain_partition in level_manager.terrainManager.partitions)
+				// Get ALL terrain partitions, not only referenced (there could
+				// be the one left when some error occured during destroying it,
+				// and aren't referenced inside terrain manager anywhere).
+				var terrain_partitions_all = level_manager.terrainManager.GetComponentsInChildren<Terrain>();
+				foreach (var terrain_partition in terrain_partitions_all)
 				{
-					// Destroy mesh as firs
+					// Destroy mesh as first
 					AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(terrain_partition.GetComponent<MeshFilter>().sharedMesh));
 					// Destroy GO
 					GameObject.DestroyImmediate(terrain_partition.gameObject);
