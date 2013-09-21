@@ -105,6 +105,18 @@ namespace ja2.script
 			GetComponent<MeshFilter>().mesh = mesh;
 			GetComponent<MeshCollider>().sharedMesh = mesh;
 		}
+
+		//! Create mesh for partition.
+		public void CreateMesh(ja2.TerrainTileSet TileSet, string AssetPath)
+		{
+			// Create mesh and save it
+			Mesh mesh = CreateMesh(TileSet);
+			AssetDatabase.CreateAsset(mesh, AssetPath + m_PositionX.ToString() + "_" + m_PositionY.ToString() + ".asset");
+			// Set mesh and material
+			GetComponent<MeshFilter>().mesh = mesh;
+			GetComponent<MeshCollider>().sharedMesh = mesh;
+			GetComponent<MeshRenderer>().sharedMaterial = Resources.Load("Materials/" + TileSet.materialName, typeof(Material)) as Material;
+		}
 #endregion
 
 #region Save/Load
