@@ -4,38 +4,7 @@ using System;
 
 namespace ja2.script
 {
-	//! Encapsulate terrain tile to be able used in hash container.
-	public struct TileKey : IEquatable<TileKey>
-	{
-#region Fields
-		//! Tile associated.
-		public readonly ja2.TerrainTileHandle tile;
-#endregion
-
-		public bool Equals(TileKey Other)
-		{
-			return (tile.partitionX == Other.tile.partitionX && tile.partitionY == Other.tile.partitionY &&  tile.x == Other.tile.x && tile.y == Other.tile.y);
-		}
-
-		public override bool Equals(object obj)
-		{
-			return obj is TileKey ? Equals((TileKey)obj) : base.Equals(obj);
-		}
-
-		public override int GetHashCode()
-		{
-			return (tile.partitionX << 24 | tile.partitionY << 16 | tile.x << 8 | tile.y);
-		}
-
-#region Construction
-		public TileKey(ja2.TerrainTileHandle Tile)
-		{
-			tile = Tile;
-		}
-#endregion
-	}
-
-	public sealed class AStarPathMap : ja2.AStarPath<TileKey>
+	public sealed class AStarPathMap : ja2.AStarPath<TerrainTileHandle>
 	{
 #region Fields
 		//! Terrain manager used.
@@ -44,35 +13,35 @@ namespace ja2.script
 
 #region Properties
 		//! Get final tile.
-		public ja2.TerrainTileHandle end { get { return base.end_.tile; } }
+		public ja2.TerrainTileHandle end { get { return base.end_; } }
 		//! Get final f(x).
 		public float f_x_End { get { return initialEstimate; } }
 #endregion
 
 #region Overrides
-		protected override float Heurestic(TileKey From, TileKey To)
+		protected override float Heurestic(TerrainTileHandle From, TerrainTileHandle To)
 		{
-			Vector3 from_vec = terrainManager.GetPosition(From.tile);
-			Vector3 to_vec = terrainManager.GetPosition(To.tile);
+			Vector3 from_vec = terrainManager.GetPosition(From);
+			Vector3 to_vec = terrainManager.GetPosition(To);
 
 			return (to_vec - from_vec).magnitude;
 		}
 
-		protected override float Distance(TileKey From, TileKey To)
+		protected override float Distance(TerrainTileHandle From, TerrainTileHandle To)
 		{
 			// Hack for now; 1 is constant distance cost .
 			return 1;
 		}
 
-		protected override TileKey[] GetNeigbours(TileKey Key)
+		protected override TerrainTileHandle[] GetNeigbours(TerrainTileHandle Key)
 		{
-			ja2.TerrainTileHandle[] tiles = terrainManager.GetAllNeighbors(Key.tile);
-			var tile_keys = new List<TileKey>();
+			ja2.TerrainTileHandle[] tiles = terrainManager.GetAllNeighbors(Key);
+			var tile_keys = new List<TerrainTileHandle>();
 			for (var i = 0; i < tiles.Length; ++i)
 			{
 				// Tile not walkable, dismiss
 				if(tiles[i] != null && terrainManager.GetTile(tiles[i]).walkable())
-					tile_keys.Add(new TileKey(tiles[i]));
+					tile_keys.Add(tiles[i]);
 			}
 
 			return tile_keys.ToArray();
@@ -88,7 +57,7 @@ namespace ja2.script
 			{
 				ret = new ja2.TerrainTileHandle[result.Length];
 				for (var i = 0; i < result.Length; ++i)
-					ret[i] = result[i].tile;
+					ret[i] = result[i];
 			}
 
 			return ret;
@@ -99,8 +68,8 @@ namespace ja2.script
 		{
 			var ret = new List<ja2.TerrainTileHandle>();
 
-			foreach (TileKey item in closedSet)
-				ret.Add(item.tile);
+			foreach (TerrainTileHandle item in closedSet)
+				ret.Add(item);
 
 			return ret.ToArray();
 		}
@@ -111,7 +80,7 @@ namespace ja2.script
 			var ret = new List<utils.Tuple<float, ja2.TerrainTileHandle>>();
 
 			foreach (var item in openSet)
-				ret.Add(new utils.Tuple<float, ja2.TerrainTileHandle>(f_score[item], item.tile));
+				ret.Add(new utils.Tuple<float, ja2.TerrainTileHandle>(f_score[item], item));
 
 			return ret.ToArray();
 		}
@@ -119,7 +88,7 @@ namespace ja2.script
 
 #region Construction
 		public AStarPathMap(TerrainManager TerrainManager_, ja2.TerrainTileHandle From, ja2.TerrainTileHandle To)
-			: base(new TileKey(From), new TileKey(To))
+			: base(From, To)
 		{
 			terrainManager = TerrainManager_;
 			// Must call start here because all is initialized now
