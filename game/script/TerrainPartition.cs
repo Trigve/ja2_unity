@@ -32,8 +32,6 @@ namespace ja2.script
 		private int m_PositionX;
 		//! Actual partition position y.
 		private int m_PositionY;
-		//! Terrain width.
-		//	private ushort m_Width;
 		//! All tiles.
 		private ja2.TerrainTile[] m_Tiles;
 		//! Mapping between Tile and triangles.
