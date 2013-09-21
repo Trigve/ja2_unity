@@ -310,9 +310,10 @@ namespace ja2.script
 			{
 				for (int i = 0; i < PARTITION_WIDTH; ++i)
 				{
-					// For first and last row and first and last column set
-					// to non-walkable
-					ja2.TerrainTile.Type tile_type = (i > 0 && j % 2 == 0) || (j % 2 == 1 && i < PARTITION_WIDTH - 1) ? ja2.TerrainTile.Type.REGULAR : ja2.TerrainTile.Type.NONE;
+					// Need to set all tiles as walkable, because we don't know
+					// here which tiles are the ones at the border. It should
+					// be set somewhere outside. \FIXME
+					ja2.TerrainTile.Type tile_type = ja2.TerrainTile.Type.REGULAR;
 					ja2.TerrainTile tile = new ja2.TerrainTile(i, j, tile_type);
 					// Set random variant
 					tile.variant = (byte)rnd.Next(0, 7);
