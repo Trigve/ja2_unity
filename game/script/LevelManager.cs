@@ -35,6 +35,8 @@ namespace ja2.script
 		private ja2.ClothManager clothManager;
 		//! Character entity manager.
 		private ja2.CharacterEntityManager charEntityManager;
+		//! Debug show of A* path.
+		public bool DebugPath;
 #endregion
 
 #region Properies
@@ -155,11 +157,16 @@ namespace ja2.script
 					{
 						// Search for path
 						var soldier_controller = soldierSelected.GetComponentInChildren<SoldierController>();
-						var path = pathManager.CreatePath(m_TerrainManager, soldier_controller.position, cursor.tile);
-						// Parse path and create actions
-						soldiersPaths[soldier_controller] = new SoldierPathManager(soldier_controller, path);
-						// Visualize path
-						pathVisualizer.CreatePath(path);
+						if (DebugPath)
+							pathManager.CreatePathDebug(m_TerrainManager, soldier_controller.position, cursor.tile);
+						else
+						{
+							var path = pathManager.CreatePath(m_TerrainManager, soldier_controller.position, cursor.tile);
+							// Parse path and create actions
+							soldiersPaths[soldier_controller] = new SoldierPathManager(soldier_controller, path);
+							// Visualize path
+							pathVisualizer.CreatePath(path);
+						}
 					}
 				}
 			}
