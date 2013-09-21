@@ -244,75 +244,105 @@ namespace ja2.script
 		public static Direction GetDirection(ja2.TerrainTileHandle From, ja2.TerrainTileHandle To)
 		{
 			Direction dir = Direction.NONE;
-			// Same y
-			if (From.y == To.y)
+			// Same partition
 			{
-				if (From.x < To.x)
-					dir = Direction.EAST;
-				else
-					dir = Direction.WEST;
-			}
-			else
-			{
-				if (From.y % 2 == 1)
+				// Same y
+				if (From.y == To.y)
 				{
-
-					switch (From.y - To.y)
-					{
-						// Row up
-						case 1:
-							if (From.x == To.x)
-								dir = Direction.NORTH_WEST;
-							else if (From.x < To.x)
-								dir = Direction.NORTH_EAST;
-							break;
-						// Row down
-						case -1:
-							if (From.x == To.x)
-								dir = Direction.SOUTH_WEST;
-							else if (From.x < To.x)
-								dir = Direction.SOUTH_EAST;
-							break;
-						// 2 Row up
-						case 2:
-							if (From.x == To.x)
-								dir = Direction.NORTH;
-							break;
-						// 2 Row down
-						case -2:
-							if (From.x == To.x)
-								dir = Direction.SOUTH;
-							break;
-					}
+					if ((From.partitionX == To.partitionX && From.x < To.x) || From.partitionX < To.partitionX)
+						dir = Direction.EAST;
+					else
+						dir = Direction.WEST;
 				}
 				else
 				{
-					switch (From.y - To.y)
+					int y_diff = From.y - To.y;
+					int x_diff = From.x - To.x;
+
+					int y_partition_diff = From.partitionY - To.partitionY;
+					int x_partition_diff = From.partitionX - To.partitionX;
+
+					if (y_partition_diff != 0)
 					{
-						// Row up
-						case 1:
-							if (From.x == To.x)
-								dir = Direction.NORTH_EAST;
-							else if (From.x > To.x)
-								dir = Direction.NORTH_WEST;
-							break;
-						// Row down
-						case -1:
-							if (From.x == To.x)
-								dir = Direction.SOUTH_EAST;
-							else if (From.x > To.x)
-								dir = Direction.SOUTH_WEST;
-							break;
-						// 2 Row up
-						case 2:
-							if (From.x == To.x)
-								dir = Direction.NORTH;
-							break;
-						// 2 Row down
-						case -2:
-							if (From.x == To.x)
-								dir = Direction.SOUTH;
-							break;
+						if (y_partition_diff < 0)
+							y_diff = TerrainPartition.PARTITION_HEIGHT - y_diff;
+						else
+							y_diff = y_diff + TerrainPartition.PARTITION_HEIGHT;
+						// Need to inverse it, because it is inter-partition
+						if (From.y % 2 == 1)
+							y_diff *= -1;
+					}
+					if (x_partition_diff != 0)
+					{
+						if (x_partition_diff < 0)
+							x_diff = TerrainPartition.PARTITION_WIDTH - x_diff;
+						else
+							x_diff = TerrainPartition.PARTITION_WIDTH + x_diff;
+						
+						if (From.y % 2 == 1)
+							x_diff *= -1;
+					}
+
+					// Non-even y
+					if (From.y % 2 == 1)
+					{
+						switch (y_diff)
+						{
+							// Row up
+							case 1:
+								if (x_diff == 0)
+									dir = Direction.NORTH_WEST;
+								else if (x_diff < 0)
+									dir = Direction.NORTH_EAST;
+								break;
+							// Row down
+							case -1:
+								if (x_diff == 0)
+									dir = Direction.SOUTH_WEST;
+								else if (x_diff < 0)
+									dir = Direction.SOUTH_EAST;
+								break;
+							// 2 Row up
+							case 2:
+								if (x_diff == 0)
+									dir = Direction.NORTH;
+								break;
+							// 2 Row down
+							case -2:
+								if (x_diff == 0)
+									dir = Direction.SOUTH;
+								break;
+						}
+					}
+					else
+					{
+						switch (y_diff)
+						{
+							// Row up
+							case 1:
+								if (x_diff == 0)
+									dir = Direction.NORTH_EAST;
+								else if (x_diff > 0)
+									dir = Direction.NORTH_WEST;
+								break;
+							// Row down
+							case -1:
+								if (x_diff == 0)
+									dir = Direction.SOUTH_EAST;
+								else if (x_diff > 0)
+									dir = Direction.SOUTH_WEST;
+								break;
+							// 2 Row up
+							case 2:
+								if (x_diff == 0)
+									dir = Direction.NORTH;
+								break;
+							// 2 Row down
+							case -2:
+								if (x_diff == 0)
+									dir = Direction.SOUTH;
+								break;
+						}
 					}
 				}
 			}
