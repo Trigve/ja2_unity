@@ -35,7 +35,6 @@ namespace ja2.script
 		//! All tiles.
 		private ja2.TerrainTile[] m_Tiles;
 		//! Mapping between Tile and triangles.
-		//	private ja2.TerrainTileHandle[] m_Mapping;
 		private ushort[] m_Mapping;
 		//! Terrain tile properties.
 		private Dictionary<ushort, ja2.TerrainTileProperty> m_Properties;
