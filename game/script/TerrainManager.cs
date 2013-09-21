@@ -75,9 +75,7 @@ namespace ja2.script
 		//! Get tile instance.
 		public ja2.TerrainTile GetTile(ja2.TerrainTileHandle TileHandle)
 		{
-			// As first get partition
-			GameObject partition_go = GetPartition((ushort)TileHandle.partitionX, (ushort)TileHandle.partitionY);
-			return partition_go.GetComponent<TerrainPartition>().GetTile(TileHandle.x, TileHandle.y);
+			return GetPartition((ushort)TileHandle.partitionX, (ushort)TileHandle.partitionY).GetTile(TileHandle.x, TileHandle.y);
 		}
 
 		//! Get neighbor tile.
@@ -353,9 +351,9 @@ namespace ja2.script
 
 #region Operations
 		//! Get the partition.
-		private GameObject GetPartition(ushort X, ushort Y)
+		private TerrainPartition GetPartition(ushort X, ushort Y)
 		{
-			return m_Partitions[X + Y * m_Width];
+			return m_Partitions[X + Y * m_Width].GetComponent <TerrainPartition>();
 		}
 
 		//! Get tile checked
