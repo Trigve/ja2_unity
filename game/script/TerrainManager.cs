@@ -387,6 +387,25 @@ namespace ja2.script
 					terrain_comp.This(j, i, TileSet, SavePath);
 				}
 			}
+			System.Random rnd = new System.Random();
+			// Set some random tile
+			for (int i = 0; i < m_Height; ++i)
+			{
+				for (int j = 0; j < m_Width; ++j)
+				{
+					TerrainPartition terrain_comp = m_Partitions[j + i * m_Width].GetComponent<TerrainPartition>();
+
+					for (int k = 0; k < 10; ++k)
+					{
+						SetTileTerrainType(
+							new TerrainTileHandle(rnd.Next(0, TerrainPartition.PARTITION_WIDTH), rnd.Next(0, TerrainPartition.PARTITION_HEIGHT), j, i),
+							(byte)rnd.Next(0, 2)
+						);
+					}
+					// Create mesh
+					terrain_comp.CreateMesh(TileSet, SavePath);
+				}
+			}
 		}
 #endregion
 	}

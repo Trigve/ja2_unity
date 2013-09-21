@@ -350,13 +350,6 @@ namespace ja2.script
 			}
 			m_Properties = new Dictionary<ushort, ja2.TerrainTileProperty>();
 			m_NonMoveableObjects = new Dictionary<Guid, ja2.NonMoveableObject>();
-			// Create mesh and save it
-			Mesh mesh = CreateMesh(TileSet);
-			AssetDatabase.CreateAsset(mesh, SavePath + m_PositionX.ToString() + "_" + m_PositionY.ToString() + ".asset");
-			// Set mesh and material
-			GetComponent<MeshFilter>().mesh = mesh;
-			GetComponent<MeshCollider>().sharedMesh = mesh;
-			GetComponent<MeshRenderer>().sharedMaterial = Resources.Load("Materials/" + TileSet.materialName, typeof(Material)) as Material;
 		}
 #endregion
 	}
