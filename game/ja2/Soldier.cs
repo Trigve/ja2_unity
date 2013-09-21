@@ -10,7 +10,7 @@ namespace ja2
 		//! Name/Description.
 		public string name;
 		//! Terrain which unit occupies, actual position.
-		public TerrainTile tile;
+		private TerrainTileHandle m_Tile;
 		//! Look direction.
 		public LookDirection lookDirection { get; set; }
 		//! Character group.
@@ -21,6 +21,19 @@ namespace ja2
 		private Torso torso;
 #endregion
 
+#region Properties
+		public TerrainTileHandle tile
+		{
+			get
+			{
+				return m_Tile;
+			}
+			set
+			{
+				m_Tile = value;
+			}
+		}
+#endregion
 #region Operations
 		//! Add torso clothing.
 		public void AddTorsoClothing(InventoryItemInstanceTorsoClothing Clothing)
@@ -58,10 +71,10 @@ namespace ja2
 			head = new Head();
 		}
 
-		public Soldier(TerrainTile Tile, CharacterGroup Group)
+		public Soldier(TerrainTileHandle Tile, CharacterGroup Group)
 			: this()
 		{
-			tile = Tile;
+			m_Tile = Tile;
 			group = Group;
 		}
 #endregion

@@ -65,10 +65,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 671428218, guid: 9e255ea1df4357f4c81237d322236dfb, type: 3}
+  m_Script: {fileID: 1481995036, guid: 9e255ea1df4357f4c81237d322236dfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugPathDraw: 1
+  debugPathDraw: 0
   terrainManager: {fileID: 0}
 --- !u!136 &13600000
 CapsuleCollider:

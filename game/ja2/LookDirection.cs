@@ -22,34 +22,34 @@ namespace ja2
 	{
 #region Operations
 		//! Convert Map.Direction to LookDirection.
-		public static LookDirection Convert(Map.Direction Dir)
+		public static LookDirection Convert(Direction Dir)
 		{
 			LookDirection direction = LookDirection.EAST;
 
 			switch(Dir)
 			{
-				case ja2.Map.Direction.EAST:
+				case ja2.Direction.EAST:
 					direction = LookDirection.EAST;
 					break;
-				case ja2.Map.Direction.NORTH:
+				case ja2.Direction.NORTH:
 					direction = LookDirection.NORTH;
 					break;
-				case ja2.Map.Direction.NORTH_EAST:
+				case ja2.Direction.NORTH_EAST:
 					direction = LookDirection.NORTHEAST;
 					break;
-				case ja2.Map.Direction.NORTH_WEST:
+				case ja2.Direction.NORTH_WEST:
 					direction = LookDirection.NORTHWEST;
 					break;
-				case ja2.Map.Direction.SOUTH:
+				case ja2.Direction.SOUTH:
 					direction = LookDirection.SOUTH;
 					break;
-				case ja2.Map.Direction.SOUTH_EAST:
+				case ja2.Direction.SOUTH_EAST:
 					direction = LookDirection.SOUTHEAST;
 					break;
-				case ja2.Map.Direction.SOUTH_WEST:
+				case ja2.Direction.SOUTH_WEST:
 					direction = LookDirection.SOUTHWEST;
 					break;
-				case ja2.Map.Direction.WEST:
+				case ja2.Direction.WEST:
 					direction = LookDirection.WEST;
 					break;
 			}

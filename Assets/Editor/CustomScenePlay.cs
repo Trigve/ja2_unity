@@ -16,7 +16,7 @@ public class CustomScenePlay : MonoBehaviour
 		string current_scene = EditorApplication.currentScene;
 		EditorPrefs.SetString(DEFAULT_SCENE_KEY, current_scene);
 		// Open testing scene
-		EditorApplication.OpenScene("Assets/Scenes/2.unity");
+		EditorApplication.OpenScene("Assets/Scenes/2/2.unity");
 		EditorApplication.isPlaying = true;
 	}
 }

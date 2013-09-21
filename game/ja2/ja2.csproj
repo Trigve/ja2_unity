@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AStarPath.cs" />
-    <Compile Include="AStarPathMap.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="CharacterDefinitionManager.cs" />
     <Compile Include="CharacterEntityManager.cs" />
@@ -52,6 +51,7 @@
     <Compile Include="ClothItem.cs" />
     <Compile Include="ClothItemGroup.cs" />
     <Compile Include="ClothManager.cs" />
+    <Compile Include="Direction.cs" />
     <Compile Include="Head.cs" />
     <Compile Include="HeadClothing.cs" />
     <Compile Include="Inventory.cs" />
@@ -66,9 +66,9 @@
     <Compile Include="InventoryItemProperties.cs" />
     <Compile Include="InventoryType.cs" />
     <Compile Include="ISoldierController.cs" />
-    <Compile Include="ITerrainManager.cs" />
     <Compile Include="LookDirection.cs" />
-    <Compile Include="Map.cs" />
+    <Compile Include="NonMoveableObject.cs" />
+    <Compile Include="NonMoveableObjectHandle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Soldier.cs" />
     <Compile Include="SoldierAction.cs" />
@@ -81,6 +81,7 @@
     <Compile Include="TerrainTileSet.cs" />
     <Compile Include="TerrainTileSplat.cs" />
     <Compile Include="TextureAtlasInfo.cs" />
+    <Compile Include="TerrainTileProperty.cs" />
     <Compile Include="Torso.cs" />
     <Compile Include="TorsoClothing.cs" />
   </ItemGroup>

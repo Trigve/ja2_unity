@@ -42,17 +42,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AStarPathManager.cs" />
+    <Compile Include="AStarPathMap.cs" />
     <Compile Include="CameraManager.cs" />
     <Compile Include="GameCursor.cs" />
     <Compile Include="ISerializePostProcessable.cs" />
     <Compile Include="LevelManager.cs" />
+    <Compile Include="LevelManagerDynamic.cs" />
     <Compile Include="MonoBehaviourEx.cs" />
     <Compile Include="NonMoveableObjectComponent.cs" />
     <Compile Include="PathVisualizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SoldierController.cs" />
     <Compile Include="SoldierPathManager.cs" />
-    <Compile Include="Terrain.cs" />
+    <Compile Include="TerrainPartition.cs" />
     <Compile Include="TerrainLoader.cs" />
     <Compile Include="TerrainManager.cs" />
   </ItemGroup>

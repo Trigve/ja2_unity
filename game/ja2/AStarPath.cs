@@ -46,7 +46,7 @@ namespace ja2
 #endregion
 		}
 
-#region Attributes
+#region Fields
 		//! Start.
 		protected readonly K start;
 		//! End;

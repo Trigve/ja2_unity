@@ -192,7 +192,7 @@ public class SerializationManager : MonoBehaviour
 					stream.Close();
 
 					// Let child handle deserialization post process
-					var post_process = obj as script.ISerializePostProcessable;
+					var post_process = obj as ja2.script.ISerializePostProcessable;
 					if (post_process != null)
 						post_process.PostProcess();
 				}

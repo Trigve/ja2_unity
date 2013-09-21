@@ -1,0 +1,5 @@
+Never associate custom classes instance to component's class attributes. Associates only components that hold (and is responsible for serialization of custom class) the custom class instance. This is because when getting the custom class instance from given component, the instance may not be deserialized yet.
+
+When generating .mdb files for monodevelop, also new .dll is generated. This .dll must be copied also with .mdb file to Assets folder. Without this .dll the debugging will be not possible from monodevelop.
+
+Our component's constructor code (This() method) should be called only when creating new instance of component, that is when it is first initialized. When loading the same component in load-level situation, we should only deserialize data and don't call any constructor there. This() should be called only once in it's lifetime and it is upon its creation, but no other time.

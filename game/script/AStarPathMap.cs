@@ -2,19 +2,19 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-namespace ja2
+namespace ja2.script
 {
 	//! Encapsulate terrain tile to be able used in hash container.
-	public sealed class TileKey : IEquatable<TileKey>
+	public struct TileKey : IEquatable<TileKey>
 	{
 #region Fields
 		//! Tile associated.
-		public readonly TerrainTile tile;
+		public readonly ja2.TerrainTileHandle tile;
 #endregion
 
 		public bool Equals(TileKey Other)
 		{
-			return (tile.x == Other.tile.x && tile.y == Other.tile.y);
+			return (tile.partitionX == Other.tile.partitionX && tile.partitionY == Other.tile.partitionY &&  tile.x == Other.tile.x && tile.y == Other.tile.y);
 		}
 
 		public override bool Equals(object obj)
@@ -24,11 +24,11 @@ namespace ja2
 
 		public override int GetHashCode()
 		{
-			return (tile.x << 16 | tile.y);
+			return (tile.partitionX << 24 | tile.partitionY << 16 | tile.x << 8 | tile.y);
 		}
 
 #region Construction
-		public TileKey(ja2.TerrainTile Tile)
+		public TileKey(ja2.TerrainTileHandle Tile)
 		{
 			tile = Tile;
 		}
@@ -37,14 +37,14 @@ namespace ja2
 
 	public sealed class AStarPathMap : ja2.AStarPath<TileKey>
 	{
-#region Attributes
+#region Fields
 		//! Terrain manager used.
-		private ITerrainManager terrainManager;
+		private TerrainManager terrainManager;
 #endregion
 
 #region Properties
 		//! Get final tile.
-		public TerrainTile end { get { return base.end_.tile; } }
+		public ja2.TerrainTileHandle end { get { return base.end_.tile; } }
 		//! Get final f(x).
 		public float f_x_End { get { return initialEstimate; } }
 #endregion
@@ -66,12 +66,12 @@ namespace ja2
 
 		protected override TileKey[] GetNeigbours(TileKey Key)
 		{
-			ja2.TerrainTile[] tiles = terrainManager.map.GetAllNeighbors(Key.tile);
+			ja2.TerrainTileHandle[] tiles = terrainManager.GetAllNeighbors(Key.tile);
 			var tile_keys = new List<TileKey>();
 			for (var i = 0; i < tiles.Length; ++i)
 			{
 				// Tile not walkable, dismiss
-				if(tiles[i] != null && tiles[i].walkable())
+				if(tiles[i] != null && terrainManager.GetTile(tiles[i]).walkable())
 					tile_keys.Add(new TileKey(tiles[i]));
 			}
 
@@ -81,12 +81,12 @@ namespace ja2
 
 #region Operations
 		//! Get path.
-		public ja2.TerrainTile[] Path()
+		public ja2.TerrainTileHandle[] Path()
 		{
-			ja2.TerrainTile[] ret = null;
+			ja2.TerrainTileHandle[] ret = null;
 			if (result != null)
 			{
-				ret = new ja2.TerrainTile[result.Length];
+				ret = new ja2.TerrainTileHandle[result.Length];
 				for (var i = 0; i < result.Length; ++i)
 					ret[i] = result[i].tile;
 			}
@@ -95,9 +95,9 @@ namespace ja2
 		}
 
 		//! Get closed nodes.
-		public ja2.TerrainTile[] ClosedSet()
+		public ja2.TerrainTileHandle[] ClosedSet()
 		{
-			var ret = new List<ja2.TerrainTile>();
+			var ret = new List<ja2.TerrainTileHandle>();
 
 			foreach (TileKey item in closedSet)
 				ret.Add(item.tile);
@@ -106,19 +106,19 @@ namespace ja2
 		}
 
 		//! Get open set.
-		public utils.Tuple<float, ja2.TerrainTile>[] OpenSet()
+		public utils.Tuple<float, ja2.TerrainTileHandle>[] OpenSet()
 		{
-			var ret = new List<utils.Tuple<float, ja2.TerrainTile>>();
+			var ret = new List<utils.Tuple<float, ja2.TerrainTileHandle>>();
 
 			foreach (var item in openSet)
-				ret.Add(new utils.Tuple<float, ja2.TerrainTile>(f_score[item], item.tile));
+				ret.Add(new utils.Tuple<float, ja2.TerrainTileHandle>(f_score[item], item.tile));
 
 			return ret.ToArray();
 		}
 #endregion
 
 #region Construction
-		public AStarPathMap(ITerrainManager TerrainManager_, TerrainTile From, TerrainTile To)
+		public AStarPathMap(TerrainManager TerrainManager_, ja2.TerrainTileHandle From, ja2.TerrainTileHandle To)
 			: base(new TileKey(From), new TileKey(To))
 		{
 			terrainManager = TerrainManager_;
@@ -127,4 +127,4 @@ namespace ja2
 		}
 #endregion
 	}
-} /*ja2*/
+} /*ja2.script*/
