@@ -78,14 +78,18 @@ namespace ja2.script
 		}
 
 		//! Get center of tile given by triangle.
+		/*!
+			\return global position.
+		*/
 		public Vector3 GetCenterOfTile(int Triangle)
 		{
 			ja2.TerrainTile tile = GetTile(Triangle);
 
 			Vector3 v0 = TileVertex(tile.x, tile.y, 0);
 			Vector3 v1 = TileVertex(tile.x, tile.y, 1);
+			
 			// Get center of tile
-			return new Vector3(v1.x, 0, v0.z);
+			return transform.TransformPoint(new Vector3(v1.x, 0, v0.z));
 		}
 #endregion
 
