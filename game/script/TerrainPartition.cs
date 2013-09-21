@@ -91,6 +91,21 @@ namespace ja2.script
 			// Get center of tile
 			return transform.TransformPoint(new Vector3(v1.x, 0, v0.z));
 		}
+
+		//! Refresh the mesh.
+		public void Refresh(ja2.TerrainTileSet TileSet)
+		{
+			// Get actual mesh and associated path of asset
+			Mesh old_mesh = GetComponent<MeshFilter>().sharedMesh;
+			string asset_path = AssetDatabase.GetAssetPath(old_mesh);
+			// Create new mesh
+			Mesh mesh = CreateMesh(TileSet);
+			// Update the mesh
+			AssetDatabase.CreateAsset(mesh, asset_path);
+			// Set mesh and material
+			GetComponent<MeshFilter>().mesh = mesh;
+			GetComponent<MeshCollider>().sharedMesh = mesh;
+		}
 #endregion
 
 #region Save/Load
