@@ -121,13 +121,26 @@ namespace ja2.script
 			}
 			// If we're past partition
 			if (x >= TerrainPartition.PARTITION_WIDTH)
+			{
 				++partition_x;
-			if (y >= TerrainPartition.PARTITION_HEIGHT)
-				++partition_y;
-			if (x < 0)
+				x %= TerrainPartition.PARTITION_WIDTH;
+			}
+			else if (x < 0)
+			{
 				--partition_x;
-			if (y < 0)
+				x = TerrainPartition.PARTITION_WIDTH + x;
+			}
+
+			if (y >= TerrainPartition.PARTITION_HEIGHT)
+			{
+				++partition_y;
+				y %= TerrainPartition.PARTITION_HEIGHT;
+			}
+			else if (y < 0)
+			{
 				--partition_y;
+				y = TerrainPartition.PARTITION_HEIGHT + y;
+			}
 
 			return GetTileChecked(partition_x, partition_y, x, y);
 		}
