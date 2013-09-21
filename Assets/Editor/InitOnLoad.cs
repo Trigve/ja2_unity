@@ -25,7 +25,22 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 			// Set as dirty
 			EditorUtility.SetDirty(serialization_manager);
 		}
-		
+		// Are we saving scene
+		foreach (var item in Paths)
+		{
+			if (item.Contains(EditorApplication.currentScene))
+			{
+				var level_manager = GameObject.Find("LevelManager");
+				if (level_manager != null)
+				{
+					string current_scene_path = item.Substring(0, item.LastIndexOf('/'));
+					current_scene_path = current_scene_path.Substring(current_scene_path.LastIndexOf('/') + 1) + "/";
+
+					level_manager.GetComponent<ja2.script.LevelManager>().SaveScene(current_scene_path);
+					break;
+				}
+			}
+		}
 
 		return Paths;
 	}
