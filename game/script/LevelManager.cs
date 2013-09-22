@@ -88,14 +88,14 @@ namespace ja2.script
 		}
 
 		//! Update soldier GO.
-		public void UpdateSoldier(ja2.Soldier Soldier_, GameObject SoldierGO)
+		public void UpdateSoldier(GameObject SoldierGO)
 		{
-
 			var combined_mesh_com = SoldierGO.GetComponent<SoldierController>();
+			ja2.Soldier soldier = combined_mesh_com.soldier;
 			// Remove old combined mesh
 			Destroy(combined_mesh_com.combinedMesh);
 			// Create new
-			combined_mesh_com.combinedMesh = charEntityManager.Create(Soldier_.character(), SoldierGO);
+			combined_mesh_com.combinedMesh = charEntityManager.Create(soldier.character(), SoldierGO);
 			// Must use task here because of unity bug - When mesh is replaced,
 			// animation stops to play and is shown in T-pose
 			new utils.Task(RebuildCharacterWorkaround(SoldierGO));
