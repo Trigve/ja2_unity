@@ -51,6 +51,14 @@ namespace ja2.script
 				UpdatePosition();
 			}
 		}
+		//! Get soldier.
+		public ja2.Soldier soldier
+		{
+			get
+			{
+				return mercenary;
+			}
+		}
 #endregion
 
 #region Operations
