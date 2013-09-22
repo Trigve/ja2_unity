@@ -27,7 +27,7 @@ namespace ja2.script
 		public const int LAYER_MASK = 1 << 8;
 #endregion
 
-#region Atrributes
+#region Fields
 		//! Actual partition position x.
 		private int m_PositionX;
 		//! Actual partition position y.
