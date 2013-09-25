@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using UnityEditor;
 
 namespace ja2.script
 {
@@ -12,7 +11,7 @@ namespace ja2.script
 		In each scene one instance of this component must exist.It handles level
 		specific stuff and is served as entry point.
 	*/
-	public class LevelManager : MonoBehaviourEx
+	public abstract class LevelManager : MonoBehaviourEx
 	{
 #region Attributes
 		//! Game cursor.
@@ -21,8 +20,6 @@ namespace ja2.script
 		public GameObject hover;
 		//! Selected mercenary.
 		private GameObject soldierSelected;
-		//! Terrain manager.
-		public TerrainManager m_TerrainManager;
 		//! Path manager.
 		public AStarPathManager pathManager;
 		//! Soldier path manager.
@@ -40,32 +37,10 @@ namespace ja2.script
 #endregion
 
 #region Properies
-		public TerrainManager terrainManager
-		{
-			get
-			{
-				return m_TerrainManager;
-			}
-		}
+		public abstract TerrainManager terrainManager { get; }
 #endregion
 
 #region Interface
-		//! Save scene.
-		public void SaveScene(string Path)
-		{
-			// Testing for now
-			var stream = new FileStream(Application.dataPath + "/Resources/Scenes/" + Path + "scene.bytes", FileMode.Create);
-			var formatter = new BinaryFormatter();
-
-			// Serialize map
-			m_TerrainManager.Save(formatter, stream);
-
-			stream.Flush();
-			stream.Close();
-
-			AssetDatabase.Refresh();
-		}
-
 		//! Create full mercenary GO.
 		public GameObject CreateSoldier(ja2.Soldier Soldier_)
 		{
@@ -74,7 +49,7 @@ namespace ja2.script
 
 			var soldier_controller = soldier_go.GetComponent<SoldierController>();
 			// Associate terrain
-			soldier_controller.terrainManager = m_TerrainManager;
+			soldier_controller.terrainManager = terrainManager;
 			// Associate solder
 			soldier_controller.SetMercenary(Soldier_);
 
@@ -100,6 +75,9 @@ namespace ja2.script
 			// animation stops to play and is shown in T-pose
 			new utils.Task(RebuildCharacterWorkaround(SoldierGO));
 		}
+#endregion
+
+#region Save/Load
 #endregion
 
 #region Operations
@@ -153,15 +131,15 @@ namespace ja2.script
 				if (soldierSelected != null && old_selection == soldierSelected)
 				{
 					// Only if target valid
-					if (m_TerrainManager.GetTile(cursor.tile).walkable())
+					if (terrainManager.IsTileWalkable(cursor.tile))
 					{
 						// Search for path
 						var soldier_controller = soldierSelected.GetComponentInChildren<SoldierController>();
 						if (DebugPath)
-							pathManager.CreatePathDebug(m_TerrainManager, soldier_controller.position, cursor.tile);
+							pathManager.CreatePathDebug(terrainManager, soldier_controller.position, cursor.tile);
 						else
 						{
-							var path = pathManager.CreatePath(m_TerrainManager, soldier_controller.position, cursor.tile);
+							var path = pathManager.CreatePath(terrainManager, soldier_controller.position, cursor.tile);
 							// Parse path and create actions
 							soldiersPaths[soldier_controller] = new SoldierPathManager(soldier_controller, path);
 							// Visualize path

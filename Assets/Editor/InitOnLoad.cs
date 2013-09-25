@@ -111,6 +111,8 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 				{
 					serialization_manager.Reload();
 					serialization_manager.Deserialize();
+
+					AssetDatabase.Refresh();
 				}
 			}
 			catch (System.Exception e)

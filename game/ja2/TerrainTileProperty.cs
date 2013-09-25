@@ -8,12 +8,12 @@ namespace ja2
 	public sealed class TerrainTileProperty
 	{
 #region Fields
-		//! Non-moveable object associated.
-		private NonMoveableObject m_NonMoveableObject;
+		//! Non-moveable object handle associated.
+		private NonMoveableObjectHandle m_NonMoveableObject;
 #endregion
 
 #region Properties
-		public NonMoveableObject nonMoveable
+		public NonMoveableObjectHandle nonMoveable
 		{
 			get
 			{

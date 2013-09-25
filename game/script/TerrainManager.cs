@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using ja2;
 using UnityEngine;
-using UnityEditor;
 
 namespace ja2.script
 {
@@ -199,11 +198,23 @@ namespace ja2.script
 				GetTile(near_neighbors[7]).SetTerrainType(TerrainTile.Vertex.EAST, TerrainType);
 			}
 		}
+
+		//! Add non-moveable for tile.
+		public void AddNonMoveable(TerrainTileHandle Tile, NonMoveableObjectComponent NonMoveable)
+		{
+			GetPartition((ushort)Tile.partitionX, (ushort)Tile.partitionY).AssociateNonMoveable(Tile.x, Tile.y, NonMoveable);
+		}
+
+		//! Is tile walkable.
+		public bool IsTileWalkable(TerrainTileHandle Tile)
+		{
+			return GetPartition((ushort)Tile.partitionX, (ushort)Tile.partitionY).IsWalkable(Tile.x, Tile.y);
+		}
 #endregion
 
 #region Save/Load
 		//! Save the data.
-		public void Save(IFormatter Formatter, Stream Stream_)
+		public void Save(IFormatter Formatter, Stream Stream_, IAssetDatabase AssetDatabase)
 		{
 			Formatter.Serialize(Stream_, m_Width);
 			Formatter.Serialize(Stream_, m_Height);
@@ -211,7 +222,7 @@ namespace ja2.script
 			// Serialize partitions
 			//		Formatter.Serialize(Stream_, partitions.Length);
 			foreach (var partition in partitions)
-				partition.GetComponent<TerrainPartition>().Save(Formatter, Stream_);
+				partition.GetComponent<TerrainPartitionEditor>().Save(Formatter, Stream_, AssetDatabase);
 		}
 
 		//! Load the data.
@@ -368,44 +379,11 @@ namespace ja2.script
 #endregion
 
 #region Construction
-		public void This(ushort Width, ushort Height, ja2.TerrainTileSet TileSet, string SavePath)
+		protected void This(ushort Width, ushort Height, ja2.TerrainTileSet TileSet)
 		{
 			m_Width = Width;
 			m_Height = Height;
 			m_Partitions = new GameObject[m_Width * m_Height];
-
-			// Create partitions
-			for (int i = 0; i < m_Height; ++i)
-			{
-				for (int j = 0; j < m_Width; ++j)
-				{
-					GameObject terrain_go = script.TerrainLoader.CreateTerrainPartition(j, i, this);
-					// Add to list of partitions
-					m_Partitions[j + i * m_Width] = terrain_go;
-					// Call "constructor"				
-					TerrainPartition terrain_comp = terrain_go.GetComponent<TerrainPartition>();
-					terrain_comp.This(j, i, TileSet, SavePath);
-				}
-			}
-			System.Random rnd = new System.Random();
-			// Set some random tile
-			for (int i = 0; i < m_Height; ++i)
-			{
-				for (int j = 0; j < m_Width; ++j)
-				{
-					TerrainPartition terrain_comp = m_Partitions[j + i * m_Width].GetComponent<TerrainPartition>();
-
-					for (int k = 0; k < 10; ++k)
-					{
-						SetTileTerrainType(
-							new TerrainTileHandle(rnd.Next(0, TerrainPartition.PARTITION_WIDTH), rnd.Next(0, TerrainPartition.PARTITION_HEIGHT), j, i),
-							(byte)rnd.Next(0, 2)
-						);
-					}
-					// Create mesh
-					terrain_comp.CreateMesh(TileSet, SavePath);
-				}
-			}
 		}
 #endregion
 	}

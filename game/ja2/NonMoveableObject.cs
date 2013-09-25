@@ -10,8 +10,6 @@ namespace ja2
 #region Fields
 		//! ID.
 		private Guid m_Id;
-		//! Tile associated to object.
-		private TerrainTile m_Tile;
 #endregion
 
 #region Operations
@@ -31,10 +29,9 @@ namespace ja2
 		}
 #endregion
 #region Construction
-		public NonMoveableObject(Guid Id, TerrainTile Tile)
+		public NonMoveableObject()
 		{
-			m_Id = Id;
-			m_Tile = Tile;
+			m_Id = Guid.NewGuid();
 		}
 #endregion
 	}

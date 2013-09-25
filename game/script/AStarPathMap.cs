@@ -40,7 +40,7 @@ namespace ja2.script
 			for (var i = 0; i < tiles.Length; ++i)
 			{
 				// Tile not walkable, dismiss
-				if(tiles[i] != null && terrainManager.GetTile(tiles[i]).walkable())
+				if (tiles[i] != null && terrainManager.IsTileWalkable(tiles[i]))
 					tile_keys.Add(tiles[i]);
 			}
 
