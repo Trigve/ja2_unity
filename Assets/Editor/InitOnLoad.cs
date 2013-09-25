@@ -30,13 +30,13 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 		{
 			if (item.Contains(EditorApplication.currentScene))
 			{
-				var level_manager = GameObject.Find("LevelManager");
+				var level_manager = GameObject.Find("LevelManager").GetComponent<ja2.script.LevelManagerEditor>();
 				if (level_manager != null)
 				{
 					string current_scene_path = item.Substring(0, item.LastIndexOf('/'));
 					current_scene_path = current_scene_path.Substring(current_scene_path.LastIndexOf('/') + 1) + "/";
 
-					level_manager.GetComponent<ja2.script.LevelManager>().SaveScene(current_scene_path);
+					level_manager.SaveScene(current_scene_path, new AssetDatabaseCustom());
 					break;
 				}
 			}
