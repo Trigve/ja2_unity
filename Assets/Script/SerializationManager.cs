@@ -8,6 +8,7 @@ using System.IO;
 using UnityEngine;
 
 using StringList_t = System.Collections.Generic.List<string>;
+using StringSet_t = System.Collections.Generic.HashSet<string>;
 using MappingType_t = System.Collections.Generic.Dictionary<System.Type, string[]>;
 
 //! Main serialization class for level.
@@ -81,27 +82,10 @@ public class SerializationManager : MonoBehaviour
 		foreach (var obj in all_obejcts)
 		{
 			Type object_type = obj.GetType();
-			// Find if we've got [Serializable] for all class
-			if(FindCustomAttribute(System.Attribute.GetCustomAttributes(object_type), typeof(System.SerializableAttribute)))
-			{
-				// Get all fields
-				FieldInfo[] fields = object_type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-				StringList_t fields_to_serialize = new StringList_t();
-				for (int i = 0; i < fields.Length; ++i)
-				{
-					// Only if not mark with [SerializeField]( because these are
-					// serialized by unity) or [NonSerialized] (cannot use both
-					// at same time because otherwise unity wouldn't serializa
-					// the field).
-					if (!FindCustomAttribute(System.Attribute.GetCustomAttributes(fields[i]), typeof(NonSerializedAttribute)) &&
-						!FindCustomAttribute(System.Attribute.GetCustomAttributes(fields[i]), typeof(UnityEngine.SerializeField)))
-						fields_to_serialize.Add(fields[i].Name);
-				}
-				// Save field to map for given type
-				m_TypeMap[object_type] = fields_to_serialize.ToArray();
-				// Save object for serialization
+
+			// The type is [Serializable], add object
+			if (FindAllFields(obj.GetType(), object_type))
 				object_to_serialize_set.Add(obj);
-			}
 		}
 		m_SerializedObjects = new MonoBehaviour[object_to_serialize_set.Count];
 		object_to_serialize_set.CopyTo(m_SerializedObjects);
@@ -131,18 +115,8 @@ public class SerializationManager : MonoBehaviour
 		{
 			MemoryStream stream = new MemoryStream();
 
-			Type actual_type = obj.GetType();
-			// Find fields to serialize
-			var serialize_fields = m_TypeMap[actual_type];
-
-			formatter.Serialize(stream, serialize_fields.Length);
-			// Now serialize fields
-			foreach (var field in serialize_fields)
-			{
-				// Store the field name as first
-				formatter.Serialize(stream, field);
-				formatter.Serialize(stream, GetFieldInfo(actual_type, field).GetValue(obj));
-			}
+			SerializeObject(formatter, stream, obj, obj.GetType());
+			
 			stream.Close();
 			// Save to solo buffer
 			m_Buffer[i] = new BufferHolder();
@@ -175,19 +149,7 @@ public class SerializationManager : MonoBehaviour
 				{
 					MemoryStream stream = new MemoryStream(m_Buffer[j].m_Buffer);
 
-					Type actual_type = obj.GetType();
-					// First number of objects
-					int number_ofobjects = (int)formatter.Deserialize(stream);
-					// Now all fields
-					for (int i = 0; i < number_ofobjects; ++i)
-					{
-						// Get field name
-						string field = (string)formatter.Deserialize(stream);
-						// Deserialize object
-						object deserialized_obj = formatter.Deserialize(stream);
-						// Set value
-						GetFieldInfo(actual_type, field).SetValue(obj, deserialized_obj);
-					}
+					DeserializeObject(formatter, stream, obj, obj.GetType());
 
 					stream.Close();
 
@@ -203,6 +165,117 @@ public class SerializationManager : MonoBehaviour
 #endregion
 
 #region Operations
+	//! Get all fields that need to be serialized.
+	/*!
+		Also process all bases that are marked for serialization. RootType is
+		the most derived type to which later fields will be set.
+	*/
+	private bool FindAllFields(Type ActualType, Type RootType)
+	{
+		bool is_serializble = false;
+		// Type is already serialized
+		if (m_TypeMap.ContainsKey(ActualType))
+		{
+			is_serializble = true;
+		}
+		else
+		{
+			// If the class has some base, process it as first. We don't want to
+			// proces MonoBehaviour and up
+			Type base_type = ActualType.BaseType;
+			if (base_type != null && !base_type.Equals(typeof(MonoBehaviour)))
+				FindAllFields(base_type, RootType);
+
+			// The class is serializable and isn't serialized already
+			if (FindCustomAttribute(System.Attribute.GetCustomAttributes(ActualType), typeof(System.SerializableAttribute)))
+			{
+				// Get all fields
+				FieldInfo[] fields = ActualType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+				StringList_t fields_to_serialize = new StringList_t();
+
+				for (int i = 0; i < fields.Length; ++i)
+				{
+					// Only if not mark with [SerializeField]( because these are
+					// serialized by unity) or [NonSerialized] (cannot use both
+					// at same time because otherwise unity wouldn't serializa
+					// the field).
+					if (!FindCustomAttribute(System.Attribute.GetCustomAttributes(fields[i]), typeof(NonSerializedAttribute)) &&
+						!FindCustomAttribute(System.Attribute.GetCustomAttributes(fields[i]), typeof(UnityEngine.SerializeField)))
+						fields_to_serialize.Add(fields[i].Name);
+				}
+				// Save field to map for given type
+				m_TypeMap[ActualType] = fields_to_serialize.ToArray();
+
+				is_serializble = true;
+			}
+		}
+
+		return is_serializble;
+	}
+
+	//! Serialize the whole hierarchy of object.
+	private void SerializeObject(IFormatter Formatter, Stream Stream_, MonoBehaviour Object, Type ObjectType)
+	{
+		// Process all bases
+		Type base_type = ObjectType.BaseType;
+		if (base_type != null && !base_type.Equals(typeof(MonoBehaviour)))
+			SerializeObject(Formatter, Stream_, Object, base_type);
+		
+		// Write the actual type
+		Formatter.Serialize(Stream_, ObjectType);
+
+		// Here could be the base type that isn't serialized, so serialize only
+		// types that shoud be
+		if (m_TypeMap.ContainsKey(ObjectType))
+		{
+			// Find fields to serialize
+			var serialize_fields = m_TypeMap[ObjectType];
+
+			Formatter.Serialize(Stream_, serialize_fields.Length);
+			// Now serialize fields
+			//\FIXME need to handle when some of the fields types are not marked
+			// as serializable and excpetion is thrown, therefor nothing is
+			// saved
+			foreach (var field in serialize_fields)
+			{
+				// Store the field name as first
+				Formatter.Serialize(Stream_, field);
+				Formatter.Serialize(Stream_, GetFieldInfo(ObjectType, field).GetValue(Object));
+			}
+		}
+		// Write length of 0, that means that type isn't serialized
+		else
+		{
+			Formatter.Serialize(Stream_, 0);
+		}
+	}
+
+	//! Deserialize whole hierarchy of object.
+	private void DeserializeObject(IFormatter Formatter, Stream Stream_, MonoBehaviour Object, Type ObjectType)
+	{
+		// Process all bases
+		Type base_type = ObjectType.BaseType;
+		if (base_type != null && !base_type.Equals(typeof(MonoBehaviour)))
+			DeserializeObject(Formatter, Stream_, Object, base_type);
+
+		// Read the type, must match
+		Type actual_type = (Type)Formatter.Deserialize(Stream_);
+		if (!ObjectType.Equals(actual_type))
+			throw new SerializationException("Deserialize: Actual type " + ObjectType.ToString() + " isn't equal to expected " + actual_type.ToString() + " when deserializing object " + Object.ToString());
+		// First number of objects
+		int number_ofobjects = (int)Formatter.Deserialize(Stream_);
+		// Now all fields
+		for (int i = 0; i < number_ofobjects; ++i)
+		{
+			// Get field name
+			string field = (string)Formatter.Deserialize(Stream_);
+			// Deserialize object
+			object deserialized_obj = Formatter.Deserialize(Stream_);
+			// Set value
+			GetFieldInfo(ObjectType, field).SetValue(Object, deserialized_obj);
+		}
+	}
+
 	//! Find custom attribute
 	private bool FindCustomAttribute(Attribute[] Attributes, Type AttributeType)
 	{
