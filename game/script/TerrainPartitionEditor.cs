@@ -139,8 +139,6 @@ namespace ja2.script
 					array_tri[triangle_index + 5] = last_vertex - 2;
 					// Save triangles
 					int triangle_index_raw = j * 2 + i * PARTITION_WIDTH * 2;
-					m_Mapping[triangle_index_raw] = (ushort)tile_index;
-					m_Mapping[triangle_index_raw + 1] = (ushort)tile_index;
 				}
 			}
 
@@ -164,7 +162,6 @@ namespace ja2.script
 			Formatter.Serialize(Stream_, m_PositionX);
 			Formatter.Serialize(Stream_, m_PositionY);
 			Formatter.Serialize(Stream_, m_Tiles);
-			Formatter.Serialize(Stream_, m_Mapping);
 			Formatter.Serialize(Stream_, m_Properties);
 
 			// Serialize mesh

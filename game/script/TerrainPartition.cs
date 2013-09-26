@@ -35,8 +35,6 @@ namespace ja2.script
 		protected int m_PositionY;
 		//! All tiles.
 		protected ja2.TerrainTile[] m_Tiles;
-		//! Mapping between Tile and triangles.
-		protected ushort[] m_Mapping;
 		//! Terrain tile properties.
 		protected Dictionary<ushort, ja2.TerrainTileProperty> m_Properties;
 		//! Map between non-moveable and tile to which it belongs.
@@ -59,7 +57,7 @@ namespace ja2.script
 
 		public ja2.TerrainTile GetTile(int Triangle)
 		{
-			return m_Tiles[m_Mapping[Triangle]];
+			return m_Tiles[Triangle / 2];
 		}
 
 		//! Get tile for given triangle.
@@ -139,8 +137,6 @@ namespace ja2.script
 			m_PositionX = (int)Formatter.Deserialize(Stream_);
 			m_PositionY = (int)Formatter.Deserialize(Stream_);
 			m_Tiles = (ja2.TerrainTile[])Formatter.Deserialize(Stream_);
-			// Load mappings
-			m_Mapping = (ushort[])Formatter.Deserialize(Stream_);
 			m_Properties = (Dictionary<ushort, ja2.TerrainTileProperty>)Formatter.Deserialize(Stream_);
 
 			// Load mesh
@@ -246,9 +242,6 @@ namespace ja2.script
 			m_PositionY = PartitionY;
 			// Create tiles
 			m_Tiles = new ja2.TerrainTile[PARTITION_WIDTH * PARTITION_HEIGHT];
-			// Create mappings; Size is double of tile size because for each tile
-			// there are 2 triangles
-			m_Mapping = new ushort[m_Tiles.Length * 2];
 
 			System.Random rnd = new System.Random();
 
