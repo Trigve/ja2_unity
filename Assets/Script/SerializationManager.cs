@@ -271,8 +271,11 @@ public class SerializationManager : MonoBehaviour
 			string field = (string)Formatter.Deserialize(Stream_);
 			// Deserialize object
 			object deserialized_obj = Formatter.Deserialize(Stream_);
-			// Set value
-			GetFieldInfo(ObjectType, field).SetValue(Object, deserialized_obj);
+			// Set value if valid - the field could be removed because of class
+			// definition change
+			FieldInfo field_info = GetFieldInfo(ObjectType, field);
+			if(field_info != null)
+				field_info.SetValue(Object, deserialized_obj);
 		}
 	}
 
