@@ -2,6 +2,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml;
 using UnityEngine;
 
 namespace ja2.script
@@ -94,6 +95,31 @@ namespace ja2.script
 #endregion
 
 #region Save/Load
+		//! Save scene as xml.
+		public void SaveSceneXml(XmlWriter Writer, IAssetDatabase AssetDatabase)
+		{
+			// Make the root tag
+			Writer.WriteStartElement("level");
+
+			// Serialize map
+			m_TerrainManager.SaveXml(Writer, AssetDatabase);
+
+			Writer.WriteEndElement();
+		}
+
+		//! Save scene.
+		public void SaveScene(string Path, IAssetDatabase AssetDatabase)
+		{
+			// Testing for now
+			var stream = new FileStream(Application.dataPath + "/Resources/Scenes/" + Path + "scene.bytes", FileMode.Create);
+			var formatter = new BinaryFormatter();
+
+			// Serialize map
+			m_TerrainManager.Save(formatter, stream, AssetDatabase);
+
+			stream.Flush();
+			stream.Close();
+		}
 #endregion
 
 #region Operations

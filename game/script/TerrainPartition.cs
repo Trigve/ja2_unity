@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using System.IO;
 using System.Collections;
+using System.Xml;
 using UnityEngine;
 
 namespace ja2.script
@@ -243,6 +244,47 @@ namespace ja2.script
 #endregion
 
 #region Save/Load
+		//! Save xml.
+		public void SaveXml(XmlWriter Writer, IAssetDatabase AssetDatabase)
+		{
+			Writer.WriteStartElement("partition");
+
+			Writer.WriteAttributeString("position_x", m_PositionX.ToString());
+			Writer.WriteAttributeString("position_y", m_PositionY.ToString());
+
+			// Save mesh
+			Writer.WriteAttributeString("mesh", AssetDatabase.GetAssetPath(GetComponent<MeshFilter>().sharedMesh));
+			// Save material
+			Writer.WriteAttributeString("material", AssetDatabase.GetAssetPath(GetComponent<MeshRenderer>().sharedMaterial));
+
+			// Write tiles
+			Writer.WriteStartElement("tile_list");
+			Array.ForEach(m_Tiles, Tile => Tile.SaveXml(Writer));
+			Writer.WriteEndElement();
+
+			// Write properties
+			Writer.WriteStartElement("property_list");
+			foreach (var property in m_Properties)
+			{
+				Writer.WriteStartElement("item");
+				Writer.WriteAttributeString("index", property.Key.ToString());
+				property.Value.SaveXml(Writer);
+				Writer.WriteEndElement();
+			}
+			Writer.WriteEndElement();
+
+			// Write nonmoveables
+			var non_moveables = GetComponentsInChildren<NonMoveableObjectComponent>();
+			Writer.WriteStartElement("nonmoveable_list");
+			foreach (var non_moveable in non_moveables)
+			{
+				non_moveable.SaveXml(Writer, AssetDatabase);
+			}
+			Writer.WriteEndElement();
+
+			Writer.WriteEndElement();
+		}
+
 		//! Save.
 		public void Save(IFormatter Formatter, Stream Stream_, IAssetDatabase AssetDatabase)
 		{

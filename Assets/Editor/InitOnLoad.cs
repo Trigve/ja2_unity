@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using System.Text;
+using System.Xml;
 
 //! Handle the editor-on-load stuff and assets modifications.
 [InitializeOnLoad]
@@ -37,6 +39,24 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 					current_scene_path = current_scene_path.Substring(current_scene_path.LastIndexOf('/') + 1) + "/";
 
 					level_manager.SaveScene(current_scene_path, new AssetDatabaseCustom());
+
+					// Also save as xml
+
+					// Generate path for xml
+					string xml_save_path = item.Substring(0, item.LastIndexOf('.')) + ".xml";
+					var xml_writer_settings = new XmlWriterSettings();
+					xml_writer_settings.Encoding = Encoding.UTF8;
+					xml_writer_settings.Indent = true;
+
+					var xml_writer = XmlWriter.Create(xml_save_path, xml_writer_settings);
+					// Start xml document
+					xml_writer.WriteStartDocument();
+
+					level_manager.SaveSceneXml(xml_writer, new AssetDatabaseCustom());
+					
+					xml_writer.WriteEndDocument();
+
+					xml_writer.Close();
 					break;
 				}
 			}

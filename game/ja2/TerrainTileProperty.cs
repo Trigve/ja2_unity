@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 using UnityEngine;
 
 namespace ja2
@@ -26,6 +27,13 @@ namespace ja2
 		}
 #endregion
 
+#region Save/Load
+		//! Save xml.
+		public void SaveXml(XmlWriter Writer)
+		{
+			Writer.WriteAttributeString("nonmoveable", m_NonMoveableObject.m_Id);
+		}
+#endregion
 #region Operations
 #endregion
 

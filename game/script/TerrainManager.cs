@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using ja2;
 using UnityEngine;
 
@@ -220,6 +221,20 @@ namespace ja2.script
 #endregion
 
 #region Save/Load
+		//! Save Xml.
+		public void SaveXml(XmlWriter Writer, IAssetDatabase AssetDatabase)
+		{
+			Writer.WriteStartElement("terrain");
+
+			Writer.WriteAttributeString("width", m_Width.ToString());
+			Writer.WriteAttributeString("height", m_Height.ToString());
+
+			foreach (var partition in partitions)
+				partition.GetComponent<TerrainPartition>().SaveXml(Writer, AssetDatabase);
+
+			Writer.WriteEndElement();
+		}
+
 		//! Save the data.
 		public void Save(IFormatter Formatter, Stream Stream_, IAssetDatabase AssetDatabase)
 		{

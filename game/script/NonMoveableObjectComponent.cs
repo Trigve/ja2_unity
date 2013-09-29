@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.IO;
+using System.Xml;
 using UnityEngine;
 
 namespace ja2.script
@@ -42,6 +43,17 @@ namespace ja2.script
 #endregion
 
 #region Save/Load
+		//! Save xml.
+		public void SaveXml(XmlWriter Writer, IAssetDatabase AssetDatabase)
+		{
+			Writer.WriteStartElement("item");
+			// Write original prefab
+			Writer.WriteAttributeString("prefab", AssetDatabase.GetAssetPath(AssetDatabase.GetPrefabParent(gameObject)));
+			// Save instance
+			m_Instance.SaveXml(Writer);
+			Writer.WriteEndElement();
+		}
+
 		public void Save(IFormatter Formatter, Stream Stream_)
 		{
 			Formatter.Serialize(Stream_, m_Instance);
