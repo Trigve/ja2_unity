@@ -19,6 +19,23 @@ public class MapWindow : EditorWindow
 		EditorWindow.GetWindow(typeof(MapWindow));
 	}
 
+#region Operations
+	//! Delete the active terrain manager stuff.
+	private static void ClearTerrain(ja2.script.TerrainManager Terrain)
+	{
+		// Get ALL terrain partitions, not only referenced (there could
+		// be the one left when some error occurred during destroying it,
+		// and aren't referenced inside terrain manager anywhere).
+		var terrain_partitions_all = Terrain.GetComponentsInChildren<ja2.script.TerrainPartition>();
+		foreach (var terrain_partition in terrain_partitions_all)
+		{
+			// Destroy mesh as first
+			AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(terrain_partition.GetComponent<MeshFilter>().sharedMesh));
+			// Destroy GO
+			GameObject.DestroyImmediate(terrain_partition.gameObject);
+		}
+	}
+#endregion
 #region Messages
 	// Use this for initialization
 	void OnGUI ()
@@ -33,19 +50,8 @@ public class MapWindow : EditorWindow
 			var level_manager = GameObject.Find("LevelManager").GetComponent<ja2.script.LevelManager>();
 			// If we got some terrain already created, destroy it
 			if (level_manager.terrainManager != null)
-			{
-				// Get ALL terrain partitions, not only referenced (there could
-				// be the one left when some error occurred during destroying it,
-				// and aren't referenced inside terrain manager anywhere).
-				var terrain_partitions_all = level_manager.terrainManager.GetComponentsInChildren<ja2.script.TerrainPartition>();
-				foreach (var terrain_partition in terrain_partitions_all)
-				{
-					// Destroy mesh as first
-					AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(terrain_partition.GetComponent<MeshFilter>().sharedMesh));
-					// Destroy GO
-					GameObject.DestroyImmediate(terrain_partition.gameObject);
-				}
-			}
+				ClearTerrain(level_manager.terrainManager);
+
 			// Get current scene path
 			string current_scene = EditorApplication.currentScene;
 			string current_scene_path = current_scene.Substring(0, current_scene.LastIndexOf('/'));
