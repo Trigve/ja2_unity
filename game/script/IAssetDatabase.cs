@@ -17,5 +17,6 @@ namespace ja2.script
 	{
 		string GetAssetPath(UnityEngine.Object AssetObject);
 		void CreateAsset(UnityEngine.Object Asset, string Path);
+		UnityEngine.Object GetPrefabParent(UnityEngine.Object Instace);
 	}
 } /*ja2.script*/

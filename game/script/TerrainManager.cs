@@ -13,21 +13,19 @@ namespace ja2.script
 	public class TerrainManager : MonoBehaviourEx
 	{
 #region Attributes
-		//! Map.
-		//	private ja2.Map map_;
 		//! Map width in partition count.
 		private ushort m_Width;
 		//! Map height in partition count.
 		private ushort m_Height;
 		//! Terrain partitions;
 		[SerializeField]
-		public GameObject[] m_Partitions;
+		public TerrainPartition[] m_Partitions;
 #endregion
 
 #region Properties
 		public ushort width { get { return m_Width; } }
 		public ushort height { get { return m_Height; } }
-		public GameObject[] partitions
+		public TerrainPartition[] partitions
 		{
 			get
 			{
@@ -212,6 +210,15 @@ namespace ja2.script
 		}
 #endregion
 
+#region Interface Editor
+		//! Create all assets.
+		public void CreateAssets(string Path, IAssetDatabase AssteDatabase)
+		{
+			foreach (var partition in m_Partitions)
+				partition.CreateAssets(Path, AssteDatabase);
+		}
+#endregion
+
 #region Save/Load
 		//! Save the data.
 		public void Save(IFormatter Formatter, Stream Stream_, IAssetDatabase AssetDatabase)
@@ -220,9 +227,8 @@ namespace ja2.script
 			Formatter.Serialize(Stream_, m_Height);
 
 			// Serialize partitions
-			//		Formatter.Serialize(Stream_, partitions.Length);
 			foreach (var partition in partitions)
-				partition.GetComponent<TerrainPartitionEditor>().Save(Formatter, Stream_, AssetDatabase);
+				partition.GetComponent<TerrainPartition>().Save(Formatter, Stream_, AssetDatabase);
 		}
 
 		//! Load the data.
@@ -231,17 +237,15 @@ namespace ja2.script
 			m_Width = (ushort)Formatter.Deserialize(Stream_);
 			m_Height = (ushort)Formatter.Deserialize(Stream_);
 
-			m_Partitions = new GameObject[m_Width * m_Height];
+			m_Partitions = new TerrainPartition[m_Width * m_Height];
 			// Create partitions
 			for (int i = 0; i < m_Height; ++i)
 			{
 				for (int j = 0; j < m_Width; ++j)
 				{
-					GameObject terrain_go = script.TerrainLoader.CreateTerrainPartition(j, i, this);
+					TerrainPartition terrain_comp = CreateTerrainPartition(j, i);
 					// Add to list of partitions
-					m_Partitions[j + i * m_Width] = terrain_go;
-					// Set parent
-					TerrainPartition terrain_comp = terrain_go.GetComponent<TerrainPartition>();
+					m_Partitions[j + i * m_Width] = terrain_comp;
 					// Load the terrain partition data
 					terrain_comp.Load(Formatter, Stream_);
 				}
@@ -376,14 +380,65 @@ namespace ja2.script
 			//		return GetTile(PartitionX, PartitionY, X, Y);
 			return new ja2.TerrainTileHandle(X, Y, PartitionX, PartitionY);
 		}
+
+		private TerrainPartition CreateTerrainPartition(int X, int Y)
+		{
+			string terrain_name = TerrainPartition.PARTITION_NAME + X + "_" + Y;
+
+			// Create terrain GO
+			GameObject terrain_go = utils.PrefabManager.Create("TerrainPartition");
+			terrain_go.name = terrain_name;
+			// Set parent
+			terrain_go.transform.parent = transform;
+			// Update position
+			Vector3 tile_vertex_0 = TerrainPartition.TileVertex(X * TerrainPartition.PARTITION_WIDTH, Y * TerrainPartition.PARTITION_HEIGHT, 0);
+			Vector3 tile_vertex_1 = TerrainPartition.TileVertex(X * TerrainPartition.PARTITION_WIDTH, Y * TerrainPartition.PARTITION_HEIGHT, 1);
+			terrain_go.transform.position = new Vector3(tile_vertex_0.x, 0, tile_vertex_1.z);
+			// Set layer
+			terrain_go.layer = TerrainPartition.LAYER;
+
+			return terrain_go.GetComponent<TerrainPartition>();
+		}
 #endregion
 
 #region Construction
-		protected void This(ushort Width, ushort Height, ja2.TerrainTileSet TileSet)
+		public void This(ushort Width, ushort Height, ja2.TerrainTileSet TileSet)
 		{
 			m_Width = Width;
 			m_Height = Height;
-			m_Partitions = new GameObject[m_Width * m_Height];
+			m_Partitions = new TerrainPartition[m_Width * m_Height];
+
+			// Create partitions
+			for (int i = 0; i < height; ++i)
+			{
+				for (int j = 0; j < width; ++j)
+				{
+					TerrainPartition terrain_comp = CreateTerrainPartition(j, i);
+					// Add to list of partitions
+					m_Partitions[j + i * width] = terrain_comp;
+					// Call "constructor"				
+					terrain_comp.This(j, i, TileSet);
+				}
+			}
+			System.Random rnd = new System.Random();
+			// Set some random tile
+			for (int i = 0; i < height; ++i)
+			{
+				for (int j = 0; j < width; ++j)
+				{
+					var terrain_comp = m_Partitions[j + i * width].GetComponent<TerrainPartition>();
+
+					for (int k = 0; k < 10; ++k)
+					{
+						SetTileTerrainType(
+							new TerrainTileHandle(rnd.Next(0, TerrainPartition.PARTITION_WIDTH), rnd.Next(0, TerrainPartition.PARTITION_HEIGHT), j, i),
+							(byte)rnd.Next(0, 2)
+						);
+					}
+					// Create mesh
+					terrain_comp.CreateMesh(TileSet);
+				}
+			}
 		}
 #endregion
 	}

@@ -30,7 +30,7 @@ public class MapWindow : EditorWindow
 		
 		if(GUILayout.Button("Create"))
 		{
-			var level_manager = GameObject.Find("LevelManager").GetComponent<ja2.script.LevelManagerEditor>();
+			var level_manager = GameObject.Find("LevelManager").GetComponent<ja2.script.LevelManager>();
 			// If we got some terrain already created, destroy it
 			if (level_manager.terrainManager != null)
 			{
@@ -61,7 +61,9 @@ public class MapWindow : EditorWindow
 				AssetDatabase.CreateFolder(asset_parent_path, current_scene_path);
 			// Create terrain manager and all partitions
 			var tile_set = material_manager.GetTerrainSet("summer");
-			level_manager.terrainManagerEditor.This((ushort)m_Width, (ushort)m_Height, tile_set, asset_path + "/", new AssetDatabaseCustom());
+			level_manager.terrainManager.This((ushort)m_Width, (ushort)m_Height, tile_set);
+			// Create all assets
+			level_manager.CreateAssets(asset_path + "/", new AssetDatabaseCustom());
 
 			// Terrain manager has changed
 			EditorUtility.SetDirty(level_manager.terrainManager);

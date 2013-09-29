@@ -9,6 +9,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "utils", "utils\utils.csproj", "{EF37F705-8AA1-48BB-A3D1-C4D8E23719FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "script", "script\script.csproj", "{DA1F0B98-4B8C-49BD-8358-D0734BB0310E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EF37F705-8AA1-48BB-A3D1-C4D8E23719FA} = {EF37F705-8AA1-48BB-A3D1-C4D8E23719FA}
+		{66FE990A-B09F-4584-A1DF-109656AD6986} = {66FE990A-B09F-4584-A1DF-109656AD6986}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

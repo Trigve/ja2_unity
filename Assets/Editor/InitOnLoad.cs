@@ -30,7 +30,7 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 		{
 			if (item.Contains(EditorApplication.currentScene))
 			{
-				var level_manager = GameObject.Find("LevelManager").GetComponent<ja2.script.LevelManagerEditor>();
+				var level_manager = GameObject.Find("LevelManager").GetComponent<ja2.script.LevelManager>();
 				if (level_manager != null)
 				{
 					string current_scene_path = item.Substring(0, item.LastIndexOf('/'));

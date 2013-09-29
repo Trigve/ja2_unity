@@ -11,7 +11,7 @@ namespace ja2.script
 		In each scene one instance of this component must exist.It handles level
 		specific stuff and is served as entry point.
 	*/
-	public abstract class LevelManager : MonoBehaviourEx
+	public class LevelManager : MonoBehaviourEx
 	{
 #region Attributes
 		//! Game cursor.
@@ -34,10 +34,18 @@ namespace ja2.script
 		private ja2.CharacterEntityManager charEntityManager;
 		//! Debug show of A* path.
 		public bool DebugPath;
+		//! Terrain manager.
+		public TerrainManager m_TerrainManager;
 #endregion
 
 #region Properies
-		public abstract TerrainManager terrainManager { get; }
+		public TerrainManager terrainManager
+		{
+			get
+			{
+				return m_TerrainManager;
+			}
+		}
 #endregion
 
 #region Interface
@@ -74,6 +82,14 @@ namespace ja2.script
 			// Must use task here because of unity bug - When mesh is replaced,
 			// animation stops to play and is shown in T-pose
 			new utils.Task(RebuildCharacterWorkaround(SoldierGO));
+		}
+#endregion
+
+#region Interface Editor
+		//! Create all assets.
+		public void CreateAssets(string Path, IAssetDatabase AssteDatabase)
+		{
+			m_TerrainManager.CreateAssets(Path, AssteDatabase);
 		}
 #endregion
 

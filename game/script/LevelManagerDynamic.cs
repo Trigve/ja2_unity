@@ -10,21 +10,6 @@ namespace ja2.script
 	//! Level manager for dynamic levels.
 	public class LevelManagerDynamic : LevelManager
 	{
-#region Fields
-		//! Terrain manager.
-		public TerrainManager m_TerrainManager;
-#endregion
-
-#region Properties
-		public override TerrainManager terrainManager
-		{
-			get
-			{
-				return m_TerrainManager;
-			}
-		}
-#endregion
-
 #region Messages
 		new void Awake()
 		{
