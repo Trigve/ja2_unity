@@ -44,7 +44,7 @@ namespace ja2.script
 
 #region Save/Load
 		//! Save xml.
-		public void SaveXml(XmlWriter Writer, IAssetDatabase AssetDatabase)
+		public void SaveXml(XmlWriter Writer, IEditor AssetDatabase)
 		{
 			Writer.WriteStartElement("item");
 			// Write original prefab

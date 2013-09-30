@@ -88,7 +88,7 @@ namespace ja2.script
 
 #region Interface Editor
 		//! Create all assets.
-		public void CreateAssets(string Path, IAssetDatabase AssteDatabase)
+		public void CreateAssets(string Path, IEditor AssteDatabase)
 		{
 			m_TerrainManager.CreateAssets(Path, AssteDatabase);
 		}
@@ -96,7 +96,7 @@ namespace ja2.script
 
 #region Save/Load
 		//! Save scene as xml.
-		public void SaveSceneXml(XmlWriter Writer, IAssetDatabase AssetDatabase)
+		public void SaveSceneXml(XmlWriter Writer, IEditor AssetDatabase)
 		{
 			// Make the root tag
 			Writer.WriteStartElement("level");
@@ -108,7 +108,7 @@ namespace ja2.script
 		}
 
 		//! Save scene.
-		public void SaveScene(string Path, IAssetDatabase AssetDatabase)
+		public void SaveScene(string Path, IEditor AssetDatabase)
 		{
 			// Testing for now
 			var stream = new FileStream(Application.dataPath + "/Resources/Scenes/" + Path + "scene.bytes", FileMode.Create);

@@ -237,7 +237,7 @@ namespace ja2.script
 
 #region Interface Editor
 		//! Create all assets.
-		public void CreateAssets(string Path, IAssetDatabase AssetDatabase)
+		public void CreateAssets(string Path, IEditor AssetDatabase)
 		{
 			AssetDatabase.CreateAsset(GetComponent<MeshCollider>().sharedMesh, Path + m_PositionX.ToString() + "_" + m_PositionY.ToString() + ".asset");
 		}
@@ -245,7 +245,7 @@ namespace ja2.script
 
 #region Save/Load
 		//! Save xml.
-		public void SaveXml(XmlWriter Writer, IAssetDatabase AssetDatabase)
+		public void SaveXml(XmlWriter Writer, IEditor AssetDatabase)
 		{
 			Writer.WriteStartElement("partition");
 
@@ -286,7 +286,7 @@ namespace ja2.script
 		}
 
 		//! Save.
-		public void Save(IFormatter Formatter, Stream Stream_, IAssetDatabase AssetDatabase)
+		public void Save(IFormatter Formatter, Stream Stream_, IEditor AssetDatabase)
 		{
 			Formatter.Serialize(Stream_, m_PositionX);
 			Formatter.Serialize(Stream_, m_PositionY);

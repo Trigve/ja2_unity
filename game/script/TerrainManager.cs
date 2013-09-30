@@ -213,7 +213,7 @@ namespace ja2.script
 
 #region Interface Editor
 		//! Create all assets.
-		public void CreateAssets(string Path, IAssetDatabase AssteDatabase)
+		public void CreateAssets(string Path, IEditor AssteDatabase)
 		{
 			foreach (var partition in m_Partitions)
 				partition.CreateAssets(Path, AssteDatabase);
@@ -222,7 +222,7 @@ namespace ja2.script
 
 #region Save/Load
 		//! Save Xml.
-		public void SaveXml(XmlWriter Writer, IAssetDatabase AssetDatabase)
+		public void SaveXml(XmlWriter Writer, IEditor AssetDatabase)
 		{
 			Writer.WriteStartElement("terrain");
 
@@ -236,7 +236,7 @@ namespace ja2.script
 		}
 
 		//! Save the data.
-		public void Save(IFormatter Formatter, Stream Stream_, IAssetDatabase AssetDatabase)
+		public void Save(IFormatter Formatter, Stream Stream_, IEditor AssetDatabase)
 		{
 			Formatter.Serialize(Stream_, m_Width);
 			Formatter.Serialize(Stream_, m_Height);

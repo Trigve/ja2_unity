@@ -13,10 +13,11 @@ namespace ja2.script
 		we wan't to be able to serialize and use this editor classes at runtime
 		but withou edit functionality.
 	*/
-	public interface IAssetDatabase
+	public interface IEditor
 	{
 		string GetAssetPath(UnityEngine.Object AssetObject);
 		void CreateAsset(UnityEngine.Object Asset, string Path);
 		UnityEngine.Object GetPrefabParent(UnityEngine.Object Instace);
+		UnityEngine.Object InstantiatePrefab(UnityEngine.Object Target);
 	}
 } /*ja2.script*/
