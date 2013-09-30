@@ -56,6 +56,7 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 					
 					xml_writer.WriteEndDocument();
 
+					xml_writer.Flush();
 					xml_writer.Close();
 					break;
 				}
