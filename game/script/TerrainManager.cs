@@ -235,6 +235,36 @@ namespace ja2.script
 			Writer.WriteEndElement();
 		}
 
+		//! Load xml.
+		public void LoadXml(XmlReader Reader, IEditor AssetDatabase)
+		{
+			// Material manager
+			var material_manager = new ja2.TerrainMaterialManager(Application.dataPath);
+			// Create terrain manager and all partitions
+			var tile_set = material_manager.GetTerrainSet("summer");
+
+			Reader.ReadToDescendant("terrain");
+
+			m_Width = ushort.Parse(Reader.GetAttribute("width"));
+			m_Height = ushort.Parse(Reader.GetAttribute("height"));
+
+			m_Partitions = new TerrainPartition[m_Width * m_Height];
+			for (int i = 0; i < m_Height; ++i)
+			{
+				for (int j = 0; j < m_Width; ++j)
+				{
+					Reader.ReadToFollowing("partition");
+
+					TerrainPartition terrain_comp = CreateTerrainPartition(j, i);
+					// Add to list of partitions
+					m_Partitions[j + i * m_Width] = terrain_comp;
+					// Load the terrain partition data
+					terrain_comp.LoadXml(Reader, AssetDatabase);
+					// Create mesh
+					terrain_comp.CreateMesh(tile_set);
+				}
+			}
+		}
 		//! Save the data.
 		public void Save(IFormatter Formatter, Stream Stream_, IEditor AssetDatabase)
 		{

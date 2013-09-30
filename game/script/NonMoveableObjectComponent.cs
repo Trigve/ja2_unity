@@ -46,12 +46,16 @@ namespace ja2.script
 		//! Save xml.
 		public void SaveXml(XmlWriter Writer, IEditor AssetDatabase)
 		{
-			Writer.WriteStartElement("item");
 			// Write original prefab
 			Writer.WriteAttributeString("prefab", AssetDatabase.GetAssetPath(AssetDatabase.GetPrefabParent(gameObject)));
 			// Save instance
 			m_Instance.SaveXml(Writer);
-			Writer.WriteEndElement();
+		}
+
+		//! Load xml.
+		public void LoadXml(XmlReader Reader, IEditor AssetDatabase)
+		{
+			m_Instance = new NonMoveableObject(Reader.GetAttribute("id"));
 		}
 
 		public void Save(IFormatter Formatter, Stream Stream_)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using UnityEngine;
 using UnityEditor;
 
@@ -17,6 +18,22 @@ public class MapWindow : EditorWindow
 	{
 		// Show only if map doesn't exist
 		EditorWindow.GetWindow(typeof(MapWindow));
+	}
+
+	[MenuItem("Map/Load from xml")]
+	static void LoadFromXml()
+	{
+		var level_manager = GameObject.Find("LevelManager").GetComponent<ja2.script.LevelManager>();
+		ClearTerrain(level_manager.terrainManager);
+
+		// Generate xml scene name
+		string current_scene_xml = EditorApplication.currentScene.Substring(0, EditorApplication.currentScene.LastIndexOf(".")) + ".xml";
+		var xml_reader = XmlReader.Create(current_scene_xml);
+		xml_reader.Read();
+
+		level_manager.LoadXml(xml_reader, new AssetDatabaseCustom());
+		// Create all assets
+		level_manager.CreateAssets(GetCurrentScenePath() + "/", new AssetDatabaseCustom());
 	}
 
 #region Operations

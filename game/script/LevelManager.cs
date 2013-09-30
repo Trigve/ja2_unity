@@ -107,6 +107,14 @@ namespace ja2.script
 			Writer.WriteEndElement();
 		}
 
+		//! Load xml.
+		public void LoadXml(XmlReader Reader, IEditor AssetDatabase)
+		{
+			Reader.MoveToContent();
+
+			m_TerrainManager.LoadXml(Reader, AssetDatabase);
+		}
+
 		//! Save scene.
 		public void SaveScene(string Path, IEditor AssetDatabase)
 		{

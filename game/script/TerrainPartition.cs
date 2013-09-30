@@ -252,11 +252,6 @@ namespace ja2.script
 			Writer.WriteAttributeString("position_x", m_PositionX.ToString());
 			Writer.WriteAttributeString("position_y", m_PositionY.ToString());
 
-			// Save mesh
-			Writer.WriteAttributeString("mesh", AssetDatabase.GetAssetPath(GetComponent<MeshFilter>().sharedMesh));
-			// Save material
-			Writer.WriteAttributeString("material", AssetDatabase.GetAssetPath(GetComponent<MeshRenderer>().sharedMaterial));
-
 			// Write tiles
 			Writer.WriteStartElement("tile_list");
 			Array.ForEach(m_Tiles, Tile => Tile.SaveXml(Writer));
@@ -278,11 +273,74 @@ namespace ja2.script
 			Writer.WriteStartElement("nonmoveable_list");
 			foreach (var non_moveable in non_moveables)
 			{
+				Writer.WriteStartElement("item");
+				Writer.WriteAttributeString("tile", m_NonMoveableMap[non_moveable.nonMoveable.id.ToString()].ToString());
 				non_moveable.SaveXml(Writer, AssetDatabase);
+				Writer.WriteEndElement();
 			}
 			Writer.WriteEndElement();
 
 			Writer.WriteEndElement();
+		}
+
+		//! Load xml.
+		public void LoadXml(XmlReader Reader, IEditor AssetDatabase)
+		{
+			m_PositionX = int.Parse(Reader.GetAttribute("position_x"));
+			m_PositionY = int.Parse(Reader.GetAttribute("position_y"));
+
+			m_Tiles = new TerrainTile[PARTITION_WIDTH * PARTITION_HEIGHT];
+			int i = 0;
+			Reader.ReadToDescendant("tile");
+			do 
+			{
+				byte[] v_types = new byte[]
+				{
+					byte.Parse(Reader.GetAttribute("type_0")),
+					byte.Parse(Reader.GetAttribute("type_1")),
+					byte.Parse(Reader.GetAttribute("type_2")),
+					byte.Parse(Reader.GetAttribute("type_3"))
+				};
+				var tile = new TerrainTile(int.Parse(Reader.GetAttribute("x")), int.Parse(Reader.GetAttribute("y")), (TerrainTile.Type)int.Parse(Reader.GetAttribute("type")));
+				
+				tile.SetTerrainType(TerrainTile.Vertex.NORTH, v_types[0]);
+				tile.SetTerrainType(TerrainTile.Vertex.WEST, v_types[1]);
+				tile.SetTerrainType(TerrainTile.Vertex.SOUTH, v_types[2]);
+				tile.SetTerrainType(TerrainTile.Vertex.EAST, v_types[3]);
+				m_Tiles[i++] = tile;
+
+			} while (Reader.ReadToNextSibling("tile"));
+
+			var mesh_renderer = GetComponent<MeshRenderer>();
+
+			m_Properties = new Dictionary<ushort, ja2.TerrainTileProperty>();
+
+			Reader.ReadToFollowing("property_list");
+			if (Reader.ReadToDescendant("item"))
+			{
+				do
+				{
+					var tile_property = new TerrainTileProperty();
+					tile_property.nonMoveable = new NonMoveableObjectHandle(Reader.GetAttribute("nonmoveable"));
+
+					m_Properties[ushort.Parse(Reader.GetAttribute("index"))] = tile_property;
+				} while (Reader.ReadToNextSibling("item"));
+			}
+
+			Reader.ReadToFollowing("nonmoveable_list");
+			if (Reader.ReadToDescendant("item"))
+			{
+				do
+				{
+					ushort tile_index = ushort.Parse(Reader.GetAttribute("tile"));
+					GameObject non_moveable_go = AssetDatabase.InstantiatePrefab(Resources.LoadAssetAtPath(Reader.GetAttribute("prefab"), typeof(GameObject))) as GameObject;
+					var comp = non_moveable_go.GetComponent<NonMoveableObjectComponent>();
+					comp.LoadXml(Reader, AssetDatabase);
+
+					TerrainTile tile = m_Tiles[tile_index];
+					AssociateNonMoveable(tile.x, tile.y, comp);
+				} while (Reader.ReadToNextSibling("item"));
+			}
 		}
 
 		//! Save.
