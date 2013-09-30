@@ -323,12 +323,9 @@ namespace ja2.script
 					if (y_partition_diff != 0)
 					{
 						if (y_partition_diff < 0)
-							y_diff = TerrainPartition.PARTITION_HEIGHT - y_diff;
+							y_diff = y_diff -TerrainPartition.PARTITION_HEIGHT;
 						else
 							y_diff = y_diff + TerrainPartition.PARTITION_HEIGHT;
-						// Need to inverse it, because it is inter-partition
-						if (From.y % 2 == 1)
-							y_diff *= -1;
 					}
 					if (x_partition_diff != 0)
 					{
