@@ -35,6 +35,19 @@ public class MapWindow : EditorWindow
 			GameObject.DestroyImmediate(terrain_partition.gameObject);
 		}
 	}
+
+	//! Get current scene path.
+	private static string GetCurrentScenePath()
+	{
+		string current_scene = EditorApplication.currentScene;
+		string current_scene_path = current_scene.Substring(0, current_scene.LastIndexOf('/'));
+		current_scene_path = current_scene_path.Substring(current_scene_path.LastIndexOf('/') + 1);
+
+		string asset_parent_path = "Assets/Resources/Scenes";
+		string asset_path = asset_parent_path + "/" + current_scene_path;
+
+		return asset_path;
+	}
 #endregion
 #region Messages
 	// Use this for initialization
@@ -60,7 +73,7 @@ public class MapWindow : EditorWindow
 			var material_manager = new ja2.TerrainMaterialManager(Application.dataPath);
 			
 			string asset_parent_path = "Assets/Resources/Scenes";
-			string asset_path = asset_parent_path + "/" + current_scene_path;
+			string asset_path = GetCurrentScenePath();
 			// Be sure asset path exist
 			string asset_path_guid = AssetDatabase.AssetPathToGUID(asset_path);
 			if(asset_path_guid.Length == 0)
