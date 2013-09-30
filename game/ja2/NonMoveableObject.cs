@@ -37,6 +37,11 @@ namespace ja2
 		}
 #endregion
 #region Construction
+		public NonMoveableObject(string Id)
+		{
+			m_Id = new System.Guid(Id);
+		}
+
 		public NonMoveableObject()
 		{
 			m_Id = Guid.NewGuid();
