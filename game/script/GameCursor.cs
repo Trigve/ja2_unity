@@ -6,12 +6,13 @@ namespace ja2.script
 	public class GameCursor : MonoBehaviour
 	{
 #region Fields
+		//! Terrain manager to use.
+		public TerrainManager m_TerrainManager;
 		private RaycastHit m_Hit;
 		//! Actual tile cursor is at.
 		private ja2.TerrainTileHandle m_Tile;
 		//! Last mouse position.
 		private Vector3 m_LastMousePos;
-		public TerrainManager m_TerrainManager;
 #endregion
 
 #region Properties
