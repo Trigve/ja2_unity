@@ -94,12 +94,13 @@ namespace ja2
 #endregion
 
 #region Construction
-		public TerrainTile(int X, int Y, Type Type_)
+		public TerrainTile(int X, int Y, Type Type_, byte Variant)
 		{
 			x = X;
 			y = Y;
 			terrainTypeArray = new byte[4];
 			type_ = Type_;
+			variant = Variant;
 		}
 #endregion
 	}

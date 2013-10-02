@@ -301,7 +301,7 @@ namespace ja2.script
 					byte.Parse(Reader.GetAttribute("type_2")),
 					byte.Parse(Reader.GetAttribute("type_3"))
 				};
-				var tile = new TerrainTile(int.Parse(Reader.GetAttribute("x")), int.Parse(Reader.GetAttribute("y")), (TerrainTile.Type)int.Parse(Reader.GetAttribute("type")));
+				var tile = new TerrainTile(int.Parse(Reader.GetAttribute("x")), int.Parse(Reader.GetAttribute("y")), (TerrainTile.Type)int.Parse(Reader.GetAttribute("type")), byte.Parse(Reader.GetAttribute("variant")));
 				
 				tile.SetTerrainType(TerrainTile.Vertex.NORTH, v_types[0]);
 				tile.SetTerrainType(TerrainTile.Vertex.WEST, v_types[1]);
@@ -510,11 +510,10 @@ namespace ja2.script
 					// Need to set all tiles as walkable, because we don't know
 					// here which tiles are the ones at the border. It should
 					// be set somewhere outside. \FIXME
-					ja2.TerrainTile.Type tile_type = ja2.TerrainTile.Type.REGULAR;
-					ja2.TerrainTile tile = new ja2.TerrainTile(i, j, tile_type);
 					// Set random variant
-					tile.variant = (byte)rnd.Next(0, 7);
-					//				tile.variant = 0;
+					ja2.TerrainTile.Type tile_type = ja2.TerrainTile.Type.REGULAR;
+					ja2.TerrainTile tile = new ja2.TerrainTile(i, j, tile_type, (byte)rnd.Next(0, 7));
+//					tile.variant = 0;
 					m_Tiles[i + j * PARTITION_WIDTH] = tile;
 
 				}
