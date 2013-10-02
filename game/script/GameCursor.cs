@@ -18,6 +18,27 @@ namespace ja2.script
 		public ja2.TerrainTileHandle tile { get { return m_Tile; } }
 #endregion
 
+#region Interface
+		//! Update the cursor info.
+		public void UpdateInfo()
+		{
+			// Update position only if mouse was moved
+			if (m_LastMousePos != Input.mousePosition)
+			{
+				m_LastMousePos = Input.mousePosition;
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				if (Physics.Raycast(ray, out m_Hit, Mathf.Infinity, TerrainPartition.LAYER_MASK))
+				{
+					// Find the tile based on triangles			
+					TerrainPartition terrain = m_Hit.transform.gameObject.GetComponent<TerrainPartition>();
+					m_Tile = terrain.GetTileHandle(m_Hit.triangleIndex);
+
+					// Get center of tile
+					transform.position = terrain.GetCenterOfTile(m_Hit.triangleIndex);
+				}
+			}
+		}
+#endregion
 #region Messages
 		void Awake()
 		{
@@ -94,26 +115,6 @@ namespace ja2.script
 		void Start()
 		{
 			Screen.showCursor = false;
-		}
-
-		// Update is called once per frame
-		void Update()
-		{
-			// Update position only if mouse was moved
-			if (m_LastMousePos != Input.mousePosition)
-			{
-				m_LastMousePos = Input.mousePosition;
-				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-				if (Physics.Raycast(ray, out m_Hit, Mathf.Infinity, TerrainPartition.LAYER_MASK))
-				{
-					// Find the tile based on triangles			
-					TerrainPartition terrain = m_Hit.transform.gameObject.GetComponent<TerrainPartition>();
-					m_Tile = terrain.GetTileHandle(m_Hit.triangleIndex);
-
-					// Get center of tile
-					transform.position = terrain.GetCenterOfTile(m_Hit.triangleIndex);
-				}
-			}
 		}
 #endregion
 	}

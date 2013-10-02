@@ -151,6 +151,8 @@ namespace ja2.script
 
 		void Update()
 		{
+			// Update mouse cursor
+			cursor.UpdateInfo();
 			// Process mercenary selection
 			if (Input.GetMouseButtonDown(0))
 			{
