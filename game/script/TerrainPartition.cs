@@ -42,7 +42,6 @@ namespace ja2.script
 		/*!
 			It is only for caching.
 		*/
-		[NonSerialized]
 		protected Dictionary<string, ushort> m_NonMoveableMap = new Dictionary<string, ushort>();
 #endregion
 
