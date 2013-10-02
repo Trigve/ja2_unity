@@ -47,6 +47,8 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 					var xml_writer_settings = new XmlWriterSettings();
 					xml_writer_settings.Encoding = Encoding.UTF8;
 					xml_writer_settings.Indent = true;
+					// If file exist, make backup
+					AssetDatabase.CopyAsset(xml_save_path, xml_save_path + ".old");
 
 					var xml_writer = XmlWriter.Create(xml_save_path, xml_writer_settings);
 					// Start xml document
