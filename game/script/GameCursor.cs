@@ -5,7 +5,7 @@ namespace ja2.script
 {
 	public class GameCursor : MonoBehaviour
 	{
-#region Attributes
+#region Fields
 		private RaycastHit m_Hit;
 		//! Actual tile cursor is at.
 		private ja2.TerrainTileHandle m_Tile;
@@ -18,6 +18,7 @@ namespace ja2.script
 		public ja2.TerrainTileHandle tile { get { return m_Tile; } }
 #endregion
 
+#region Messages
 		void Awake()
 		{
 			var mesh_filter = GetComponent<MeshFilter>();
@@ -114,5 +115,6 @@ namespace ja2.script
 				}
 			}
 		}
+#endregion
 	}
 } /*ja2.script*/
