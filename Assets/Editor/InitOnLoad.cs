@@ -18,20 +18,24 @@ public class InitOnLoad : UnityEditor.AssetModificationProcessor
 	//! Hande pre-save action.
 	public static string[] OnWillSaveAssets(string[] Paths)
 	{
-		// Try to serialize objects if there is serialization manager in scene
-		// If there is serialization manager in scene.
-		var serialization_manager = (SerializationManager)GameObject.FindObjectOfType(typeof(SerializationManager));
-		if (serialization_manager)
-		{
-			serialization_manager.Serialize();
-			// Set as dirty
-			EditorUtility.SetDirty(serialization_manager);
-		}
 		// Are we saving scene
 		foreach (var item in Paths)
 		{
 			if (item.Contains(EditorApplication.currentScene))
 			{
+				// Try to serialize objects if there is serialization manager in
+				// scene and we're saving the scene. Otherwise some recursive 
+				// calls could be done if this serialization were at the
+				// beginning of function, because AssetDatabase.CopyAsset() will
+				// call this function again
+				var serialization_manager = (SerializationManager)GameObject.FindObjectOfType(typeof(SerializationManager));
+				if (serialization_manager)
+				{
+					serialization_manager.Serialize();
+					// Set as dirty
+					EditorUtility.SetDirty(serialization_manager);
+				} 
+
 				var level_manager = GameObject.Find("LevelManager").GetComponent<ja2.script.LevelManager>();
 				if (level_manager != null)
 				{
