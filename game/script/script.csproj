@@ -49,7 +49,10 @@
     <Compile Include="AStarPathMap.cs" />
     <Compile Include="CameraManager.cs" />
     <Compile Include="GameCursor.cs" />
+    <Compile Include="GameCursor2D.cs" />
+    <Compile Include="GameCursor3D.cs" />
     <Compile Include="IAssetDatabase.cs" />
+    <Compile Include="IGameCursor.cs" />
     <Compile Include="ISerializePostProcessable.cs" />
     <Compile Include="LevelManager.cs" />
     <Compile Include="LevelManagerDynamic.cs" />

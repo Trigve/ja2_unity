@@ -55,6 +55,7 @@
     <Compile Include="ClothItemGroup.cs" />
     <Compile Include="ClothManager.cs" />
     <Compile Include="Direction.cs" />
+    <Compile Include="GameCursorType.cs" />
     <Compile Include="Head.cs" />
     <Compile Include="HeadClothing.cs" />
     <Compile Include="Inventory.cs" />
