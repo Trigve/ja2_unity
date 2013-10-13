@@ -208,26 +208,11 @@ namespace ja2.script
 		//! Rotate as coroutine
 		public IEnumerator Rotate_CoRo(ja2.LookDirection Direction)
 		{
-			isRotating = true;
-
-			float time_to_pass = 0.1f * Mathf.Abs((byte)mercenary.lookDirection - (byte)Direction);
-			float start = Time.time;
-			Quaternion start_rotation = transform.rotation;
-			Quaternion end_rotation = ja2.LookDirectionConverter.DirectionToRotation(Direction);
-
-			while (Time.time - start < time_to_pass)
-			{
-				// Update rotation of GO
-				transform.rotation = Quaternion.Lerp(start_rotation, end_rotation, (Time.time - start) / time_to_pass);
-				// Compute actual direction			
-				mercenary.lookDirection = OrientationFromAngle(transform.rotation);
-
-				yield return null;
-			}
+			// Set the final direction and update transform's rotation
 			mercenary.lookDirection = Direction;
 			UpdateOrientation();
 
-			isRotating = false;
+			yield break;
 		}
 
 
