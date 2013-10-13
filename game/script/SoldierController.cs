@@ -82,13 +82,19 @@ namespace ja2.script
 		}
 
 		//! Move.
-		public void Move(ushort NumberOfTiles)
+		/*!
+			See Move_Coro.
+		*/
+		public void Move(ushort NumberOfTiles, bool SlowDown)
 		{
-			StartCoroutine(Move_Coro(NumberOfTiles));
+			StartCoroutine(Move_Coro(NumberOfTiles, SlowDown));
 		}
 
 		//! Move as coroutine.
-		public IEnumerator Move_Coro(ushort NumberOfTiles)
+		/*!
+			See ISoldierController;
+		*/
+		public IEnumerator Move_Coro(ushort NumberOfTiles, bool Slowdown)
 		{
 			// Does the position of GO need to be clamped to center of tile
 			bool clamp_position = false;
@@ -118,7 +124,8 @@ namespace ja2.script
 				print("Stopping walk: " + distance_to_go);
 #endif
 					// No transition comes to play
-					animator.SetBool(walkParam, false);
+					if (Slowdown)
+						animator.SetBool(walkParam, false);
 					yield return new WaitForFixedUpdate();
 					// Store actual distance to go
 					float distance_to_go_pre = distance_to_go;
@@ -175,12 +182,15 @@ namespace ja2.script
 				yield return new WaitForFixedUpdate();
 			}
 			// Must be in idle and no transition
-			while (!(animator.GetCurrentAnimatorStateInfo(0).nameHash == idleState && !animator.IsInTransition(0)))
+			if (Slowdown)
 			{
+				while (!(animator.GetCurrentAnimatorStateInfo(0).nameHash == idleState && !animator.IsInTransition(0)))
+				{
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
-			print("Waiting...");
+					print("Waiting...");
 #endif
-				yield return new WaitForFixedUpdate();
+					yield return new WaitForFixedUpdate();
+				}
 			}
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
 		print("Off Distance: " + utils.Vector3Helper.DistanceSigned(transform.position, target_pos, target_normal_plane));

@@ -38,7 +38,11 @@ namespace ja2
 		{
 			// Task not started
 			if (actualTask == null)
-				actualTask = new utils.Task(actions.Dequeue().Run(soldierController));
+			{
+				// Is final action
+				bool final = (actions.Count == 1);
+				actualTask = new utils.Task(actions.Dequeue().Run(soldierController, final));
+			}
 			// If task is finnished, get the next task
 			if (!actualTask.Running)
 				actualTask = null;

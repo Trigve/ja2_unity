@@ -13,7 +13,7 @@ namespace ja2
 
 #region Operations
 		//! See base.
-		protected override IEnumerator DoRun(ISoldierController Controller)
+		protected override IEnumerator DoRun(ISoldierController Controller, bool Final)
 		{
 			yield return utils.Task.WaitForTask(Controller.Rotate_CoRo(look));
 		}

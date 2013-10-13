@@ -12,9 +12,9 @@ namespace ja2
 #endregion
 #region Operations
 		//! See base.
-		protected override IEnumerator DoRun(ISoldierController Controller)
+		protected override IEnumerator DoRun(ISoldierController Controller, bool Final)
 		{
-			yield return utils.Task.WaitForTask(Controller.Move_Coro(tilesToMove));
+			yield return utils.Task.WaitForTask(Controller.Move_Coro(tilesToMove, Final));
 		}
 #endregion
 
