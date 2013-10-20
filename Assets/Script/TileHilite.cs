@@ -7,9 +7,9 @@ public class TileHilite : MonoBehaviour
 	//! Tile to show.
 	public ja2.TerrainTileHandle m_Tile;
 	//! Mesh filter.
-	private MeshFilter meshFilter;
+	private MeshFilter m_MeshFilter;
 	//! Terrain manager.
-	private ja2.script.TerrainManager terrainManager;
+	private ja2.script.TerrainManager m_TerrainManager;
 #endregion
 
 #region Properties
@@ -25,12 +25,13 @@ public class TileHilite : MonoBehaviour
 		}
 	}
 #endregion
+
 #region  Messages
 	void Awake()
 	{
 		// Get components
-		meshFilter = GetComponent<MeshFilter>();
-		terrainManager = GameObject.Find("Map").GetComponent<ja2.script.TerrainManager>();
+		m_MeshFilter = GetComponent<MeshFilter>();
+		m_TerrainManager = GameObject.Find("TerrainManager").GetComponent<ja2.script.TerrainManager>();
 	}
 	// Use this for initialization
 	void Start ()
@@ -56,13 +57,13 @@ public class TileHilite : MonoBehaviour
 		mesh.vertices = vertices;
 		mesh.triangles = triangles;
 		mesh.colors32 = colors;
-		meshFilter.mesh = mesh;
+		m_MeshFilter.mesh = mesh;
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		transform.position = new Vector3(terrainManager.GetPosition(tile, 1).x, 0, terrainManager.GetPosition(tile, 0).z);
+		transform.position = new Vector3(m_TerrainManager.GetPosition(tile, 1).x, 0, m_TerrainManager.GetPosition(tile, 0).z);
 	}
 #endregion
 }
