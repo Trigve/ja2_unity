@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
+using System.Linq;
 using UnityEngine;
 
 namespace ja2.script
@@ -25,6 +26,22 @@ namespace ja2.script
 		public AStarPathManager pathManager;
 		//! Soldier path manager.
 		private Dictionary<SoldierController, SoldierPathManager> soldiersPaths;
+		//! Canceling paths.
+		/*!
+			This field hold all path for given soldier that are being canceled,
+			so they should be finished before any other active path for given
+			soldier could run.
+		*/
+		private Dictionary<SoldierController, SoldierPathManager> m_SoldiersPathsCancelling;
+		//! Pending new path.
+		/*!
+			Pending paths are the one which are being created. We should create
+			it only if all canceling paths are done, because we need to find
+			actual position of soldier and not the position at which the soldier
+			was when new path has-to-be created (because cancelling could change
+			the soldier position by one tile).
+		*/
+		private Dictionary<SoldierController, TerrainTileHandle> m_SoldiersPathsPending;
 		//! Path visualizer.
 		public PathVisualizer pathVisualizer;
 		//! Character definition manager.
@@ -144,6 +161,8 @@ namespace ja2.script
 		protected void Awake()
 		{
 			soldiersPaths = new Dictionary<SoldierController, SoldierPathManager>();
+			m_SoldiersPathsCancelling = new Dictionary<SoldierController, SoldierPathManager>();
+			m_SoldiersPathsPending = new Dictionary<SoldierController, TerrainTileHandle>();
 			charDefManager = new ja2.CharacterDefinitionManager("Data");
 			clothManager = new ja2.ClothManager("Data");
 			charEntityManager = new ja2.CharacterEntityManager(charDefManager, clothManager);
@@ -182,25 +201,63 @@ namespace ja2.script
 				// Wasn't new selection, move
 				if (soldierSelected != null && old_selection == soldierSelected)
 				{
+					var soldier_controller = soldierSelected.GetComponentInChildren<SoldierController>();
+					// If there is some path movement in action, cancel it
+					if (soldiersPaths.ContainsKey(soldier_controller))
+					{
+						soldiersPaths[soldier_controller].Cancel();
+						// Need to move to cancel dict to be able to finish it
+						m_SoldiersPathsCancelling[soldier_controller] = soldiersPaths[soldier_controller];
+						soldiersPaths.Remove(soldier_controller);
+					}
 					// Only if target valid
 					if (terrainManager.IsTileWalkable(cursor.tile))
 					{
-						// Search for path
-						var soldier_controller = soldierSelected.GetComponentInChildren<SoldierController>();
-						if (DebugPath)
-							pathManager.CreatePathDebug(terrainManager, soldier_controller.position, cursor.tile);
-						else
-						{
-							var path = pathManager.CreatePath(terrainManager, soldier_controller.position, cursor.tile);
-							// Parse path and create actions
-							soldiersPaths[soldier_controller] = new SoldierPathManager(soldier_controller, path);
-							// Visualize path
-							pathVisualizer.CreatePath(path);
-						}
+						m_SoldiersPathsPending[soldier_controller] = cursor.tile;
 					}
 				}
 			}
-			// Run all paths
+			var paths_cancelled_to_remove = new List<SoldierController>();
+			// As first run all canceling paths
+			foreach (var it in m_SoldiersPathsCancelling)
+			{
+				var path_manager = it.Value;
+				// Update action
+				if (!path_manager.finished)
+					path_manager.Run();
+				// Has finished, remove it
+				else
+					paths_cancelled_to_remove.Add(it.Key);
+			}
+			// Remove all canceled paths now, because we need up to date dict
+			paths_cancelled_to_remove.ForEach(Soldier => m_SoldiersPathsCancelling.Remove(Soldier));
+
+			// Create new paths
+			var paths_pending_to_remove = new List<SoldierController>();
+			foreach (var it in m_SoldiersPathsPending)
+			{
+				var soldier_controller = it.Key;
+				// Be sure that soldier doesn't have any canceling path
+				if(!m_SoldiersPathsCancelling.ContainsKey(soldier_controller))
+				{
+					if (DebugPath)
+						pathManager.CreatePathDebug(terrainManager, soldier_controller.position, it.Value);
+					else
+					{
+						var path = pathManager.CreatePath(terrainManager, soldier_controller.position, it.Value);
+						// Parse path and create actions
+						soldiersPaths[soldier_controller] = new SoldierPathManager(soldier_controller, path);
+						// Visualize path
+						pathVisualizer.CreatePath(path);
+					}
+					// Flag for remove
+					paths_pending_to_remove.Add(soldier_controller);
+				}
+			}
+			// Remove pending paths
+			paths_pending_to_remove.ForEach(Soldier => m_SoldiersPathsPending.Remove(Soldier));
+
+			// Run all active paths
 			var paths_to_remove = new List<SoldierController>();
 			foreach (var it in soldiersPaths)
 			{
@@ -211,11 +268,7 @@ namespace ja2.script
 				else
 					paths_to_remove.Add(it.Key);
 			}
-			// Remove unneeded one
-			foreach (var it in paths_to_remove)
-			{
-				soldiersPaths.Remove(it);
-			}
+			paths_to_remove.ForEach(Soldier => soldiersPaths.Remove(Soldier));
 		}
 #endregion
 	}

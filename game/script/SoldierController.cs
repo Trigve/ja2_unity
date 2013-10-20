@@ -33,6 +33,8 @@ namespace ja2.script
 		public TerrainManager terrainManager;
 		//! Animator.
 		protected Animator animator;
+		//! Should we cancel any actions.
+		private bool m_CancelAction;
 #endregion
 
 #region Properties
@@ -60,16 +62,10 @@ namespace ja2.script
 #endregion
 
 #region Operations
-		virtual public void Awake()
+		//! Cancel any action.
+		public void Cancel()
 		{
-			isRotating = false;
-			animator = GetComponent<Animator>();
-		}
-
-		protected void Start()
-		{
-			UpdatePosition();
-			UpdateOrientation();
+			m_CancelAction = true;
 		}
 
 		//! Set mercenary.
@@ -110,6 +106,42 @@ namespace ja2.script
 			Vector3 target_normal_plane = (beg_pos - target_pos).normalized;
 			while (true)
 			{
+				// If we should cancel actual movement, finish move to the near
+				// tile
+				if (m_CancelAction)
+				{
+#if JA_MERCENARY_CONTROLLER_PRINT_MOVE
+					print("Cancelling walk.");
+#endif
+					// Need to get next tile in given direction to compute the
+					// normal vector of plane from which we will find out if
+					// we're beyond the center of current tile or not and
+					// therefor if we should complete the move to the next tile
+					// or only finish the current tile
+					TerrainTileHandle target_tile_helper = terrainManager.GetTile(position, LookDirToMoveDir(mercenary.lookDirection));
+
+					Vector3 current_tile_pos = terrainManager.GetPosition(position);
+					Vector3 target_tile_helper_pos = terrainManager.GetPosition(target_tile_helper);
+	
+					// Compute the normaln vector of our plane
+					Vector3 target_normal_plane_helper = (target_tile_helper_pos - current_tile_pos).normalized;
+					// Find if we're past the centre of current tile or not
+					float distance_cancel = utils.Vector3Helper.DistanceSigned(transform.position, current_tile_pos, target_normal_plane_helper);
+
+					// Past the center
+					if (distance_cancel > 0)
+						target_tile = terrainManager.GetTile(position, LookDirToMoveDir(mercenary.lookDirection));
+					// Before the center
+					else
+						target_tile = position;
+
+					// Update the new target tile and also the plane normal
+					// vector for computing the distance to target
+					target_pos = terrainManager.GetPosition(target_tile);
+					target_normal_plane = (transform.position - target_pos).normalized;
+
+					m_CancelAction = false;
+				}
 				// Actual distance to targetm if < 0 we're beyond the target
 				float distance_to_go = utils.Vector3Helper.DistanceSigned(transform.position, target_pos, target_normal_plane);
 				// We're in the proximity of error
@@ -238,7 +270,7 @@ namespace ja2.script
 		//! Update current position.
 		protected void UpdatePosition()
 		{
-			transform.position = new Vector3(terrainManager.GetPosition(mercenary.tile, 1).x, 0, terrainManager.GetPosition(mercenary.tile, 0).z);
+			transform.position = terrainManager.GetPosition(mercenary.tile);
 		}
 
 		//! Update tile position of mercenary.
@@ -303,6 +335,21 @@ namespace ja2.script
 			}
 
 			return move_dir;
+		}
+#endregion
+
+#region Messages
+		void Awake()
+		{
+			isRotating = false;
+			animator = GetComponent<Animator>();
+		}
+
+		void Start()
+		{
+			m_CancelAction = false;
+			UpdatePosition();
+			UpdateOrientation();
 		}
 #endregion
 	}

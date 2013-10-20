@@ -35,6 +35,12 @@ namespace ja2.script
 		{
 			Debug.Log("On move end.");
 		}
+
+		//! Cancel actions.
+		public void Cancel()
+		{
+			soldierActions.Cancel();
+		}
 #endregion
 
 #region Construction

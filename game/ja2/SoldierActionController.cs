@@ -47,6 +47,15 @@ namespace ja2
 			if (!actualTask.Running)
 				actualTask = null;
 		}
+
+		//! Cancel all actions that are running.
+		public void Cancel()
+		{
+			// Cancel any action in soldier controller, but let it finish
+			soldierController.Cancel();
+			// Remove all pending tasks
+			actions.Clear();
+		}
 #endregion
 
 #region Construction

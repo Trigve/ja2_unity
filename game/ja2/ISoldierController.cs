@@ -15,6 +15,8 @@ namespace ja2
 		IEnumerator Move_Coro(ushort Tiles, bool SlowDown);
 		//! Rotate soldier coroutine.
 		IEnumerator Rotate_CoRo(LookDirection Direction);
+		//! Cancel any action.
+		void Cancel();
 #endregion
 	}
 }
