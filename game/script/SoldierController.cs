@@ -249,11 +249,23 @@ namespace ja2.script
 		//! Update tile position of mercenary.
 		private void UpdateTilePosition()
 		{
+			// Find the next tile which we should land
+			TerrainTileHandle next_tile = terrainManager.GetTile(position, LookDirToMoveDir(mercenary.lookDirection));
+
 			RaycastHit hit;
 			Ray ray = new Ray(new Vector3(transform.position.x, 1, transform.position.z), Vector3.down);
 			if (Physics.Raycast(ray, out hit, Mathf.Infinity, TerrainPartition.LAYER_MASK))
 			{
-				mercenary.tile = hit.transform.gameObject.GetComponent<TerrainPartition>().GetTileHandle(hit.triangleIndex);
+				// Try to find the tile by raycast
+				TerrainTileHandle ray_cast_tile = hit.transform.gameObject.GetComponent<TerrainPartition>().GetTileHandle(hit.triangleIndex);
+				// If it match the next tile it should land, update it.
+				// Otherwise we need to discard it because it might find the
+				// neighbor tile which isn't in particular look direction (if we
+				// move straight line from west -> east, there is a place when
+				// west/east tile meat which is no man land, which coulf led to
+				// bad tile from ray cast (it will find it as south tile).
+				if (ray_cast_tile.Equals(next_tile))
+					mercenary.tile = next_tile;
 			}
 		}
 
