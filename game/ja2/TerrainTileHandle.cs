@@ -32,6 +32,11 @@ namespace ja2
 		{
 			return (partitionX << 24 | partitionY << 16 | x << 8 | y);
 		}
+
+		public override string ToString()
+		{
+			return "(" + partitionX.ToString() + "," + partitionY.ToString() + ") " + x.ToString() + "," + y.ToString();
+		}
 #endregion
 #region Construction
 		public TerrainTileHandle(int X, int Y, int PartitionX, int PartitionY)
