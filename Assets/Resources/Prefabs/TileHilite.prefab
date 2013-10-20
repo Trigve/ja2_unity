@@ -65,12 +65,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 377f683d310700c44afe3a63711137a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile:
-    m_x: 0
-    m_y: 0
-    variant: 0
-    terrainTypeArray: 
-    type_: 0
+  m_Tile:
+    x: 0
+    y: 0
+    partitionX: 0
+    partitionY: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
