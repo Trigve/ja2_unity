@@ -14,7 +14,7 @@ namespace utils
 		public static float DistanceSigned(Vector3 From, Vector3 To, Vector3 NormalizedNormal)
 		{
 			Vector3 actual_pos = From - To;
-			return NormalizedNormal.x * actual_pos.x + NormalizedNormal.y * actual_pos.y + NormalizedNormal.z * actual_pos.z;
+			return Vector3.Dot(NormalizedNormal, actual_pos);
 		}
 	}
 }
