@@ -33,8 +33,6 @@ namespace ja2.script
 		public TerrainManager terrainManager;
 		//! Animator.
 		protected Animator animator;
-		//! Rigid body.
-		private Rigidbody rigidBody;
 #endregion
 
 #region Properties
@@ -66,7 +64,6 @@ namespace ja2.script
 		{
 			isRotating = false;
 			animator = GetComponent<Animator>();
-			rigidBody = GetComponent<Rigidbody>();
 		}
 
 		protected void Start()
@@ -98,8 +95,6 @@ namespace ja2.script
 		{
 			// Does the position of GO need to be clamped to center of tile
 			bool clamp_position = false;
-			// Save constraints
-			RigidbodyConstraints rigid_body_constrains = rigidBody.constraints;
 			// Compute target position
 			ja2.TerrainTileHandle target_tile = terrainManager.GetTile(mercenary.tile, LookDirToMoveDir(mercenary.lookDirection), NumberOfTiles);
 			Vector3 target_pos = terrainManager.GetPosition(target_tile);
@@ -145,7 +140,7 @@ namespace ja2.script
 						if (animator.GetCurrentAnimatorStateInfo(0).nameHash == idleState)
 						{
 							Debug.LogWarning("Stall: " + distance_to_go_pre + ", " + distance_to_go);
-							rigidBody.MovePosition(target_pos);
+							transform.position = target_pos;
 							break;
 						}
 						distance_to_go_pre = distance_to_go;
@@ -154,7 +149,7 @@ namespace ja2.script
 						yield return new WaitForFixedUpdate();
 					}
 					// Stop updating pos
-					rigidBody.constraints |= RigidbodyConstraints.FreezePosition;
+					animator.applyRootMotion = false;
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
 				print("Distance: " + utils.Vector3Helper.DistanceSigned(transform.position, target_pos, target_normal_plane));
 #endif
@@ -205,8 +200,8 @@ namespace ja2.script
 #endif
 				UpdatePosition();
 			}
-			// Reset constraints
-			rigidBody.constraints = rigid_body_constrains;
+			// Re-apply root motion
+			animator.applyRootMotion = true;
 		}
 
 		//! Rotate.
