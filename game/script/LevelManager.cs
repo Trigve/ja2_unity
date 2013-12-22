@@ -94,12 +94,14 @@ namespace ja2.script
 			var combined_mesh_com = SoldierGO.GetComponent<SoldierController>();
 			ja2.Soldier soldier = combined_mesh_com.soldier;
 			// Remove old combined mesh
+			combined_mesh_com.combinedMesh.transform.parent = null;
 			Destroy(combined_mesh_com.combinedMesh);
 			// Create new
 			combined_mesh_com.combinedMesh = charEntityManager.Create(soldier.character(), SoldierGO);
-			// Must use task here because of unity bug - When mesh is replaced,
-			// animation stops to play and is shown in T-pose
-			new utils.Task(RebuildCharacterWorkaround(SoldierGO));
+			// Must re-enable object because of unity bug - When mesh is
+			// replaced, animation stops to play and is shown in T-pose
+			SoldierGO.SetActive(false);
+			SoldierGO.SetActive(true);
 		}
 #endregion
 
@@ -148,13 +150,6 @@ namespace ja2.script
 #endregion
 
 #region Operations
-		//! Bug workaround task for soldier mesh rebuild.
-		System.Collections.IEnumerator RebuildCharacterWorkaround(GameObject SoldierGO)
-		{
-			SoldierGO.SetActive(false);
-			yield return new WaitForFixedUpdate();
-			SoldierGO.SetActive(true);
-		}
 #endregion
 
 #region Messages
