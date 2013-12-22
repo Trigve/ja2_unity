@@ -12,7 +12,7 @@ namespace ja2
 			If \param Slowdown is true, slowdown the soldier at the end of
 			path.
 		*/
-		IEnumerator Move_Coro(ushort Tiles, bool SlowDown);
+		IEnumerator Move_Coro(bool SlowDown);
 		//! Rotate soldier coroutine.
 		IEnumerator Rotate_CoRo(LookDirection Direction);
 		//! Cancel any action.

@@ -47,8 +47,6 @@ namespace ja2.script
 		public SoldierPathManager(SoldierController Soldier, ja2.TerrainTileHandle[] Tiles)
 		{
 			ja2.TerrainTileHandle previous = null;
-			// Move distance
-			ushort move_distance = 0;
 			// Last direction
 			ja2.Direction last_direction = ja2.Direction.NONE;
 			// Create action controller
@@ -64,30 +62,16 @@ namespace ja2.script
 					// Direction change
 					if (last_direction != dir)
 					{
-						// Queue move first if needed
-						if (move_distance > 0)
-						{
-							var action = new ja2.SoldierActionMove(move_distance);
-							soldierActions.Add(action);
-							move_distance = 0;
-						}
 						// Set rotation
 						soldierActions.Add(new ja2.SoldierActionRotate(ja2.LookDirectionConverter.Convert(dir)));
 					}
-					//				byte rot = (byte)ja2.LookDirectionConverter.Convert(dir);
-					// Must be move
-					++move_distance;
+					// Queue move first if needed
+					soldierActions.Add(new ja2.SoldierActionMove());
 					// Update last direction
 					last_direction = dir;
 				}
 				// Update previous tile
 				previous = tile;
-			}
-			// Queue move if was any
-			if (move_distance != 0)
-			{
-				var action = new ja2.SoldierActionMove(move_distance);
-				soldierActions.Add(action);
 			}
 		}
 #endregion

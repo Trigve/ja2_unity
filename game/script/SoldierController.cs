@@ -80,19 +80,21 @@ namespace ja2.script
 		*/
 		public void Move(ushort NumberOfTiles, bool SlowDown)
 		{
-			StartCoroutine(Move_Coro(NumberOfTiles, SlowDown));
+			//\FIXME Move_Coro() moves only 1 tile at the time. Must start
+			// another to sequentially call Move_Coro or use Actions somehow
+			StartCoroutine(Move_Coro(SlowDown));
 		}
 
 		//! Move as coroutine.
 		/*!
 			See ISoldierController;
 		*/
-		public IEnumerator Move_Coro(ushort NumberOfTiles, bool Slowdown)
+		public IEnumerator Move_Coro(bool Slowdown)
 		{
 			// Does the position of GO need to be clamped to center of tile
 			bool clamp_position = false;
 			// Compute target position
-			ja2.TerrainTileHandle target_tile = terrainManager.GetTile(mercenary.tile, LookDirToMoveDir(mercenary.lookDirection), NumberOfTiles);
+			ja2.TerrainTileHandle target_tile = terrainManager.GetTile(mercenary.tile, LookDirToMoveDir(mercenary.lookDirection));
 			Vector3 target_pos = terrainManager.GetPosition(target_tile);
 			// Beginning position must actual transform position because we will
 			// never be in the center of tile
@@ -123,7 +125,7 @@ namespace ja2.script
 					Vector3 current_tile_pos = terrainManager.GetPosition(position);
 					Vector3 target_tile_helper_pos = terrainManager.GetPosition(target_tile_helper);
 	
-					// Compute the normaln vector of our plane
+					// Compute the normal vector of our plane
 					Vector3 target_normal_plane_helper = (target_tile_helper_pos - current_tile_pos).normalized;
 					// Find if we're past the centre of current tile or not
 					float distance_cancel = utils.Vector3Helper.DistanceSigned(transform.position, current_tile_pos, target_normal_plane_helper);
@@ -142,16 +144,16 @@ namespace ja2.script
 
 					m_CancelAction = false;
 				}
-				// Actual distance to targetm if < 0 we're beyond the target
+				// Actual distance to target if < 0 we're beyond the target
 				float distance_to_go = utils.Vector3Helper.DistanceSigned(transform.position, target_pos, target_normal_plane);
 				// We're in the proximity of error
 				if (distance_to_go <= MOVE_DIFF)
 				{
 #if JA_MERCENARY_CONTROLLER_PRINT_MOVE
-				print("Stopping walk: " + distance_to_go);
+				print("At tile: " + distance_to_go);
 #endif
 					// No transition comes to play
-					if (Slowdown)
+					if (Slowdown && !m_CancelAction)
 						animator.SetBool(walkParam, false);
 					yield return new WaitForFixedUpdate();
 					// Store actual distance to go
@@ -209,7 +211,7 @@ namespace ja2.script
 				yield return new WaitForFixedUpdate();
 			}
 			// Must be in idle and no transition
-			if (Slowdown)
+			if (Slowdown && !m_CancelAction)
 			{
 				while (!(animator.GetCurrentAnimatorStateInfo(0).nameHash == idleState && !animator.IsInTransition(0)))
 				{
